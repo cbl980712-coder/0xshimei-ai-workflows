@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K 线回放练习器</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='3' width='3' height='8' fill='%2326a69a'/%3E%3Crect x='4.2' y='1' width='.6' height='13' fill='%2326a69a'/%3E%3Crect x='10' y='5' width='3' height='7' fill='%23ef5350'/%3E%3Crect x='11.2' y='3' width='.6' height='12' fill='%23ef5350'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <h1 data-i18n="title">K 线回放练习器</h1>
+    <span class="sub" data-i18n="subtitle">模拟 BTC/USDT 1 小时 · 非真实行情</span>
+  </div>
+  <div class="top-actions">
+    <select id="langSel" aria-label="Language"></select>
+    <button id="themeBtn" class="icon-btn" data-i18n-title="theme" title="切换深浅色" aria-label="theme">◐</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="chart-col">
+    <div class="chart-head">
+      <div class="ohlc" id="ohlc"></div>
+      <div class="hint" data-i18n="chartHint">滚轮缩放 · 拖动平移 · 双击回到最新</div>
+    </div>
+    <div class="chart-wrap" id="chartWrap">
+      <canvas id="chart"></canvas>
+    </div>
+    <div class="replay-bar">
+      <button id="nextBtn" class="btn" data-i18n="next">下一根</button>
+      <button id="playBtn" class="btn" data-i18n="play">自动播放</button>
+      <label class="speed"><span data-i18n="speed">速度</span>
+        <select id="speedSel">
+          <option value="1000">1×</option>
+          <option value="500" selected>2×</option>
+          <option value="250">4×</option>
+          <option value="100">10×</option>
+        </select>
+      </label>
+      <button id="restartBtn" class="btn ghost" data-i18n="restart">重新开始</button>
+      <div class="progress">
+        <span data-i18n="progress">进度</span>
+        <span id="progText" class="mono">50/300</span>
+        <div class="bar"><div id="progFill"></div></div>
+      </div>
+    </div>
+    <div class="keys" data-i18n="keys">快捷键：空格 下一根 · P 播放/暂停 · B 做多 · S 做空 · C 平仓</div>
+  </section>
+
+  <aside class="side-col">
+    <div class="card">
+      <div class="order-grid">
+        <label><span data-i18n="qty">数量 (BTC)</span>
+          <input id="qtyIn" type="number" min="0.001" step="0.01" value="0.1" inputmode="decimal"></label>
+        <label><span data-i18n="tp">止盈价</span>
+          <input id="tpIn" type="number" step="1" inputmode="decimal" placeholder="—"></label>
+        <label><span data-i18n="sl">止损价</span>
+          <input id="slIn" type="number" step="1" inputmode="decimal" placeholder="—"></label>
+      </div>
+      <div class="tpsl-row">
+        <button id="tpslBtn" class="btn small" data-i18n="setTpSl">更新止盈止损</button>
+        <button id="tpslClearBtn" class="btn small ghost" data-i18n="clearTpSl">清除</button>
+      </div>
+      <p class="note" data-i18n="tpslHint">留空表示不设置。持仓时可随时修改。</p>
+      <div class="trade-btns">
+        <button id="longBtn" class="btn long" data-i18n="long">市价做多</button>
+        <button id="shortBtn" class="btn short" data-i18n="short">市价做空</button>
+        <button id="closeBtn" class="btn ghost" data-i18n="close">平仓</button>
+      </div>
+      <div id="msg" class="msg" role="status" aria-live="polite"></div>
+      <p class="note" data-i18n="feeNote">手续费 0.05%（按成交额），市价单按当前 K 线收盘价成交</p>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="position">当前持仓</h2>
+      <dl class="kv" id="posBox"></dl>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="stats">统计</h2>
+      <dl class="kv" id="statBox"></dl>
+    </div>
+
+    <div class="card grow">
+      <h2 data-i18n="history">交易记录</h2>
+      <div class="table-wrap">
+        <table class="trades">
+          <thead><tr>
+            <th>#</th>
+            <th data-i18n="colSide">方向</th>
+            <th data-i18n="colEntry">开仓</th>
+            <th data-i18n="colExit">平仓</th>
+            <th data-i18n="colPnl">盈亏</th>
+            <th data-i18n="colReason">原因</th>
+          </tr></thead>
+          <tbody id="tradeBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div class="modal" id="summary" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="sumTitle">
+    <h2 id="sumTitle" data-i18n="summaryTitle">回放结束 · 总结</h2>
+    <div class="sum-hero" id="sumHero"></div>
+    <dl class="kv two" id="sumBox"></dl>
+    <p class="comment" id="sumComment"></p>
+    <div class="modal-actions">
+      <button id="againBtn" class="btn long" data-i18n="playAgain">再练一次</button>
+      <button id="sumCloseBtn" class="btn ghost" data-i18n="closeDialog">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

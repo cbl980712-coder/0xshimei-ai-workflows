@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K 线回放练习器</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1 data-i18n="title">K 线回放练习器</h1>
+    <p class="sub" data-i18n="sub">模拟 BTC/USDT · 1 小时 · 共 300 根</p>
+  </div>
+  <div class="top-tools">
+    <select id="langSel" aria-label="语言" data-i18n-aria="lang">
+      <option value="zh-CN">简体中文</option>
+      <option value="en">English</option>
+      <option value="zh-TW">繁體中文</option>
+      <option value="ja">日本語</option>
+      <option value="ko">한국어</option>
+    </select>
+    <button id="themeBtn" class="btn icon" type="button" aria-label="切换深色 / 浅色" data-i18n-aria="theme" data-i18n-title="theme">◐</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="chart-col">
+    <div class="card chart-card">
+      <div id="legend" class="legend" aria-hidden="true"></div>
+      <div class="zoom">
+        <button id="zoomOut" class="btn icon" type="button" aria-label="缩小" data-i18n-aria="zoomOut">－</button>
+        <button id="zoomIn" class="btn icon" type="button" aria-label="放大" data-i18n-aria="zoomIn">＋</button>
+      </div>
+      <div id="chartWrap" class="chart-wrap"><canvas id="chart"></canvas></div>
+    </div>
+
+    <div class="card playbar">
+      <div class="play-btns">
+        <button id="nextBtn" class="btn primary" type="button"><span data-i18n="next">下一根</span> <kbd>␣</kbd></button>
+        <button id="playBtn" class="btn" type="button" data-i18n="play">自动播放</button>
+        <label class="speed"><span data-i18n="speed">速度</span>
+          <select id="speedSel">
+            <option value="800">1×</option>
+            <option value="400" selected>2×</option>
+            <option value="160">5×</option>
+            <option value="60">10×</option>
+          </select>
+        </label>
+        <button id="resetBtn" class="btn" type="button" data-i18n="reset">重新开始</button>
+        <button id="summaryBtn" class="btn" type="button" data-i18n="showSummary" hidden>查看总结</button>
+      </div>
+      <div class="progress">
+        <div class="bar"><div id="progFill"></div></div>
+        <span id="progText"></span>
+      </div>
+      <p class="hint"><span data-i18n="chartHint"></span><br><span class="desk-only" data-i18n="shortcuts"></span></p>
+    </div>
+  </section>
+
+  <aside class="side">
+    <div class="card">
+      <h2 data-i18n="order">下单</h2>
+      <label class="field"><span data-i18n="amount">下单金额 (USDT)</span>
+        <input id="amountInp" type="number" inputmode="decimal" min="0" step="100" value="10000">
+      </label>
+      <div class="quick" id="quickAmt">
+        <button class="btn mini" type="button" data-mult="0.5">0.5×</button>
+        <button class="btn mini" type="button" data-mult="1">1×</button>
+        <button class="btn mini" type="button" data-mult="2">2×</button>
+        <button class="btn mini" type="button" data-mult="5">5×</button>
+      </div>
+      <div class="row2">
+        <label class="field"><span data-i18n="tp">止盈价</span>
+          <input id="tpInp" type="number" inputmode="decimal" min="0" step="10" placeholder="可不填" data-i18n-ph="optional">
+        </label>
+        <label class="field"><span data-i18n="sl">止损价</span>
+          <input id="slInp" type="number" inputmode="decimal" min="0" step="10" placeholder="可不填" data-i18n-ph="optional">
+        </label>
+      </div>
+      <div class="trade-btns">
+        <button id="longBtn" class="btn up" type="button" data-i18n="long">做多</button>
+        <button id="shortBtn" class="btn down" type="button" data-i18n="short">做空</button>
+        <button id="closeBtn" class="btn" type="button" data-i18n="close">平仓</button>
+      </div>
+      <button id="tpslBtn" class="btn wide" type="button" data-i18n="updateTpSl">更新止盈止损</button>
+      <p id="msg" class="msg" role="status" aria-live="polite"></p>
+      <p class="hint" data-i18n="feeNote"></p>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="account">账户</h2>
+      <dl class="stats">
+        <div><dt data-i18n="equity">账户权益</dt><dd id="sEquity"></dd></div>
+        <div><dt data-i18n="position">当前持仓</dt><dd id="sPos"></dd></div>
+        <div><dt data-i18n="entry">开仓价</dt><dd id="sEntry"></dd></div>
+        <div><dt data-i18n="tpsl">止盈 / 止损</dt><dd id="sTpSl"></dd></div>
+        <div><dt data-i18n="floating">浮动盈亏</dt><dd id="sFloat"></dd></div>
+        <div><dt data-i18n="realized">已实现盈亏</dt><dd id="sReal"></dd></div>
+        <div><dt data-i18n="winRate">胜率</dt><dd id="sWin"></dd></div>
+        <div><dt data-i18n="maxDD">最大回撤</dt><dd id="sDD"></dd></div>
+        <div><dt data-i18n="tradeCount">交易笔数</dt><dd id="sCount"></dd></div>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="trades">交易记录</h2>
+      <p id="noTrades" class="hint" data-i18n="noTrades">还没有交易。</p>
+      <div class="table-wrap">
+        <table id="tradeTable" hidden>
+          <thead><tr>
+            <th>#</th><th data-i18n="colSide">方向</th><th data-i18n="colEntry">开仓</th>
+            <th data-i18n="colExit">平仓</th><th data-i18n="colPnl">盈亏</th><th data-i18n="colReason">原因</th>
+          </tr></thead>
+          <tbody id="tradeBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="foot" data-i18n="disclaimer">行情为程序生成的模拟数据，仅供练习，不构成投资建议。</footer>
+
+<dialog id="summaryDlg" aria-labelledby="sumTitle">
+  <h2 id="sumTitle" data-i18n="sumTitle">回放总结</h2>
+  <div class="sum-hero">
+    <span data-i18n="sumReturn">总收益率</span>
+    <strong id="sumReturn"></strong>
+  </div>
+  <p id="sumVerdict" class="verdict"></p>
+  <dl class="stats" id="sumStats"></dl>
+  <div class="dlg-btns">
+    <button id="sumClose" class="btn" type="button" data-i18n="viewChart">查看图表</button>
+    <button id="sumAgain" class="btn primary" type="button" data-i18n="again">再来一次</button>
+  </div>
+</dialog>
+
+<script src="data.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

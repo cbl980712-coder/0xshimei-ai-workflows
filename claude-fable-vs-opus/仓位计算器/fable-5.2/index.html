@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>合约仓位计算器</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3f4f7; --card:#ffffff; --inset:#f6f7f9; --line:#e3e6eb; --text:#13161b; --muted:#667085;
+  --up:#0a8f62; --up-soft:rgba(14,159,110,.16); --up-solid:#12b27c;
+  --down:#d3302f; --down-soft:rgba(217,45,32,.14); --down-solid:#e5484d;
+  --entry:#9a6700; --entry-solid:#d69e2e; --focus:#3b6cf6;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark; --bg:#0c0e12; --card:#151920; --inset:#1b2029; --line:#272d38; --text:#e9ebef; --muted:#8d95a3;
+    --up:#2ebd85; --up-soft:rgba(46,189,133,.2); --up-solid:#2ebd85;
+    --down:#f6566a; --down-soft:rgba(246,70,93,.2); --down-solid:#f6465d;
+    --entry:#f2c14e; --entry-solid:#f2c14e; --focus:#7da2ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark; --bg:#0c0e12; --card:#151920; --inset:#1b2029; --line:#272d38; --text:#e9ebef; --muted:#8d95a3;
+  --up:#2ebd85; --up-soft:rgba(46,189,133,.2); --up-solid:#2ebd85;
+  --down:#f6566a; --down-soft:rgba(246,70,93,.2); --down-solid:#f6465d;
+  --entry:#f2c14e; --entry-solid:#f2c14e; --focus:#7da2ff;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans","Noto Sans CJK SC","Microsoft YaHei","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:20px 16px calc(32px + env(safe-area-inset-bottom))}
+header{display:flex; align-items:center; justify-content:space-between; gap:12px}
+h1{font-size:22px; line-height:1.25; margin:0; letter-spacing:-.01em}
+.sub{color:var(--muted); font-size:13px; margin:6px 0 16px}
+.tools{display:flex; gap:8px; flex:none}
+.tools select,.tools button{
+  height:36px; border:1px solid var(--line); background:var(--card); color:var(--text);
+  border-radius:10px; font:inherit; font-size:13px; padding:0 10px; cursor:pointer;
+}
+.tools button{width:36px; padding:0; font-size:16px}
+.grid{display:grid; gap:16px; grid-template-columns:1fr}
+@media (min-width:860px){
+  .wrap{padding-top:36px}
+  h1{font-size:26px}
+  .grid{grid-template-columns:340px 1fr; align-items:start}
+  .form{position:sticky; top:20px}
+}
+.card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow)}
+.stack{display:grid; gap:16px; min-width:0}
+h2{font-size:13px; font-weight:600; color:var(--muted); margin:0 0 12px; letter-spacing:.02em}
+
+/* form */
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field label,.field .lab{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
+.inp{display:flex; align-items:center; background:var(--inset); border:1px solid var(--line); border-radius:12px; padding:0 12px; height:48px}
+.inp:focus-within{border-color:var(--focus); box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 22%,transparent)}
+.inp.bad{border-color:var(--down-solid)}
+.inp input{flex:1; min-width:0; border:0; outline:0; background:transparent; color:var(--text); font:inherit; font-size:18px; font-weight:600; font-variant-numeric:tabular-nums}
+.inp .unit{color:var(--muted); font-size:13px; margin-left:8px; flex:none}
+.err{color:var(--down); font-size:12px; margin-top:6px; min-height:0}
+.err:empty{display:none}
+.seg{display:grid; grid-template-columns:1fr 1fr; gap:6px; background:var(--inset); border:1px solid var(--line); border-radius:12px; padding:4px}
+.seg button{height:40px; border:0; border-radius:9px; background:transparent; color:var(--muted); font:inherit; font-weight:600; cursor:pointer}
+.seg button[aria-pressed="true"][data-side="long"]{background:var(--up-solid); color:#fff}
+.seg button[aria-pressed="true"][data-side="short"]{background:var(--down-solid); color:#fff}
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:28px; margin:8px 0 4px; background:transparent; cursor:pointer; --p:0%}
+input[type=range]::-webkit-slider-runnable-track{height:6px; border-radius:3px; background:linear-gradient(to right,var(--entry-solid) var(--p),var(--line) var(--p))}
+input[type=range]::-moz-range-track{height:6px; border-radius:3px; background:linear-gradient(to right,var(--entry-solid) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:22px; height:22px; margin-top:-8px; border-radius:50%; background:var(--card); border:3px solid var(--entry-solid); box-shadow:0 1px 3px rgba(0,0,0,.25)}
+input[type=range]::-moz-range-thumb{width:16px; height:16px; border-radius:50%; background:var(--card); border:3px solid var(--entry-solid)}
+input[type=range]:focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:6px}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chips button{flex:1; min-width:44px; height:32px; border:1px solid var(--line); background:transparent; color:var(--muted); border-radius:8px; font:inherit; font-size:13px; cursor:pointer; font-variant-numeric:tabular-nums}
+.chips button.on{border-color:var(--entry-solid); color:var(--entry); font-weight:600}
+button:focus-visible,select:focus-visible,.axis:focus-visible{outline:2px solid var(--focus); outline-offset:2px}
+
+/* stats */
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.stat{background:var(--inset); border-radius:12px; padding:12px 14px; min-width:0}
+.stat .k{font-size:12px; color:var(--muted)}
+.stat .v{font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; line-height:1.3; margin-top:2px}
+.stat .v small{font-size:12px; font-weight:500; color:var(--muted); margin-left:4px; white-space:nowrap; display:inline-block}
+.stat.hero{grid-column:1/-1; display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap; background:var(--down-soft)}
+.stat.hero .v{font-size:30px; color:var(--down)}
+.stat.hero.safe{background:var(--up-soft)}
+.stat.hero.safe .v{color:var(--up)}
+.stat.hero .note{font-size:13px; color:var(--text); padding-bottom:6px}
+
+/* axis */
+.axis{position:relative; padding:0 6px; touch-action:pan-y; user-select:none; -webkit-user-select:none; cursor:ew-resize; border-radius:8px}
+.axis .in{position:relative}
+.flags{position:relative; height:56px}
+.flag{position:absolute; top:0; bottom:-18px; width:0}
+.flag i{position:absolute; left:-1px; width:2px; bottom:0; border-radius:1px}
+.flag b{position:absolute; white-space:nowrap; font-size:12px; font-weight:600; line-height:20px; padding:0 7px; border-radius:6px; color:#fff; font-variant-numeric:tabular-nums}
+.flag.e b{top:0; background:var(--entry-solid); color:#1c1400}
+.flag.e i{top:20px; background:var(--entry-solid)}
+.flag.l b{top:26px; background:var(--down-solid)}
+.flag.l i{top:46px; background:var(--down-solid)}
+.trackwrap{position:relative; height:18px}
+.track{position:absolute; inset:0; border-radius:9px; overflow:hidden; background:var(--inset)}
+.zone{position:absolute; top:0; bottom:0}
+.zone.p{background:var(--up-soft)}
+.zone.s{background:var(--down-soft)}
+.zone.x{background:repeating-linear-gradient(135deg,var(--down-solid) 0 3px,transparent 3px 7px),var(--down-soft); opacity:.75}
+.probe{position:absolute; top:-5px; bottom:-5px; width:4px; margin-left:-2px; border-radius:2px; background:var(--text)}
+.probe::after{content:""; position:absolute; left:50%; top:50%; width:16px; height:16px; margin:-8px; border-radius:50%; background:var(--card); border:3px solid var(--text)}
+.ticks{position:relative; height:30px}
+.tick{position:absolute; top:0; width:0}
+.tick::before{content:""; position:absolute; left:-.5px; top:3px; width:1px; height:6px; background:var(--muted); opacity:.6}
+.tick span{position:absolute; top:10px; white-space:nowrap; font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums}
+.ends{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums}
+.readout{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px; background:var(--inset); border-radius:12px; padding:10px 12px}
+.readout div{min-width:0}
+.readout .k{font-size:11px; color:var(--muted)}
+.readout .v{font-size:14px; font-weight:600; font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
+@media (max-width:480px){.readout{grid-template-columns:1fr 1fr}}
+.legend{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--muted); margin-top:12px}
+.legend i{display:inline-block; width:12px; height:8px; border-radius:2px; margin-right:5px; vertical-align:middle}
+.hint{font-size:12px; color:var(--muted); margin-top:8px}
+.empty{color:var(--muted); font-size:13px; padding:20px 0; text-align:center}
+
+/* table */
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+th{font-size:12px; font-weight:500; color:var(--muted); text-align:right; padding:0 0 8px}
+td{text-align:right; padding:10px 0; border-top:1px solid var(--line); font-size:14px}
+th:first-child,td:first-child{text-align:left}
+td:first-child{font-weight:700}
+td.pr{color:var(--muted)}
+tr.gap td{border-top:2px solid var(--line)}
+.up{color:var(--up)} .down{color:var(--down)}
+.badge{display:inline-block; font-size:11px; font-weight:600; line-height:18px; padding:0 6px; border-radius:5px; background:var(--down-solid); color:#fff; white-space:nowrap}
+td .badge{margin-left:6px}
+@media (max-width:400px){td{font-size:13px} .card{padding:16px 14px}}
+.disc{font-size:12px; color:var(--muted); margin:16px 2px 0; line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 data-t="title"></h1>
+    <div class="tools">
+      <select id="lang" aria-label="Language">
+        <option value="zh">简体中文</option>
+        <option value="en">English</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+      </select>
+      <button id="theme" type="button" aria-label="Theme">◐</button>
+    </div>
+  </header>
+  <div class="sub" data-t="sub"></div>
+
+  <div class="grid">
+    <section class="card form">
+      <div class="field">
+        <span class="lab" data-t="side"></span>
+        <div class="seg" role="group">
+          <button type="button" data-side="long" data-t="long"></button>
+          <button type="button" data-side="short" data-t="short"></button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="margin" data-t="margin"></label>
+        <div class="inp"><input id="margin" type="text" inputmode="decimal" autocomplete="off" value="1000"><span class="unit">USDT</span></div>
+        <div class="err" id="e-margin" aria-live="polite"></div>
+      </div>
+      <div class="field">
+        <label for="lev" data-t="leverage"></label>
+        <div class="inp"><input id="lev" type="text" inputmode="decimal" autocomplete="off" value="10"><span class="unit">×</span></div>
+        <div class="err" id="e-lev" aria-live="polite"></div>
+        <input id="levr" type="range" min="1" max="125" step="1" value="10" aria-label="Leverage">
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="field">
+        <label for="entry" data-t="entry"></label>
+        <div class="inp"><input id="entry" type="text" inputmode="decimal" autocomplete="off" value="60000"><span class="unit">USDT</span></div>
+        <div class="err" id="e-entry" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <div class="stack">
+      <section class="card">
+        <div class="stats" id="stats"></div>
+      </section>
+      <section class="card">
+        <h2 data-t="axis"></h2>
+        <div id="axisBox"></div>
+      </section>
+      <section class="card">
+        <h2 data-t="scen"></h2>
+        <div id="tableBox"></div>
+      </section>
+    </div>
+  </div>
+  <p class="disc" data-t="disclaimer"></p>
+</div>
+
+<script>
+(function(){
+"use strict";
+var MMR = 0.005, MAX_LEV = 125;
+var PCTS = [10, 5, 1, -1, -5, -10];
+var SPANS = [.005,.01,.02,.03,.05,.075,.1,.15,.2,.3,.5,.75,1,1.5,2];
+
+var I18N = {
+  zh:{title:"合约仓位计算器",sub:"逐仓 · 维持保证金率 0.5% · 结果为估算",side:"方向",long:"做多",short:"做空",
+    margin:"本金",leverage:"杠杆倍数",entry:"开仓价",posValue:"仓位价值",qty:"持仓数量（币）",liq:"预估强平价",
+    liqDown:"价格下跌 {0} 触发强平",liqUp:"价格上涨 {0} 触发强平",noLiq:"不会强平",noLiqNote:"1 倍做多，价格归零前不会强平",
+    scen:"价格涨跌时的盈亏",chg:"涨跌",price:"价格",pnl:"盈亏 (USDT)",roe:"收益率",liquidated:"已强平",
+    axis:"价格轴",axisHint:"拖动或点击价格轴，查看任意价格的盈亏",entryTag:"开仓",liqTag:"强平",probe:"查看价格",
+    zProfit:"盈利区",zLoss:"亏损区",zLiq:"强平区",
+    errMargin:"请输入大于 0 的本金",errEntry:"请输入大于 0 的开仓价",errLev:"杠杆请填 1 到 125 之间的数",
+    fix:"先把左侧标红的输入改好，结果会自动出现",
+    disclaimer:"估算未计入手续费和资金费率。各交易所的维持保证金率和强平规则不同，实际强平价以交易所为准。本工具仅供计算参考，不构成投资建议。"},
+  en:{title:"Futures Position Calculator",sub:"Isolated margin · 0.5% maintenance margin · estimates only",side:"Direction",long:"Long",short:"Short",
+    margin:"Margin",leverage:"Leverage",entry:"Entry price",posValue:"Position value",qty:"Quantity (coins)",liq:"Est. liquidation price",
+    liqDown:"Liquidated if price falls {0}",liqUp:"Liquidated if price rises {0}",noLiq:"No liquidation",noLiqNote:"A 1× long is not liquidated before price reaches zero",
+    scen:"PnL when price moves",chg:"Change",price:"Price",pnl:"PnL (USDT)",roe:"ROE",liquidated:"Liquidated",
+    axis:"Price axis",axisHint:"Drag or tap the axis to see PnL at any price",entryTag:"Entry",liqTag:"Liq.",probe:"Price",
+    zProfit:"Profit",zLoss:"Loss",zLiq:"Liquidated",
+    errMargin:"Enter a margin greater than 0",errEntry:"Enter an entry price greater than 0",errLev:"Leverage must be between 1 and 125",
+    fix:"Fix the fields marked in red and the results will appear",
+    disclaimer:"Estimates exclude trading fees and funding. Maintenance margin rates and liquidation rules differ between exchanges; the exchange's own liquidation price is final. For calculation only, not investment advice."},
+  "zh-TW":{title:"合約倉位計算器",sub:"逐倉 · 維持保證金率 0.5% · 結果為估算",side:"方向",long:"做多",short:"做空",
+    margin:"本金",leverage:"槓桿倍數",entry:"開倉價",posValue:"倉位價值",qty:"持倉數量（幣）",liq:"預估強平價",
+    liqDown:"價格下跌 {0} 觸發強平",liqUp:"價格上漲 {0} 觸發強平",noLiq:"不會強平",noLiqNote:"1 倍做多，價格歸零前不會強平",
+    scen:"價格漲跌時的盈虧",chg:"漲跌",price:"價格",pnl:"盈虧 (USDT)",roe:"收益率",liquidated:"已強平",
+    axis:"價格軸",axisHint:"拖動或點擊價格軸，查看任意價格的盈虧",entryTag:"開倉",liqTag:"強平",probe:"查看價格",
+    zProfit:"盈利區",zLoss:"虧損區",zLiq:"強平區",
+    errMargin:"請輸入大於 0 的本金",errEntry:"請輸入大於 0 的開倉價",errLev:"槓桿請填 1 到 125 之間的數",
+    fix:"先把標紅的輸入改好，結果會自動出現",
+    disclaimer:"估算未計入手續費和資金費率。各交易所的維持保證金率和強平規則不同，實際強平價以交易所為準。本工具僅供計算參考，不構成投資建議。"},
+  ja:{title:"先物ポジション計算ツール",sub:"分離マージン · 維持証拠金率 0.5% · 概算値",side:"方向",long:"ロング",short:"ショート",
+    margin:"証拠金",leverage:"レバレッジ",entry:"エントリー価格",posValue:"ポジション価値",qty:"数量（コイン）",liq:"推定清算価格",
+    liqDown:"価格が {0} 下落すると清算",liqUp:"価格が {0} 上昇すると清算",noLiq:"清算なし",noLiqNote:"1 倍ロングは価格がゼロになるまで清算されません",
+    scen:"価格変動時の損益",chg:"変動",price:"価格",pnl:"損益 (USDT)",roe:"収益率",liquidated:"清算済み",
+    axis:"価格軸",axisHint:"価格軸をドラッグまたはタップすると、任意の価格での損益を確認できます",entryTag:"エントリー",liqTag:"清算",probe:"価格",
+    zProfit:"利益",zLoss:"損失",zLiq:"清算",
+    errMargin:"0 より大きい証拠金を入力してください",errEntry:"0 より大きいエントリー価格を入力してください",errLev:"レバレッジは 1〜125 で入力してください",
+    fix:"赤く表示された入力を直すと、結果が表示されます",
+    disclaimer:"概算には取引手数料と資金調達料を含みません。維持証拠金率と清算ルールは取引所ごとに異なり、実際の清算価格は取引所の表示が優先されます。計算の参考用であり、投資助言ではありません。"},
+  ko:{title:"선물 포지션 계산기",sub:"격리 마진 · 유지 증거금률 0.5% · 추정치",side:"방향",long:"롱",short:"숏",
+    margin:"증거금",leverage:"레버리지",entry:"진입가",posValue:"포지션 가치",qty:"수량 (코인)",liq:"예상 청산가",
+    liqDown:"가격이 {0} 하락하면 청산",liqUp:"가격이 {0} 상승하면 청산",noLiq:"청산 없음",noLiqNote:"1배 롱은 가격이 0이 되기 전까지 청산되지 않습니다",
+    scen:"가격 변동 시 손익",chg:"변동",price:"가격",pnl:"손익 (USDT)",roe:"수익률",liquidated:"청산됨",
+    axis:"가격 축",axisHint:"가격 축을 드래그하거나 탭하면 원하는 가격의 손익을 볼 수 있습니다",entryTag:"진입",liqTag:"청산",probe:"가격",
+    zProfit:"수익",zLoss:"손실",zLiq:"청산",
+    errMargin:"0보다 큰 증거금을 입력하세요",errEntry:"0보다 큰 진입가를 입력하세요",errLev:"레버리지는 1~125 사이로 입력하세요",
+    fix:"빨간색으로 표시된 입력을 수정하면 결과가 표시됩니다",
+    disclaimer:"추정치에는 거래 수수료와 펀딩비가 포함되지 않습니다. 유지 증거금률과 청산 규칙은 거래소마다 다르며 실제 청산가는 거래소 기준입니다. 계산 참고용이며 투자 조언이 아닙니다."}
+};
+var HTML_LANG = {zh:"zh-CN", en:"en", "zh-TW":"zh-TW", ja:"ja", ko:"ko"};
+
+var $ = function(id){ return document.getElementById(id); };
+var store = {
+  get:function(){ try{ return JSON.parse(localStorage.getItem("fpc-state")||"{}")||{}; }catch(e){ return {}; } },
+  set:function(o){ try{ localStorage.setItem("fpc-state", JSON.stringify(o)); }catch(e){} }
+};
+function detectLang(){
+  var list = navigator.languages || [navigator.language || "en"];
+  for (var i=0;i<list.length;i++){
+    var l = String(list[i]).toLowerCase();
+    if (/^zh-(tw|hk|mo|hant)/.test(l)) return "zh-TW";
+    if (l.indexOf("zh")===0) return "zh";
+    if (l.indexOf("ja")===0) return "ja";
+    if (l.indexOf("ko")===0) return "ko";
+    if (l.indexOf("en")===0) return "en";
+  }
+  return "en";
+}
+
+var saved = store.get();
+var state = {
+  lang: I18N[saved.lang] ? saved.lang : detectLang(),
+  side: saved.side === "short" ? "short" : "long",
+  probeT: null
+};
+if (saved.theme === "light" || saved.theme === "dark") document.documentElement.setAttribute("data-theme", saved.theme);
+["margin","lev","entry"].forEach(function(k){ if (typeof saved[k] === "string" && saved[k] !== "") $(k).value = saved[k]; });
+
+function t(key){
+  var s = I18N[state.lang][key];
+  for (var i=1;i<arguments.length;i++) s = s.replace("{"+(i-1)+"}", arguments[i]);
+  return s;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+/* ---------- 数字 ---------- */
+function num(str){
+  var s = String(str).replace(/[０-９．]/g,function(c){ return c==="．" ? "." : String.fromCharCode(c.charCodeAt(0)-65248); })
+                     .replace(/[,\s，]/g,"");
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+function loc(v,min,max){ return v.toLocaleString("en-US",{minimumFractionDigits:min,maximumFractionDigits:max}); }
+function fmtPrice(p){
+  if (!(p > 0)) return "0";
+  if (p >= 1000) return loc(p,2,2);
+  if (p >= 1) return loc(p,2,4);
+  return loc(Number(p.toPrecision(6)),0,12);
+}
+function sign(v){ return v > 0 ? "+" : v < 0 ? "−" : ""; }
+function fmtUsd(v){ var r = Math.round(v*100)/100; return sign(r) + loc(Math.abs(r),2,2); }
+function fmtPct(f, signed){ var r = Math.round(f*10000)/100; return (signed ? sign(r) : "") + loc(Math.abs(r),0,2) + "%"; }
+function fmtQty(q){ return loc(Number(q.toPrecision(6)),0,10); }
+function cls(v){ return v > 0 ? "up" : v < 0 ? "down" : ""; }
+
+/* ---------- 计算 ---------- */
+function calc(){
+  var m = num($("margin").value), L = num($("lev").value), E = num($("entry").value);
+  var errs = {
+    margin: m > 0 && isFinite(m) ? "" : t("errMargin"),
+    lev: L >= 1 && L <= MAX_LEV ? "" : t("errLev"),
+    entry: E > 0 && isFinite(E) ? "" : t("errEntry")
+  };
+  var ok = !errs.margin && !errs.lev && !errs.entry;
+  if (!ok) return {ok:false, errs:errs};
+  var long = state.side === "long", dir = long ? 1 : -1;
+  var notional = m * L;
+  // 逐仓：本金 + 浮动盈亏 = 强平价 × 数量 × 维持保证金率
+  var liq = long ? E * (1 - 1/L) / (1 - MMR) : E * (1 + 1/L) / (1 + MMR);
+  if (!(liq > 0)) liq = null;
+  var dist = liq === null ? null : Math.abs(liq - E) / E;
+  function at(price){
+    var dead = liq !== null && (long ? price <= liq : price >= liq);
+    var pnl = dead ? -m : notional * (price - E) / E * dir;
+    return {price:price, chg:(price - E)/E, dead:dead, pnl:pnl, roe:pnl/m};
+  }
+  var span = .1;
+  if (dist !== null){ span = 2; for (var i=0;i<SPANS.length;i++) if (SPANS[i] >= dist*1.25){ span = SPANS[i]; break; } }
+  return {ok:true, errs:errs, m:m, L:L, E:E, long:long, notional:notional, qty:notional/E, liq:liq, dist:dist, at:at,
+          span:span, lo:Math.max(E*(1-span),0), hi:E*(1+span)};
+}
+
+/* ---------- 渲染 ---------- */
+function renderStats(r){
+  var dash = "—", h = "";
+  if (!r.ok){
+    h += '<div class="stat hero"><div><div class="k">'+esc(t("liq"))+'</div><div class="v" style="color:var(--muted)">'+dash+'</div></div></div>';
+    h += '<div class="stat"><div class="k">'+esc(t("posValue"))+'</div><div class="v">'+dash+'</div></div>';
+    h += '<div class="stat"><div class="k">'+esc(t("qty"))+'</div><div class="v">'+dash+'</div></div>';
+  } else {
+    if (r.liq === null){
+      h += '<div class="stat hero safe"><div><div class="k">'+esc(t("liq"))+'</div><div class="v" id="o-liq">'+esc(t("noLiq"))+'</div></div><div class="note">'+esc(t("noLiqNote"))+'</div></div>';
+    } else {
+      h += '<div class="stat hero"><div><div class="k">'+esc(t("liq"))+'</div><div class="v" id="o-liq">'+fmtPrice(r.liq)+'</div></div><div class="note">'+esc(t(r.long?"liqDown":"liqUp", fmtPct(r.dist)))+'</div></div>';
+    }
+    h += '<div class="stat"><div class="k">'+esc(t("posValue"))+'</div><div class="v" id="o-pos">'+loc(r.notional,2,2)+'<small>USDT</small></div></div>';
+    h += '<div class="stat"><div class="k">'+esc(t("qty"))+'</div><div class="v" id="o-qty">'+fmtQty(r.qty)+'</div></div>';
+  }
+  $("stats").innerHTML = h;
+}
+
+function renderTable(r){
+  if (!r.ok){ $("tableBox").innerHTML = '<div class="empty">'+esc(t("fix"))+'</div>'; return; }
+  var h = '<table><thead><tr><th>'+esc(t("chg"))+'</th><th>'+esc(t("price"))+'</th><th>'+esc(t("pnl"))+'</th><th>'+esc(t("roe"))+'</th></tr></thead><tbody>';
+  PCTS.forEach(function(p, i){
+    var s = r.at(r.E * (1 + p/100));
+    h += '<tr'+(i===3?' class="gap"':'')+'><td class="'+(p>0?"up":"down")+'">'+(p>0?"+":"−")+Math.abs(p)+'%</td>'
+       + '<td class="pr">'+fmtPrice(s.price)+'</td>'
+       + '<td class="'+cls(s.pnl)+'">'+fmtUsd(s.pnl)+'</td>'
+       + '<td class="'+cls(s.roe)+'">'+(s.dead ? '<span class="badge">'+esc(t("liquidated"))+'</span>' : fmtPct(s.roe,true))+'</td></tr>';
+  });
+  $("tableBox").innerHTML = h + '</tbody></table>';
+}
+
+var axisModel = null;
+function renderAxis(r){
+  var box = $("axisBox");
+  if (!r.ok){ axisModel = null; box.innerHTML = '<div class="empty">'+esc(t("fix"))+'</div>'; return; }
+  var lo = r.lo, hi = r.hi;
+  function pos(p){ return Math.min(100, Math.max(0, (p - lo) / (hi - lo) * 100)); }
+  function lbl(x){ return 'style="transform:translateX(-'+x.toFixed(2)+'%)"'; }
+  var ex = pos(r.E), lx = r.liq === null ? null : pos(r.liq);
+  if (state.probeT === null) state.probeDefault = r.long ? (ex + 100) / 200 : ex / 200;
+  var T = state.probeT === null ? state.probeDefault : state.probeT;
+
+  // 区域
+  var z = "";
+  function zone(c,a,b){ if (b > a) z += '<div class="zone '+c+'" style="left:'+a+'%;width:'+(b-a)+'%"></div>'; }
+  if (r.long){ if (lx !== null) zone("x",0,lx); zone("s", lx===null?0:lx, ex); zone("p", ex, 100); }
+  else { zone("p",0,ex); zone("s", ex, lx===null?100:lx); if (lx !== null) zone("x", lx, 100); }
+
+  // 刻度：优先 ±10/5/1%，放不下再用轴的整段和半段
+  var cands = [10,5,1].filter(function(p){ return p/100 <= r.span + 1e-9; }).concat([r.span*100, r.span*50]);
+  var shown = [], ticks = "";
+  cands.forEach(function(p){
+    [1,-1].forEach(function(sg){
+      var price = r.E * (1 + sg*p/100);
+      if (price < lo - 1e-9 || price > hi + 1e-9) return;
+      var x = pos(price);
+      if (Math.abs(x - ex) < 6) return;
+      for (var i=0;i<shown.length;i++) if (Math.abs(shown[i] - x) < 11) return;
+      shown.push(x);
+      ticks += '<div class="tick" style="left:'+x+'%"><span '+lbl(x)+'>'+(sg>0?"+":"−")+loc(p,0,2)+'%</span></div>';
+    });
+  });
+
+  var h = '<div class="axis" id="axis" tabindex="0" role="slider" aria-label="'+esc(t("probe"))+'" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(T*100)+'"><div class="in">'
+    + '<div class="flags">'
+    + '<div class="flag e" style="left:'+ex+'%"><b '+lbl(ex)+'>'+esc(t("entryTag"))+' '+fmtPrice(r.E)+'</b><i></i></div>'
+    + (lx===null ? '' : '<div class="flag l" style="left:'+lx+'%"><b '+lbl(lx)+'>'+esc(t("liqTag"))+' '+fmtPrice(r.liq)+'</b><i></i></div>')
+    + '</div>'
+    + '<div class="trackwrap"><div class="track">'+z+'</div><div class="probe" id="probe" style="left:'+(T*100)+'%"></div></div>'
+    + '<div class="ticks">'+ticks+'</div>'
+    + '<div class="ends"><span>'+fmtPrice(lo)+'</span><span>'+fmtPrice(hi)+'</span></div>'
+    + '</div></div>'
+    + '<div class="readout" id="readout"></div>'
+    + '<div class="legend"><span><i style="background:var(--up-soft)"></i>'+esc(t("zProfit"))+'</span><span><i style="background:var(--down-soft)"></i>'+esc(t("zLoss"))+'</span>'
+    + (lx===null?'':'<span><i style="background:var(--down-solid)"></i>'+esc(t("zLiq"))+'</span>')+'</div>'
+    + '<div class="hint">'+esc(t("axisHint"))+'</div>';
+  var hadFocus = document.activeElement && document.activeElement.id === "axis";
+  box.innerHTML = h;
+  axisModel = r;
+  bindAxis();
+  if (hadFocus) $("axis").focus();
+  renderProbe();
+}
+function renderProbe(){
+  var r = axisModel; if (!r) return;
+  var T = state.probeT === null ? state.probeDefault : state.probeT;
+  var s = r.at(r.lo + T * (r.hi - r.lo));
+  $("probe").style.left = (T*100) + "%";
+  $("axis").setAttribute("aria-valuenow", Math.round(T*100));
+  $("axis").setAttribute("aria-valuetext", fmtPrice(s.price));
+  $("readout").innerHTML =
+      '<div><div class="k">'+esc(t("probe"))+'</div><div class="v" id="p-price">'+fmtPrice(s.price)+'</div></div>'
+    + '<div><div class="k">'+esc(t("chg"))+'</div><div class="v '+cls(s.chg)+'">'+fmtPct(s.chg,true)+'</div></div>'
+    + '<div><div class="k">'+esc(t("pnl"))+'</div><div class="v '+cls(s.pnl)+'" id="p-pnl">'+fmtUsd(s.pnl)+'</div></div>'
+    + '<div><div class="k">'+esc(t("roe"))+'</div><div class="v '+cls(s.roe)+'">'+(s.dead?'<span class="badge">'+esc(t("liquidated"))+'</span>':fmtPct(s.roe,true))+'</div></div>';
+}
+function bindAxis(){
+  var ax = $("axis"), dragging = false;
+  function move(ev){
+    var rect = ax.querySelector(".in").getBoundingClientRect();
+    state.probeT = Math.min(1, Math.max(0, (ev.clientX - rect.left) / rect.width));
+    renderProbe();
+  }
+  ax.addEventListener("pointerdown", function(ev){ dragging = true; try{ ax.setPointerCapture(ev.pointerId); }catch(e){} move(ev); });
+  ax.addEventListener("pointermove", function(ev){ if (dragging) move(ev); });
+  ["pointerup","pointercancel"].forEach(function(n){ ax.addEventListener(n, function(){ dragging = false; }); });
+  ax.addEventListener("keydown", function(ev){
+    var d = ev.key === "ArrowLeft" ? -1 : ev.key === "ArrowRight" ? 1 : 0;
+    if (!d) return;
+    ev.preventDefault();
+    var T = state.probeT === null ? state.probeDefault : state.probeT;
+    state.probeT = Math.min(1, Math.max(0, T + d * (ev.shiftKey ? .05 : .01)));
+    renderProbe();
+  });
+}
+
+function renderStatic(){
+  document.documentElement.lang = HTML_LANG[state.lang];
+  document.title = t("title");
+  var nodes = document.querySelectorAll("[data-t]");
+  for (var i=0;i<nodes.length;i++) nodes[i].textContent = t(nodes[i].getAttribute("data-t"));
+  $("lang").value = state.lang;
+}
+function render(){
+  var r = calc();
+  ["margin","lev","entry"].forEach(function(k){
+    $("e-"+k).textContent = r.errs[k];
+    $(k).parentNode.classList.toggle("bad", !!r.errs[k]);
+    $(k).setAttribute("aria-invalid", r.errs[k] ? "true" : "false");
+  });
+  var segs = document.querySelectorAll(".seg button");
+  for (var i=0;i<segs.length;i++) segs[i].setAttribute("aria-pressed", segs[i].getAttribute("data-side") === state.side ? "true" : "false");
+  var L = num($("lev").value), chips = $("chips").children;
+  $("levr").style.setProperty("--p", (($("levr").value - 1) / (MAX_LEV - 1) * 100) + "%");
+  for (var j=0;j<chips.length;j++) chips[j].classList.toggle("on", Number(chips[j].getAttribute("data-l")) === L);
+  renderStats(r); renderAxis(r); renderTable(r);
+}
+function persist(){
+  var o = store.get();
+  o.lang = state.lang; o.side = state.side;
+  o.margin = $("margin").value; o.lev = $("lev").value; o.entry = $("entry").value;
+  store.set(o);
+}
+function update(){ render(); persist(); }
+
+/* ---------- 事件 ---------- */
+[3,5,10,20,50,100].forEach(function(l){
+  var b = document.createElement("button");
+  b.type = "button"; b.textContent = l + "×"; b.setAttribute("data-l", l);
+  b.addEventListener("click", function(){ $("lev").value = l; $("levr").value = l; update(); });
+  $("chips").appendChild(b);
+});
+$("margin").addEventListener("input", update);
+$("entry").addEventListener("input", function(){ state.probeT = null; update(); });
+$("lev").addEventListener("input", function(){
+  var L = num($("lev").value);
+  if (L >= 1 && L <= MAX_LEV) $("levr").value = Math.round(L);
+  update();
+});
+$("levr").addEventListener("input", function(){ $("lev").value = $("levr").value; update(); });
+var segBtns = document.querySelectorAll(".seg button");
+for (var i=0;i<segBtns.length;i++) segBtns[i].addEventListener("click", function(){
+  state.side = this.getAttribute("data-side"); state.probeT = null; update();
+});
+$("lang").addEventListener("change", function(){ state.lang = this.value; renderStatic(); update(); });
+$("theme").addEventListener("click", function(){
+  var root = document.documentElement, cur = root.getAttribute("data-theme");
+  if (!cur) cur = window.matchMedia && matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light";
+  var next = cur === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  var o = store.get(); o.theme = next; store.set(o);
+});
+
+var L0 = num($("lev").value);
+if (L0 >= 1 && L0 <= MAX_LEV) $("levr").value = Math.round(L0);
+renderStatic();
+render();
+})();
+</script>
+</body>
+</html>

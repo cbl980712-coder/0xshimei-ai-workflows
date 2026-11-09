@@ -6,6 +6,7 @@
 |---|---|---|
 | [`screen-to-tutorial`](screen-to-tutorial/) | 一段软件操作录屏 → 自动切出每一步的画面 → AI 写动作和说明 → 一个图文教程 HTML，可直接发给别人 | Python 3.8+、Pillow、numpy、ffmpeg |
 | [`ashare-watcher`](ashare-watcher/) | 海外 AI 交易教程用的平台国内用不了，换成国内免登录的 A 股行情：信号、回测、模拟盘、盯盘提醒 | 只要 Python 3.8+，不用装包 |
+| [`video-prompt-guard`](video-prompt-guard/) | AI 视频生成前先检查分镜：哪些镜头容易崩、怎么拆怎么改，写好首尾帧提示词，算修改前后的预估成本；也能当 Claude Code Skill 用 | 只要 Python 3.8+，不用装包 |
 
 ## 怎么下载
 

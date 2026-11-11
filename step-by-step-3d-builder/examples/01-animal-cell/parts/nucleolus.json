@@ -1,0 +1,10 @@
+{
+ "shapes": [
+  {
+   "type": "sphere",
+   "r": 0.3,
+   "color": "#2a3b9c",
+   "rough": 0.7
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "shapes": [
+  {
+   "type": "box",
+   "size": [
+    2.6,
+    2.0,
+    1.5
+   ],
+   "pos": [
+    0,
+    0.1,
+    0
+   ],
+   "color": "#7a8aa0",
+   "opacity": 0.2,
+   "rough": 0.4
+  },
+  {
+   "type": "cylinder",
+   "r": 1.1,
+   "h": 2.5,
+   "open": true,
+   "seg": 48,
+   "pos": [
+    0,
+    2.25,
+    0
+   ],
+   "color": "#8fa0b3",
+   "opacity": 0.22,
+   "metal": 0.6,
+   "rough": 0.3
+  }
+ ]
+}

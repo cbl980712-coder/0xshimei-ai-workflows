@@ -1,0 +1,24 @@
+{
+ "shapes": [
+  {
+   "type": "cone",
+   "r": 0.7,
+   "h": 0.7,
+   "pos": [
+    0.1,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    90
+   ],
+   "color": "#d94f3d",
+   "metal": 0.4
+  }
+ ],
+ "code": null,
+ "anim": null,
+ "update": null
+}

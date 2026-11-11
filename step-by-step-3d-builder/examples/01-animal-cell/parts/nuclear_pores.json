@@ -1,0 +1,22 @@
+{
+ "shapes": [
+  {
+   "type": "scatter",
+   "of": {
+    "type": "torus",
+    "R": 0.09,
+    "r": 0.03,
+    "seg": 10,
+    "color": "#ffd166",
+    "emissive": "#553300"
+   },
+   "count": 14,
+   "radius": [
+    1.4,
+    1.4
+   ],
+   "seed": 5,
+   "orient": "radial"
+  }
+ ]
+}

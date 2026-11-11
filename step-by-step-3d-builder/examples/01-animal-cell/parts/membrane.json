@@ -1,0 +1,27 @@
+{
+ "shapes": [
+  {
+   "type": "sphere",
+   "r": 4.0,
+   "seg": 48,
+   "color": "#ff8fb1",
+   "opacity": 0.16,
+   "rough": 0.3
+  },
+  {
+   "type": "scatter",
+   "of": {
+    "type": "sphere",
+    "r": 0.035,
+    "seg": 6,
+    "color": "#ffb3c8"
+   },
+   "count": 420,
+   "radius": [
+    3.97,
+    4.0
+   ],
+   "seed": 2
+  }
+ ]
+}

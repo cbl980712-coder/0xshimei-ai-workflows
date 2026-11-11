@@ -1,0 +1,24 @@
+{
+ "shapes": [
+  {
+   "type": "cylinder",
+   "r": 0.18,
+   "h": 0.5,
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    90
+   ],
+   "color": "#8a93a3",
+   "metal": 0.8
+  }
+ ],
+ "code": null,
+ "anim": null,
+ "update": null
+}

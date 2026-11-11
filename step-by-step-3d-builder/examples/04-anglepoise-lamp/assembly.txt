@@ -1,0 +1,14 @@
+装配图：Anglepoise 台灯 3D 模型
+格式：名称 (id)  相对父部件坐标 → 世界坐标  bound
+
+└─ 底座 (base)  [0, 0, 0] → [0, 0, 0]  bound=[4.5, 7.5, 4.5]
+   ├─ 弹簧组 (springs)  [0, 0.9, 0] → [0, 0.9, 0]  bound=1.2
+   ├─ 下臂 (lower_arm)  [0.6, 2.2, 0] → [0.6, 2.2, 0]  bound=[1.5, 2.1, 0.5]
+   ├─ 上臂 (upper_arm)  [0.9, 4.4, 0] → [0.9, 4.4, 0]  bound=[1.5, 2.0, 0.5]
+   ├─ 配重 (balance_weight)  [-0.7, 0.9, 0] → [-0.7, 0.9, 0]  bound=0.8
+   ├─ 灯座接口 (socket)  [2.0, 5.2, 0] → [2.0, 5.2, 0]  bound=0.5
+   ├─ 反光罩 (reflector)  [2.3, 5.2, 0] → [2.3, 5.2, 0]  bound=[0.9, 0.8, 0.9]
+   └─ 灯泡 (bulb)  [2.3, 5.2, 0] → [2.3, 5.2, 0]  bound=0.4
+
+建造顺序（先父后子、先依赖后使用）：
+  base → springs → lower_arm → upper_arm → balance_weight → socket → reflector → bulb

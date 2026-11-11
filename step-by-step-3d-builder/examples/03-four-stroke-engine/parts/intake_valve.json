@@ -1,0 +1,25 @@
+{
+ "shapes": [
+  {
+   "type": "cylinder",
+   "r": 0.06,
+   "h": 1.5,
+   "pos": [
+    0,
+    0.75,
+    0
+   ],
+   "color": "#aab4c0",
+   "metal": 0.9
+  },
+  {
+   "type": "cylinder",
+   "r": 0.36,
+   "h": 0.05,
+   "color": "#4aa3ff",
+   "metal": 0.8,
+   "rough": 0.3
+  }
+ ],
+ "update": "const ph=(2.0*t)%(4*Math.PI); node.position.y=3.5-(ph<Math.PI?0.3*Math.sin(ph):0);"
+}

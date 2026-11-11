@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>动物细胞 3D 互动模型</title>
+<style>
+  :root { --bg:#0b1020; --panel:#121a30; --line:#27345a; --fg:#e8edf8; --mute:#8d9bbd; --acc:#4aa3ff; --ok:#3ddc97; --bad:#ff6b6b; --warn:#ffc857; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.5 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+  #stage { position:fixed; inset:0 340px 0 0; }
+  #stage canvas { display:block; width:100%; height:100%; }
+  #nogl { padding:24px; color:var(--warn); }
+  #panel { position:fixed; top:0; right:0; bottom:0; width:340px; background:var(--panel); border-left:1px solid var(--line); overflow:auto; padding:16px; }
+  h1 { font-size:18px; margin:0 0 2px; }
+  .sub { color:var(--mute); font-size:12px; margin:0 0 12px; }
+  .badge { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; border:1px solid var(--line); }
+  .badge.ok { color:var(--ok); border-color:var(--ok); } .badge.bad { color:var(--bad); border-color:var(--bad); }
+  ul#tree, ul#tree ul { list-style:none; margin:0; padding-left:14px; }
+  ul#tree { padding-left:0; margin:12px 0; }
+  #tree button { all:unset; cursor:pointer; display:flex; align-items:center; gap:8px; padding:3px 6px; border-radius:6px; width:calc(100% - 12px); }
+  #tree button:hover { background:#1b2646; }
+  #tree button.sel { background:#1f3a66; outline:1px solid var(--acc); }
+  .chip { width:10px; height:10px; border-radius:50%; flex:none; border:1px solid #fff4; }
+  .mark { margin-left:auto; font-size:12px; }
+  .mark.ok { color:var(--ok); } .mark.bad { color:var(--bad); }
+  #info { border-top:1px solid var(--line); padding-top:10px; min-height:120px; font-size:13px; }
+  #info h2 { font-size:15px; margin:0 0 4px; }
+  #info .k { color:var(--mute); }
+  #info .iss { color:var(--bad); } #info .wrn { color:var(--warn); }
+  label.t { display:inline-flex; gap:6px; align-items:center; margin-right:12px; color:var(--mute); font-size:12px; cursor:pointer; }
+  #tag { position:fixed; pointer-events:none; background:#000b; border:1px solid var(--acc); color:#fff; padding:2px 8px; border-radius:6px; font-size:12px; transform:translate(-50%,-140%); display:none; white-space:nowrap; }
+  #hint { position:fixed; left:12px; bottom:10px; color:var(--mute); font-size:12px; }
+  @media (max-width:760px) { #stage { inset:0 0 46% 0; } #panel { top:auto; width:auto; left:0; height:46%; border-left:0; border-top:1px solid var(--line); } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="tag"></div>
+<div id="hint">拖拽旋转 · 滚轮缩放 · 点击部件高亮 · Esc 取消选择</div>
+<aside id="panel">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div><span class="badge" id="badge">自检中…</span></div>
+  <ul id="tree"></ul>
+  <div style="margin-bottom:10px">
+    <label class="t"><input type="checkbox" id="iso"> 隔离选中部件</label>
+    <label class="t"><input type="checkbox" id="anim" checked> 部件动画</label>
+    <label class="t"><input type="checkbox" id="spin"> 自动旋转视角</label>
+  </div>
+  <div id="info"><span class="k">点击场景里的部件，或点上面的列表。</span></div>
+</aside>
+<pre id="build-report" hidden></pre>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const SPEC = {"title": "动物细胞 3D 互动模型", "subtitle": "13 个独立部件，逐个生成、逐个自检后组装。资料来源：Wikipedia「Cell (biology)」", "source_url": "https://en.wikipedia.org/wiki/Cell_(biology)", "background": "#0a0f1e", "camera": {"position": [0, 3.5, 15], "target": [0, 0, 0]}, "parts": [{"id": "membrane", "name": "细胞膜", "parent": null, "position": [0, 0, 0], "bound": 4.1, "source_terms": ["cell membrane", "plasma membrane"], "desc": "磷脂双分子层，包住整个细胞，控制物质进出。", "shapes": [{"type": "sphere", "r": 4.0, "seg": 48, "color": "#ff8fb1", "opacity": 0.16, "rough": 0.3}, {"type": "scatter", "of": {"type": "sphere", "r": 0.035, "seg": 6, "color": "#ffb3c8"}, "count": 420, "radius": [3.97, 4.0], "seed": 2}], "evidence": [{"term": "cell membrane", "count": 31}, {"term": "plasma membrane", "count": 5}]}, {"id": "cytoplasm", "name": "细胞质", "parent": "membrane", "position": [0, 0, 0], "bound": 3.95, "source_terms": ["cytoplasm"], "desc": "膜内的半流体基质，所有细胞器都悬浮在里面。", "shapes": [{"type": "sphere", "r": 3.9, "seg": 40, "color": "#ffd9a8", "opacity": 0.07}], "evidence": [{"term": "cytoplasm", "count": 26}]}, {"id": "nucleus", "name": "细胞核", "parent": "cytoplasm", "position": [0.3, 0.2, 0], "bound": 1.5, "source_terms": ["nucleus"], "desc": "双层核膜包着遗传物质（DNA），是细胞的控制中心。", "shapes": [{"type": "sphere", "r": 1.4, "seg": 40, "color": "#6f8cff", "opacity": 0.28, "rough": 0.3}], "evidence": [{"term": "nucleus", "count": 38}]}, {"id": "nucleolus", "name": "核仁", "parent": "nucleus", "position": [0.35, 0, 0.2], "bound": 0.4, "source_terms": ["nucleolus"], "desc": "核内致密小球，合成核糖体 RNA。", "shapes": [{"type": "sphere", "r": 0.3, "color": "#2a3b9c", "rough": 0.7}], "evidence": [{"term": "nucleolus", "count": 4}]}, {"id": "chromatin", "name": "染色质", "parent": "nucleus", "position": [0, 0, 0], "bound": 1.1, "color": "#ff7ad9", "source_terms": ["chromatin", "chromosome"], "desc": "DNA 与蛋白质缠绕成的丝状结构。", "code": "const g=new THREE.Group();\nconst rnd=ctx.rngFrom(11);\nconst mat=ctx.makeMat({color:'#ff7ad9',emissive:'#551144',rough:0.5});\nfor(let k=0;k<6;k++){\n  const pts=[]; const p=new THREE.Vector3(rnd()-.5,rnd()-.5,rnd()-.5).multiplyScalar(1.2);\n  for(let i=0;i<14;i++){\n    p.add(new THREE.Vector3(rnd()-.5,rnd()-.5,rnd()-.5).multiplyScalar(0.7));\n    if(p.length()>0.9) p.multiplyScalar(0.9/p.length());\n    pts.push(p.clone());\n  }\n  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),80,0.035,6,false),mat));\n}\nreturn g;", "evidence": [{"term": "chromatin", "count": 1}, {"term": "chromosome", "count": 17}]}, {"id": "nuclear_pores", "name": "核孔", "parent": "nucleus", "position": [0, 0, 0], "bound": 1.5, "depends_on": ["nucleus"], "source_terms": ["nuclear pore"], "desc": "核膜上的孔道，RNA 和蛋白质经这里进出细胞核。", "shapes": [{"type": "scatter", "of": {"type": "torus", "R": 0.09, "r": 0.03, "seg": 10, "color": "#ffd166", "emissive": "#553300"}, "count": 14, "radius": [1.4, 1.4], "seed": 5, "orient": "radial"}], "evidence": [{"term": "nuclear pore", "count": 1}]}, {"id": "mitochondria", "name": "线粒体", "parent": "cytoplasm", "position": [0, 0, 0], "bound": 3.7, "color": "#ff9a3c", "source_terms": ["mitochondri"], "desc": "双层膜、内膜折叠成嵴，通过呼吸作用产生 ATP。", "code": "const g=new THREE.Group();\nconst outer=ctx.makeMat({color:'#ff9a3c',opacity:0.35,rough:0.4});\nconst inner=ctx.makeMat({color:'#d9480f',rough:0.5});\nconst spots=[[-2.4,-1.2,1.2, 0.6,0.2,0.9],[2.3,-1.6,-0.8, 1.2,0,0.4],[-1.8,1.9,-1.4, 0.3,0.8,1.3],[2.0,1.6,1.7, 1.0,0.5,0.2]];\nfor(const s of spots){\n  const m=new THREE.Group(); m.position.set(s[0],s[1],s[2]); m.rotation.set(s[3],s[4],s[5]);\n  m.add(new THREE.Mesh(new THREE.CapsuleGeometry(0.36,0.6,6,16),outer));\n  for(let y=-0.4;y<=0.401;y+=0.16){\n    const c=new THREE.Mesh(new THREE.CylinderGeometry(0.27,0.27,0.035,20),inner); c.position.y=y; m.add(c);\n  }\n  g.add(m);\n}\nreturn g;", "evidence": [{"term": "mitochondri", "count": 26}]}, {"id": "er", "name": "内质网", "parent": "cytoplasm", "position": [0.3, 0.2, 0], "bound": 2.45, "color": "#4fd1c5", "depends_on": ["nucleus"], "source_terms": ["endoplasmic reticulum"], "desc": "紧贴核膜外侧、折叠成网的膜管道，合成并运输蛋白质和脂质。", "code": "const g=new THREE.Group();\nconst mat=ctx.makeMat({color:'#4fd1c5',rough:0.4,emissive:'#0b3d3a'});\n[35,60,85,110,135].forEach((deg,k)=>{\n  const th=deg*Math.PI/180, pts=[];\n  for(let i=0;i<48;i++){\n    const a=2*Math.PI*i/48, r=1.62+0.18*Math.sin(5*a+k*1.3);\n    pts.push(new THREE.Vector3(r*Math.sin(th)*Math.cos(a), r*Math.cos(th), r*Math.sin(th)*Math.sin(a)));\n  }\n  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts,true),160,0.07,8,true),mat));\n});\nreturn g;", "evidence": [{"term": "endoplasmic reticulum", "count": 14}]}, {"id": "golgi", "name": "高尔基体", "parent": "cytoplasm", "position": [2.2, 0.2, -1.8], "bound": 1.0, "source_terms": ["golgi"], "desc": "一摞扁平膜囊，加工、分拣、包装蛋白质。", "shapes": [{"type": "sphere", "r": 0.75, "seg": 24, "scale": [1, 0.1, 0.62], "pos": [0, -0.34, 0], "rot": [0, 0, 22], "color": "#c77dff", "rough": 0.4}, {"type": "sphere", "r": 0.75, "seg": 24, "scale": [1, 0.1, 0.62], "pos": [0, -0.17, 0], "rot": [0, 0, 22], "color": "#c77dff", "rough": 0.4}, {"type": "sphere", "r": 0.75, "seg": 24, "scale": [1, 0.1, 0.62], "pos": [0, 0.0, 0], "rot": [0, 0, 22], "color": "#c77dff", "rough": 0.4}, {"type": "sphere", "r": 0.75, "seg": 24, "scale": [1, 0.1, 0.62], "pos": [0, 0.16999999999999998, 0], "rot": [0, 0, 22], "color": "#c77dff", "rough": 0.4}, {"type": "sphere", "r": 0.75, "seg": 24, "scale": [1, 0.1, 0.62], "pos": [0, 0.34, 0], "rot": [0, 0, 22], "color": "#c77dff", "rough": 0.4}, {"type": "sphere", "r": 0.09, "pos": [0.78, 0.1, 0.35], "color": "#e0aaff"}, {"type": "sphere", "r": 0.09, "pos": [-0.7, -0.2, 0.4], "color": "#e0aaff"}, {"type": "sphere", "r": 0.09, "pos": [0.5, 0.45, -0.5], "color": "#e0aaff"}, {"type": "sphere", "r": 0.09, "pos": [-0.6, 0.3, -0.45], "color": "#e0aaff"}], "evidence": [{"term": "golgi", "count": 14}]}, {"id": "lysosomes", "name": "溶酶体", "parent": "cytoplasm", "position": [0, 0, 0], "bound": 3.5, "source_terms": ["lysosome"], "desc": "含水解酶的小囊泡，分解废物和外来物。", "shapes": [{"type": "sphere", "r": 0.2, "pos": [-0.2, -2.7, 0.9], "color": "#ffd23f", "emissive": "#665500"}, {"type": "sphere", "r": 0.2, "pos": [-3.0, 0.4, -1.0], "color": "#ffd23f", "emissive": "#665500"}, {"type": "sphere", "r": 0.2, "pos": [1.0, 2.9, -1.1], "color": "#ffd23f", "emissive": "#665500"}, {"type": "sphere", "r": 0.2, "pos": [0.4, -2.9, -1.5], "color": "#ffd23f", "emissive": "#665500"}, {"type": "sphere", "r": 0.2, "pos": [-1.0, 2.4, 1.8], "color": "#ffd23f", "emissive": "#665500"}], "evidence": [{"term": "lysosome", "count": 8}]}, {"id": "centrosome", "name": "中心体", "parent": "cytoplasm", "position": [-1.3, 1.7, 0.9], "bound": 0.5, "source_terms": ["centrosome", "centriole"], "desc": "一对互相垂直的中心粒，组织微管、参与细胞分裂。", "shapes": [{"type": "cylinder", "r": 0.07, "h": 0.42, "seg": 14, "color": "#9bf6ff", "emissive": "#0a4a55"}, {"type": "cylinder", "r": 0.07, "h": 0.36, "seg": 14, "pos": [0, 0, 0.26], "rot": [90, 0, 0], "color": "#9bf6ff", "emissive": "#0a4a55"}], "evidence": [{"term": "centrosome", "count": 10}, {"term": "centriole", "count": 6}]}, {"id": "cytoskeleton", "name": "细胞骨架（微管）", "parent": "cytoplasm", "position": [0, 0, 0], "bound": 3.8, "color": "#7bd88f", "depends_on": ["centrosome"], "source_terms": ["cytoskeleton", "microtubule"], "desc": "从中心体向外辐射的微管，维持形状并充当运输轨道。", "code": "const g=new THREE.Group();\nconst rnd=ctx.rngFrom(21);\nconst mat=ctx.makeMat({color:'#7bd88f',opacity:0.6,rough:0.5});\nconst start=new THREE.Vector3(-1.3,1.7,0.9);\nfor(let k=0;k<16;k++){\n  const th=2*Math.PI*rnd(), ph=Math.acos(2*rnd()-1);\n  const end=new THREE.Vector3(Math.sin(ph)*Math.cos(th),Math.cos(ph),Math.sin(ph)*Math.sin(th)).multiplyScalar(3.7);\n  const mid=start.clone().lerp(end,0.5).add(new THREE.Vector3(rnd()-.5,rnd()-.5,rnd()-.5).multiplyScalar(0.5));\n  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([start,mid,end]),24,0.018,5,false),mat));\n}\nreturn g;", "evidence": [{"term": "cytoskeleton", "count": 23}, {"term": "microtubule", "count": 10}]}, {"id": "ribosomes", "name": "核糖体", "parent": "cytoplasm", "position": [0, 0, 0], "bound": 3.6, "allow_overlap": true, "depends_on": ["nucleus", "mitochondria", "golgi", "er"], "source_terms": ["ribosome"], "desc": "合成蛋白质的小颗粒，游离在细胞质里，避开已有的细胞器。", "shapes": [{"type": "scatter", "of": {"type": "sphere", "r": 0.05, "seg": 8, "color": "#e63946"}, "count": 160, "radius": [0.5, 3.45], "seed": 7, "minDist": 0.15, "exclude": [[0.3, 0.2, 0, 2.0], [-2.4, -1.2, 1.2, 0.9], [2.3, -1.6, -0.8, 0.9], [-1.8, 1.9, -1.4, 0.9], [2.0, 1.6, 1.7, 0.9], [2.2, 0.2, -1.8, 1.1]]}], "evidence": [{"term": "ribosome", "count": 27}]}]};
+const $ = s => document.querySelector(s);
+const D2R = Math.PI / 180;
+
+/* ---------- 工具 ---------- */
+function rngFrom(seed) { let s = (seed >>> 0) || 1; return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; }
+function boundArr(b) { return Array.isArray(b) ? b : [b, b, b]; }
+
+function makeMat(o = {}) {
+  const op = o.opacity ?? 1;
+  return new THREE.MeshStandardMaterial({
+    color: o.color || '#9aa4b2', roughness: o.rough ?? 0.55, metalness: o.metal ?? 0,
+    transparent: op < 1, opacity: op, side: op < 1 ? THREE.DoubleSide : THREE.FrontSide,
+    emissive: new THREE.Color(o.emissive || '#000000'), emissiveIntensity: o.emissive ? 0.5 : 0,
+    wireframe: !!o.wire, depthWrite: op >= 0.6
+  });
+}
+
+function gearGeometry(s) {
+  const N = s.teeth;
+  let rP, rOut, rIn;
+  if (s.module) { rP = s.module * N / 2; rOut = rP + s.module; rIn = rP - 1.25 * s.module; }
+  else { rOut = s.r; rIn = s.rIn ?? s.r * 0.86; rP = (rOut + rIn) / 2; }
+  const p = 2 * Math.PI / N, sh = new THREE.Shape();
+  for (let i = 0; i < N; i++) {
+    [[rIn, 0], [rOut, 0.2], [rOut, 0.42], [rIn, 0.62]].forEach(([r, f], k) => {
+      const a = (i + f) * p, x = Math.cos(a) * r, y = Math.sin(a) * r;
+      (i === 0 && k === 0) ? sh.moveTo(x, y) : sh.lineTo(x, y);
+    });
+  }
+  sh.closePath();
+  if (s.hole) { const h = new THREE.Path(); h.absarc(0, 0, s.hole, 0, Math.PI * 2, true); sh.holes.push(h); }
+  const depth = s.thick ?? 0.08;
+  const g = new THREE.ExtrudeGeometry(sh, { depth, bevelEnabled: false, curveSegments: 6 });
+  g.translate(0, 0, -depth / 2);
+  if ((s.axis || 'y') === 'y') g.rotateX(-Math.PI / 2);
+  return g;
+}
+
+function makeGeo(s) {
+  const seg = s.seg || 32;
+  switch (s.type) {
+    case 'sphere':   return new THREE.SphereGeometry(s.r, seg, Math.max(8, (seg * 0.75) | 0));
+    case 'box':      return new THREE.BoxGeometry(...s.size);
+    case 'cylinder': return new THREE.CylinderGeometry(s.rTop ?? s.r, s.rBottom ?? s.r, s.h, seg, 1, !!s.open);
+    case 'cone':     return new THREE.ConeGeometry(s.r, s.h, seg);
+    case 'torus':    return new THREE.TorusGeometry(s.R, s.r, 12, seg * 2, (s.arc ?? 360) * D2R);
+    case 'capsule':  return new THREE.CapsuleGeometry(s.r, s.len, 6, 16);
+    case 'tube': {
+      if (!s.points || s.points.length < 2) throw new Error('tube 至少需要 2 个点');
+      const pts = s.points.map(p => new THREE.Vector3(...p));
+      return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, !!s.closed), s.segs || Math.max(16, pts.length * 8), s.r, 8, !!s.closed);
+    }
+    case 'gear':     return gearGeometry(s);
+    default: throw new Error('未知形状类型: ' + s.type);
+  }
+}
+
+function place(o, s) {
+  if (s.pos) o.position.set(...s.pos);
+  if (s.rot) o.rotation.set(s.rot[0] * D2R, s.rot[1] * D2R, s.rot[2] * D2R);
+  if (s.scale) o.scale.set(...s.scale);
+}
+
+function buildScatter(s) {
+  const rnd = rngFrom(s.seed || 1), geom = makeGeo(s.of);
+  const inst = new THREE.InstancedMesh(geom, makeMat(s.of), s.count);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), pos = new THREE.Vector3(), sc = new THREE.Vector3();
+  const zAxis = new THREE.Vector3(0, 0, 1), placed = [];
+  const [r0, r1] = s.radius, ex = s.exclude || [];
+  let n = 0, tries = 0;
+  while (n < s.count && tries < s.count * 300) {
+    tries++;
+    const th = 2 * Math.PI * rnd(), ph = Math.acos(2 * rnd() - 1);
+    const dir = new THREE.Vector3(Math.sin(ph) * Math.cos(th), Math.cos(ph), Math.sin(ph) * Math.sin(th));
+    const r = Math.cbrt(r0 ** 3 + (r1 ** 3 - r0 ** 3) * rnd());
+    pos.copy(dir).multiplyScalar(r);
+    if (s.center) pos.add(new THREE.Vector3(...s.center));
+    if (ex.some(e => pos.distanceTo(new THREE.Vector3(e[0], e[1], e[2])) < e[3])) continue;
+    if (s.minDist && placed.some(p => p.distanceTo(pos) < s.minDist)) continue;
+    if (s.orient === 'radial') q.setFromUnitVectors(zAxis, dir); else q.identity();
+    const j = 1 + (rnd() - 0.5) * 2 * (s.jitter || 0);
+    sc.set(j, j, j);
+    inst.setMatrixAt(n++, m.compose(pos, q, sc));
+    placed.push(pos.clone());
+  }
+  inst.count = n;
+  inst.instanceMatrix.needsUpdate = true;
+  if (n < s.count * 0.8) inst.userData.warn = `scatter 只放下 ${n}/${s.count} 个（空间不够或 exclude 太多）`;
+  return inst;
+}
+
+function buildShape(s) {
+  if (s.type === 'scatter') return buildScatter(s);
+  const mesh = new THREE.Mesh(makeGeo(s), makeMat(s));
+  place(mesh, s);
+  return mesh;
+}
+
+function buildInto(p, own) {
+  if (p.code) {
+    const fn = new Function('THREE', 'ctx', p.code);            // 语法错误会在这里抛出，只影响这一个部件
+    const obj = fn(THREE, { makeMat, makeGeo, rngFrom, gearGeometry });
+    if (!obj || !obj.isObject3D) throw new Error('code 必须 return 一个 THREE.Object3D');
+    own.add(obj);
+  }
+  for (const s of p.shapes || []) own.add(buildShape(s));
+}
+
+/* ---------- 场景 ---------- */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(SPEC.background || '#0b1020');
+scene.add(new THREE.HemisphereLight(0xdfe9ff, 0x1a1f33, 1.1));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(5, 8, 6); scene.add(key);
+const fill = new THREE.PointLight(0x88aaff, 40, 0, 2); fill.position.set(-6, -3, -5); scene.add(fill);
+const root = new THREE.Group(); scene.add(root);
+
+let renderer = null, camera = null, controls = null;
+const stage = $('#stage');
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  stage.appendChild(renderer.domElement);
+  camera = new THREE.PerspectiveCamera(SPEC.camera?.fov || 45, 1, 0.05, 500);
+  camera.position.set(...(SPEC.camera?.position || [0, 3, 10]));
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(...(SPEC.camera?.target || [0, 0, 0]));
+  controls.enableDamping = true; controls.autoRotateSpeed = 1.2;
+  controls.update();
+} catch (e) {
+  stage.innerHTML = '<div id="nogl">这台设备/浏览器没有可用的 WebGL，3D 视图无法显示（部件自检仍然已经执行）：' + e.message + '</div>';
+}
+
+/* ---------- 逐个部件挂载 + 自检（这就是“循环 + 依赖测试”） ---------- */
+const recs = new Map();
+const report = { title: SPEC.title, parts: [], total: SPEC.parts.length };
+const ANIM_TS = [0, 0.37, 0.74, 1.11, 1.48, 1.85];
+
+function applyAnim(rec, t) {
+  const { p, node } = rec;
+  node.position.copy(node.userData.basePos);
+  node.rotation.copy(node.userData.baseRot);
+  const a = p.anim || {};
+  if (a.rotate) { node.rotation.x += a.rotate[0] * t; node.rotation.y += a.rotate[1] * t; node.rotation.z += a.rotate[2] * t; }
+  if (a.oscillate) {
+    const o = a.oscillate, d = o.amp * Math.sin(t * o.speed + (o.phase || 0)), ax = o.axis || [0, 1, 0];
+    if (o.mode === 'rotate') { node.rotation.x += ax[0] * d; node.rotation.y += ax[1] * d; node.rotation.z += ax[2] * d; }
+    else node.position.add(new THREE.Vector3(...ax).multiplyScalar(d));
+  }
+  if (rec.updateFn) rec.updateFn(node, t, { THREE });
+}
+
+function collectPoints(own, out) {
+  own.updateWorldMatrix(true, true);
+  const v = new THREE.Vector3(), im = new THREE.Matrix4(), wm = new THREE.Matrix4();
+  let nan = false;
+  own.traverse(o => {
+    if (!o.isMesh) return;
+    const a = o.geometry.attributes.position;
+    if (!a || a.count === 0) { out.empty = true; return; }
+    for (let i = 0; i < a.array.length; i++) if (!Number.isFinite(a.array[i])) { nan = true; return; }
+    if (o.isInstancedMesh) {
+      const stride = Math.max(1, Math.floor(a.count / 12));
+      for (let k = 0; k < o.count; k++) {
+        o.getMatrixAt(k, im); wm.multiplyMatrices(o.matrixWorld, im);
+        for (let i = 0; i < a.count; i += stride) { v.fromBufferAttribute(a, i).applyMatrix4(wm); out.push(v.x, v.y, v.z); }
+      }
+    } else {
+      const stride = Math.max(1, Math.floor(a.count / 400));
+      for (let i = 0; i < a.count; i += stride) { v.fromBufferAttribute(a, i).applyMatrix4(o.matrixWorld); out.push(v.x, v.y, v.z); }
+    }
+  });
+  out.nan = out.nan || nan;
+}
+
+function normDist(x, y, z, o, b, mode) {
+  const dx = (x - o.x) / b[0], dy = mode === 'xz' ? 0 : (y - o.y) / b[1], dz = (z - o.z) / b[2];
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+function mountPart(p) {
+  const t0 = performance.now(), issues = [], warns = [];
+  const node = new THREE.Group(); node.name = p.id; node.userData.partId = p.id;
+  node.position.set(...p.position);
+  if (p.rotation) node.rotation.set(p.rotation[0] * D2R, p.rotation[1] * D2R, p.rotation[2] * D2R);
+  node.userData.basePos = node.position.clone(); node.userData.baseRot = node.rotation.clone();
+  const own = new THREE.Group(); node.add(own);
+  const rec = { p, node, own, issues, warns, box: null, origin: null };
+
+  let threw = false;
+  try { buildInto(p, own); } catch (e) { threw = true; issues.push('构建失败: ' + e.message); }
+  try { if (p.update) rec.updateFn = new Function('node', 't', 'ctx', p.update); } catch (e) { issues.push('update 脚本语法错误: ' + e.message); }
+
+  for (const d of p.depends_on || []) if (!recs.has(d)) issues.push(`依赖的部件 ${d} 还没挂载`);
+  const parentRec = p.parent ? recs.get(p.parent) : null;
+  if (p.parent && !parentRec) issues.push(`父部件 ${p.parent} 还没挂载`);
+  (parentRec ? parentRec.node : root).add(node);
+  root.updateWorldMatrix(true, true);
+  rec.origin = new THREE.Vector3().setFromMatrixPosition(node.matrixWorld);
+
+  if (!threw) {
+    const pts = [];
+    try {
+      for (const t of (rec.updateFn || p.anim) ? ANIM_TS : [0]) { applyAnim(rec, t); collectPoints(own, pts); }
+      applyAnim(rec, 0); node.updateWorldMatrix(true, true);
+    } catch (e) { issues.push('动画/update 运行出错: ' + e.message); }
+    own.traverse(o => { if (o.userData.warn) warns.push(o.userData.warn); });
+    if (pts.empty || pts.length === 0) issues.push('没有生成任何网格顶点');
+    else if (pts.nan) issues.push('几何里出现 NaN（多半是某个尺寸参数缺失或写错）');
+    else {
+      const b = boundArr(p.bound); let maxN = 0, minV = [1e9, 1e9, 1e9], maxV = [-1e9, -1e9, -1e9];
+      for (let i = 0; i < pts.length; i += 3) {
+        maxN = Math.max(maxN, normDist(pts[i], pts[i + 1], pts[i + 2], rec.origin, b));
+        for (let k = 0; k < 3; k++) { minV[k] = Math.min(minV[k], pts[i + k]); maxV[k] = Math.max(maxV[k], pts[i + k]); }
+      }
+      rec.box = { min: minV, max: maxV };
+      rec.extent = maxV.map((v, k) => +(v - minV[k]).toFixed(3));
+      if (maxN > 1.05) issues.push(`部件比自己声明的 bound 大：实际约 ${(maxN * 100).toFixed(0)}% of bound（尺寸或坐标写错了）`);
+      else if (maxN < 0.2) warns.push(`部件只占声明 bound 的 ${(maxN * 100).toFixed(0)}%，bound 可能写大了`);
+      // 容器关系
+      const mode = p.inside === undefined ? (parentRec ? true : false) : p.inside;
+      if (parentRec && mode) {
+        const pb = boundArr(parentRec.p.bound); let worst = 0, outN = 0;
+        for (let i = 0; i < pts.length; i += 3) {
+          const n = normDist(pts[i], pts[i + 1], pts[i + 2], parentRec.origin, pb, mode === 'xz' ? 'xz' : 'xyz');
+          if (n > 1.03) outN++; worst = Math.max(worst, n);
+        }
+        if (outN) issues.push(`有 ${outN} 个顶点跑出父部件「${parentRec.p.name}」的范围（最远达 ${(worst * 100).toFixed(0)}%）`);
+      }
+      // 同级重叠（只警告）
+      for (const other of recs.values()) {
+        if (other.p.parent !== p.parent || !other.box || p.allow_overlap || other.p.allow_overlap) continue;
+        // 只比较"紧凑"部件：弥散分布的部件（核糖体、微管……）包围盒天然互相重叠，比了只会误报
+        const lim = parentRec ? Math.max(...boundArr(parentRec.p.bound)) * 0.5 : 1e9;
+        if (Math.max(...rec.extent) > lim || Math.max(...other.extent) > lim) continue;
+        const A = rec.box, B = other.box; let vol = 1, va = 1, vb = 1;
+        for (let k = 0; k < 3; k++) {
+          const ov = Math.min(A.max[k], B.max[k]) - Math.max(A.min[k], B.min[k]);
+          if (ov <= 0) { vol = 0; break; }
+          vol *= ov; va *= Math.max(1e-6, A.max[k] - A.min[k]); vb *= Math.max(1e-6, B.max[k] - B.min[k]);
+        }
+        if (vol > 0 && vol / Math.min(va, vb) > 0.35) warns.push(`与同级「${other.p.name}」包围盒大幅重叠（${(100 * vol / Math.min(va, vb)).toFixed(0)}%）`);
+      }
+    }
+  }
+  if (threw) {                                          // 出错的部件用红色线框占位，场景不会崩
+    const b = boundArr(p.bound);
+    const ph = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 8), new THREE.MeshBasicMaterial({ color: 0xff4d4d, wireframe: true }));
+    ph.scale.set(...b.map(x => Math.max(0.05, x * 0.5))); own.add(ph);
+  }
+  recs.set(p.id, rec);
+  report.parts.push({
+    id: p.id, name: p.name, ok: issues.length === 0, issues, warnings: warns,
+    ms: +(performance.now() - t0).toFixed(1), extent: rec.extent || null,
+    world: rec.origin.toArray().map(v => +v.toFixed(3))
+  });
+}
+
+for (const p of SPEC.parts) {
+  try { mountPart(p); }
+  catch (e) { report.parts.push({ id: p.id, name: p.name, ok: false, issues: ['自检脚本异常: ' + e.message], warnings: [], ms: 0 }); }
+}
+report.passed = report.parts.filter(r => r.ok).length;
+report.warnings = report.parts.reduce((n, r) => n + r.warnings.length, 0);
+window.__BUILD_REPORT__ = report;
+$('#build-report').textContent = JSON.stringify(report);
+console.log('[3d-builder] ' + report.passed + '/' + report.total + ' 部件通过自检');
+
+/* ---------- 界面 ---------- */
+$('#title').textContent = SPEC.title;
+$('#sub').textContent = SPEC.subtitle || '';
+const badge = $('#badge');
+badge.textContent = `自检 ${report.passed}/${report.total} 通过` + (report.warnings ? ` · ${report.warnings} 条提醒` : '');
+badge.className = 'badge ' + (report.passed === report.total ? 'ok' : 'bad');
+
+const byId = Object.fromEntries(report.parts.map(r => [r.id, r]));
+function firstColor(p) {
+  const s = (p.shapes || [])[0]; if (s?.color) return s.color; if (s?.of?.color) return s.of.color;
+  return p.color || '#9aa4b2';
+}
+function renderTree() {
+  const ul = $('#tree'); ul.innerHTML = '';
+  const kids = id => SPEC.parts.filter(p => (p.parent || null) === id);
+  const add = (host, p) => {
+    const li = document.createElement('li'), b = document.createElement('button');
+    b.dataset.part = p.id; b.title = p.desc || '';
+    const r = byId[p.id];
+    b.innerHTML = `<span class="chip" style="background:${firstColor(p)}"></span><span>${p.name}</span><span class="mark ${r.ok ? 'ok' : 'bad'}">${r.ok ? '✓' : '✗'}</span>`;
+    b.addEventListener('click', () => select(p.id));
+    li.appendChild(b);
+    const ch = kids(p.id);
+    if (ch.length) { const sub = document.createElement('ul'); ch.forEach(c => add(sub, c)); li.appendChild(sub); }
+    host.appendChild(li);
+  };
+  kids(null).forEach(p => add(ul, p));
+}
+renderTree();
+
+let selected = null;
+function setHighlight() {
+  const iso = $('#iso').checked;
+  for (const rec of recs.values()) {
+    const isSel = rec.p.id === selected;
+    rec.own.traverse(o => {
+      if (!o.isMesh) return;
+      for (const m of [].concat(o.material)) {
+        m.userData.orig ||= { op: m.opacity, tr: m.transparent, dw: m.depthWrite, em: m.emissive ? m.emissive.clone() : null, ei: m.emissiveIntensity };
+        const g = m.userData.orig;
+        if (m.emissive) { if (isSel) { m.emissive.set('#4aa3ff'); m.emissiveIntensity = 0.9; } else { m.emissive.copy(g.em); m.emissiveIntensity = g.ei; } }
+        if (iso && selected && !isSel) { m.transparent = true; m.opacity = g.op * 0.1; m.depthWrite = false; }
+        else { m.transparent = g.tr; m.opacity = g.op; m.depthWrite = g.dw; }
+        m.needsUpdate = true;
+      }
+    });
+  }
+}
+function select(id) {
+  selected = id;
+  document.querySelectorAll('#tree button').forEach(b => b.classList.toggle('sel', b.dataset.part === id));
+  setHighlight(); showInfo();
+}
+function showInfo() {
+  const box = $('#info');
+  if (!selected) { box.innerHTML = '<span class="k">点击场景里的部件，或点上面的列表。</span>'; $('#tag').style.display = 'none'; return; }
+  const p = SPEC.parts.find(x => x.id === selected), r = byId[selected];
+  const ev = (p.evidence || []).map(e => `${e.term}×${e.count}`).join('，');
+  box.innerHTML = `<h2>${p.name} <span class="k">(${p.id})</span></h2><div>${p.desc || ''}</div>
+    <div><span class="k">相对父部件坐标：</span>[${p.position.join(', ')}]　<span class="k">世界坐标：</span>[${r.world.join(', ')}]</div>
+    <div><span class="k">声明范围 bound：</span>${JSON.stringify(p.bound)}　<span class="k">实测尺寸：</span>${r.extent ? r.extent.join(' × ') : '—'}</div>
+    ${p.depends_on?.length ? `<div><span class="k">依赖：</span>${p.depends_on.join('、')}</div>` : ''}
+    ${ev ? `<div><span class="k">源网页里出现次数：</span>${ev}</div>` : ''}
+    <div><span class="k">自检：</span>${r.ok ? '<span style="color:var(--ok)">通过</span>' : ''}</div>
+    ${r.issues.map(i => `<div class="iss">✗ ${i}</div>`).join('')}${r.warnings.map(i => `<div class="wrn">! ${i}</div>`).join('')}`;
+}
+$('#iso').addEventListener('change', setHighlight);
+$('#spin').addEventListener('change', e => { if (controls) controls.autoRotate = e.target.checked; });
+addEventListener('keydown', e => { if (e.key === 'Escape') select(null); });
+
+/* ---------- 点击拾取 + 渲染循环 ---------- */
+if (renderer) {
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(); let down = null;
+  const pickAt = ev => {
+    const r = renderer.domElement.getBoundingClientRect();
+    ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    const hits = ray.intersectObject(root, true).filter(h => h.object.visible);
+    const solid = hits.find(h => (h.object.material.opacity ?? 1) >= 0.5) || hits[0];
+    if (!solid) return null;
+    let o = solid.object; while (o && !o.userData.partId) o = o.parent;
+    return o ? o.userData.partId : null;
+  };
+  renderer.domElement.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
+  renderer.domElement.addEventListener('pointerup', e => {
+    if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return;
+    select(pickAt(e));
+  });
+  renderer.domElement.addEventListener('pointermove', e => { renderer.domElement.style.cursor = pickAt(e) ? 'pointer' : 'grab'; });
+  const resize = () => { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+  addEventListener('resize', resize); resize();
+  const clock = new THREE.Clock(), tag = $('#tag'), v = new THREE.Vector3();
+  renderer.setAnimationLoop(() => {
+    const t = clock.getElapsedTime();
+    if ($('#anim').checked) for (const rec of recs.values()) if (rec.p.anim || rec.updateFn) { try { applyAnim(rec, t); } catch (e) { rec.updateFn = null; } }
+    controls.update();
+    if (selected) {
+      const rec = recs.get(selected); v.setFromMatrixPosition(rec.node.matrixWorld).project(camera);
+      const r = renderer.domElement.getBoundingClientRect();
+      tag.style.display = 'block'; tag.textContent = rec.p.name;
+      tag.style.left = (r.left + (v.x * 0.5 + 0.5) * r.width) + 'px'; tag.style.top = (r.top + (-v.y * 0.5 + 0.5) * r.height) + 'px';
+    }
+    renderer.render(scene, camera);
+  });
+}
+document.body.dataset.done = '1';
+</script>
+</body>
+</html>

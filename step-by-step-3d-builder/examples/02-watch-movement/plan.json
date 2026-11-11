@@ -1,0 +1,245 @@
+{
+  "title": "机械腕表机芯 3D 互动模型",
+  "subtitle": "11 个独立部件：发条盒→齿轮系→擒纵→摆轮游丝，传动比按齿数算。资料来源：Wikipedia「Watch」",
+  "description": "机械腕表机芯（发条盒、齿轮系、擒纵机构、摆轮游丝）",
+  "source_url": "https://en.wikipedia.org/wiki/Watch",
+  "background": "#0c0f17",
+  "camera": {
+    "position": [
+      0.3,
+      10.5,
+      5.8
+    ],
+    "target": [
+      0,
+      0.6,
+      0
+    ]
+  },
+  "parts": [
+    {
+      "id": "mainplate",
+      "name": "主夹板",
+      "parent": null,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "bound": 3.5,
+      "color": "#c9a54a",
+      "source_terms": [
+        "plate"
+      ],
+      "desc": "黄铜底板，所有齿轮的轴都支在它和上面的桥板之间。"
+    },
+    {
+      "id": "barrel",
+      "name": "发条盒（含发条）",
+      "parent": "mainplate",
+      "position": [
+        -1.5,
+        0.36,
+        0.0
+      ],
+      "bound": 1.3,
+      "inside": "xz",
+      "source_terms": [
+        "mainspring"
+      ],
+      "desc": "盒内盘着发条，松开时带动整条齿轮系——整个机芯的动力源。",
+      "color": "#2f6fb5"
+    },
+    {
+      "id": "center_wheel",
+      "name": "中心轮",
+      "parent": "mainplate",
+      "position": [
+        0.0,
+        0.56,
+        0.0
+      ],
+      "bound": 1.1,
+      "inside": "xz",
+      "depends_on": [
+        "barrel"
+      ],
+      "source_terms": [
+        "wheel",
+        "gear train"
+      ],
+      "desc": "40 齿大轮 + 12 齿小齿轮，被发条盒（48 齿）驱动，转速是发条盒的 4 倍。",
+      "allow_overlap": true
+    },
+    {
+      "id": "third_wheel",
+      "name": "三号轮",
+      "parent": "mainplate",
+      "position": [
+        0.625,
+        0.76,
+        1.0825
+      ],
+      "bound": 1.0,
+      "inside": "xz",
+      "depends_on": [
+        "center_wheel"
+      ],
+      "source_terms": [
+        "wheel"
+      ],
+      "desc": "36 齿大轮 + 10 齿小齿轮，再升速 4 倍。",
+      "allow_overlap": true
+    },
+    {
+      "id": "fourth_wheel",
+      "name": "四号轮",
+      "parent": "mainplate",
+      "position": [
+        1.7117,
+        0.96,
+        0.7913
+      ],
+      "bound": 0.95,
+      "inside": "xz",
+      "depends_on": [
+        "third_wheel"
+      ],
+      "source_terms": [
+        "gear"
+      ],
+      "desc": "30 齿大轮 + 9 齿小齿轮，传统机芯里它的轴上装秒针。",
+      "allow_overlap": true
+    },
+    {
+      "id": "escape_wheel",
+      "name": "擒纵轮",
+      "parent": "mainplate",
+      "position": [
+        1.9705,
+        1.16,
+        -0.1746
+      ],
+      "bound": 1.1,
+      "inside": "xz",
+      "depends_on": [
+        "fourth_wheel"
+      ],
+      "source_terms": [
+        "escapement"
+      ],
+      "desc": "15 个尖齿，被擒纵叉一格一格地放行——“滴答”声由此而来。",
+      "allow_overlap": true
+    },
+    {
+      "id": "pallet_fork",
+      "name": "擒纵叉",
+      "parent": "mainplate",
+      "position": [
+        1.45,
+        1.26,
+        -0.95
+      ],
+      "bound": 1.1,
+      "inside": "xz",
+      "depends_on": [
+        "escape_wheel"
+      ],
+      "source_terms": [
+        "pallet",
+        "fork",
+        "lever"
+      ],
+      "desc": "带两颗红宝石卡瓦的杠杆，一端卡擒纵轮，另一端被摆轮推动。"
+    },
+    {
+      "id": "balance_wheel",
+      "name": "摆轮",
+      "parent": "mainplate",
+      "position": [
+        0.85,
+        0.85,
+        -2.05
+      ],
+      "bound": 1.0,
+      "inside": "xz",
+      "depends_on": [
+        "pallet_fork"
+      ],
+      "source_terms": [
+        "balance wheel"
+      ],
+      "desc": "机芯的“节拍器”：来回摆动，每次摆动放行擒纵轮一格。"
+    },
+    {
+      "id": "hairspring",
+      "name": "游丝",
+      "parent": "mainplate",
+      "position": [
+        0.85,
+        0.6,
+        -2.05
+      ],
+      "bound": 0.7,
+      "inside": "xz",
+      "depends_on": [
+        "balance_wheel"
+      ],
+      "source_terms": [
+        "hairspring"
+      ],
+      "desc": "细螺旋弹簧，给摆轮提供回复力，决定摆动频率。",
+      "color": "#5aa9ff",
+      "allow_overlap": true
+    },
+    {
+      "id": "jewels",
+      "name": "宝石轴承",
+      "parent": "mainplate",
+      "position": [
+        0,
+        0.1,
+        0
+      ],
+      "bound": 3.0,
+      "inside": "xz",
+      "depends_on": [
+        "barrel",
+        "center_wheel",
+        "third_wheel",
+        "fourth_wheel",
+        "escape_wheel",
+        "pallet_fork",
+        "balance_wheel"
+      ],
+      "source_terms": [
+        "jewel"
+      ],
+      "desc": "红宝石做的轴承，减小轴尖摩擦；图上标在 7 个轴的位置。",
+      "allow_overlap": true,
+      "color": "#d6283c"
+    },
+    {
+      "id": "crown_stem",
+      "name": "表冠与上弦轴",
+      "parent": "mainplate",
+      "position": [
+        -3.0,
+        0.3,
+        0
+      ],
+      "bound": 1.2,
+      "inside": false,
+      "depends_on": [
+        "barrel"
+      ],
+      "source_terms": [
+        "crown",
+        "stem",
+        "winding"
+      ],
+      "desc": "旋转表冠，经上弦轴给发条盒上弦，也用来拨针。",
+      "color": "#e8d28a"
+    }
+  ]
+}

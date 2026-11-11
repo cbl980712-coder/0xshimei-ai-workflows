@@ -1,0 +1,50 @@
+{
+ "shapes": [
+  {
+   "type": "box",
+   "size": [
+    0.26,
+    2.2,
+    0.2
+   ],
+   "pos": [
+    0,
+    1.1,
+    0
+   ],
+   "color": "#8fa0b3",
+   "metal": 0.8,
+   "rough": 0.35
+  },
+  {
+   "type": "cylinder",
+   "r": 0.3,
+   "h": 0.24,
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "color": "#6f7f92",
+   "metal": 0.8
+  },
+  {
+   "type": "cylinder",
+   "r": 0.17,
+   "h": 0.24,
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "pos": [
+    0,
+    2.2,
+    0
+   ],
+   "color": "#6f7f92",
+   "metal": 0.8
+  }
+ ],
+ "update": "const w=2.0,r=0.6,L=2.2,th=w*t; const s=Math.sqrt(L*L-r*r*Math.sin(th)*Math.sin(th)); const yp=r*Math.cos(th)+s; const al=Math.atan2(-r*Math.sin(th), s); node.position.set(-r*Math.sin(th), r*Math.cos(th), 0); node.rotation.set(0,0,al);"
+}

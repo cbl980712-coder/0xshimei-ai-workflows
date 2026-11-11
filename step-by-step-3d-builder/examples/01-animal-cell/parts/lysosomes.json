@@ -1,0 +1,59 @@
+{
+ "shapes": [
+  {
+   "type": "sphere",
+   "r": 0.2,
+   "pos": [
+    -0.2,
+    -2.7,
+    0.9
+   ],
+   "color": "#ffd23f",
+   "emissive": "#665500"
+  },
+  {
+   "type": "sphere",
+   "r": 0.2,
+   "pos": [
+    -3.0,
+    0.4,
+    -1.0
+   ],
+   "color": "#ffd23f",
+   "emissive": "#665500"
+  },
+  {
+   "type": "sphere",
+   "r": 0.2,
+   "pos": [
+    1.0,
+    2.9,
+    -1.1
+   ],
+   "color": "#ffd23f",
+   "emissive": "#665500"
+  },
+  {
+   "type": "sphere",
+   "r": 0.2,
+   "pos": [
+    0.4,
+    -2.9,
+    -1.5
+   ],
+   "color": "#ffd23f",
+   "emissive": "#665500"
+  },
+  {
+   "type": "sphere",
+   "r": 0.2,
+   "pos": [
+    -1.0,
+    2.4,
+    1.8
+   ],
+   "color": "#ffd23f",
+   "emissive": "#665500"
+  }
+ ]
+}

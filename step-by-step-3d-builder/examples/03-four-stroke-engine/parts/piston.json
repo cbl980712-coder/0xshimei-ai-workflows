@@ -1,0 +1,60 @@
+{
+ "shapes": [
+  {
+   "type": "cylinder",
+   "r": 0.95,
+   "h": 0.7,
+   "seg": 40,
+   "color": "#d7dbe2",
+   "metal": 0.85,
+   "rough": 0.3
+  },
+  {
+   "type": "torus",
+   "R": 0.96,
+   "r": 0.03,
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "pos": [
+    0,
+    0.2,
+    0
+   ],
+   "color": "#555d6b",
+   "metal": 0.9
+  },
+  {
+   "type": "torus",
+   "R": 0.96,
+   "r": 0.03,
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "pos": [
+    0,
+    0.1,
+    0
+   ],
+   "color": "#555d6b",
+   "metal": 0.9
+  },
+  {
+   "type": "cylinder",
+   "r": 0.15,
+   "h": 1.2,
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "color": "#aab4c0",
+   "metal": 0.9
+  }
+ ],
+ "update": "const w=2.0,r=0.6,L=2.2,th=w*t; const s=Math.sqrt(L*L-r*r*Math.sin(th)*Math.sin(th)); const yp=r*Math.cos(th)+s; node.position.y=yp;"
+}

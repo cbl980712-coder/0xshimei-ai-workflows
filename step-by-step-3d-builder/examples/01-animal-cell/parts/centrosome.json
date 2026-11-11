@@ -1,0 +1,30 @@
+{
+ "shapes": [
+  {
+   "type": "cylinder",
+   "r": 0.07,
+   "h": 0.42,
+   "seg": 14,
+   "color": "#9bf6ff",
+   "emissive": "#0a4a55"
+  },
+  {
+   "type": "cylinder",
+   "r": 0.07,
+   "h": 0.36,
+   "seg": 14,
+   "pos": [
+    0,
+    0,
+    0.26
+   ],
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "color": "#9bf6ff",
+   "emissive": "#0a4a55"
+  }
+ ]
+}

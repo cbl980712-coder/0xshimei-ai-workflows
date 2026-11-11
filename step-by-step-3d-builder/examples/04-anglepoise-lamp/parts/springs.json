@@ -1,0 +1,58 @@
+{
+ "shapes": [
+  {
+   "type": "cylinder",
+   "r": 0.08,
+   "h": 1.6,
+   "pos": [
+    -0.3,
+    0.2,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    -12
+   ],
+   "color": "#c9ced6",
+   "metal": 0.9
+  },
+  {
+   "type": "cylinder",
+   "r": 0.08,
+   "h": 1.6,
+   "pos": [
+    0,
+    0.2,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    -12
+   ],
+   "color": "#c9ced6",
+   "metal": 0.9
+  },
+  {
+   "type": "cylinder",
+   "r": 0.08,
+   "h": 1.6,
+   "pos": [
+    0.3,
+    0.2,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    -12
+   ],
+   "color": "#c9ced6",
+   "metal": 0.9
+  }
+ ],
+ "code": null,
+ "anim": null,
+ "update": null
+}

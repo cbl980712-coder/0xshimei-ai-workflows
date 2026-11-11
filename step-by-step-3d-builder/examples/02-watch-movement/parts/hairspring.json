@@ -1,0 +1,4 @@
+{
+ "code": "const g=new THREE.Group();\nconst pts=[];\nfor(let i=0;i<=120;i++){ const a=i*0.22, r=0.08+0.42*i/120; pts.push(new THREE.Vector3(r*Math.cos(a),0,r*Math.sin(a))); }\ng.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),360,0.012,5,false),ctx.makeMat({color:'#5aa9ff',metal:0.8,rough:0.3,emissive:'#103060'})));\nreturn g;",
+ "update": "const s=1+0.18*Math.sin(t*3.93); node.scale.set(s,1,s);"
+}

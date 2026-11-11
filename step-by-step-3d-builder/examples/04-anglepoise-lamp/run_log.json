@@ -1,0 +1,14 @@
+{
+  "stages": {
+    "plan_check": 0.0,
+    "load_parts": 0.0,
+    "browser_test": 2.06,
+    "assemble": 0.0,
+    "screenshot": 2.63
+  },
+  "total_seconds": 4.69,
+  "parts": 8,
+  "passed": 8,
+  "warnings": 3,
+  "output_bytes": 27382
+}

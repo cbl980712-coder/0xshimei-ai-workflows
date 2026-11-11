@@ -1,0 +1,180 @@
+{
+ "title": "Anglepoise 台灯 3D 模型",
+ "subtitle": "8 个部件，平衡臂台灯结构示意。资料来源：Wikipedia「Anglepoise lamp」",
+ "description": "台灯结构（底座、弹簧、灯臂、反光罩、灯泡）",
+ "source_url": "https://en.wikipedia.org/wiki/Anglepoise_lamp",
+ "background": "#0b1020",
+ "camera": {
+  "position": [
+   6,
+   4,
+   8
+  ],
+  "target": [
+   0,
+   2.5,
+   0
+  ]
+ },
+ "parts": [
+  {
+   "id": "base",
+   "name": "底座",
+   "parent": null,
+   "position": [
+    0,
+    0,
+    0
+   ],
+   "bound": [
+    4.5,
+    7.5,
+    4.5
+   ],
+   "source_terms": [
+    "base"
+   ],
+   "desc": "圆形重底座，弹簧都装在它附近"
+  },
+  {
+   "id": "springs",
+   "name": "弹簧组",
+   "parent": "base",
+   "position": [
+    0,
+    0.9,
+    0
+   ],
+   "bound": 1.2,
+   "source_terms": [
+    "spring"
+   ],
+   "desc": "靠近底座的三根拉簧",
+   "depends_on": [
+    "base"
+   ]
+  },
+  {
+   "id": "lower_arm",
+   "name": "下臂",
+   "parent": "base",
+   "position": [
+    0.6,
+    2.2,
+    0
+   ],
+   "bound": [
+    1.5,
+    2.1,
+    0.5
+   ],
+   "source_terms": [
+    "arm"
+   ],
+   "desc": "下半截平行四边形连杆臂",
+   "depends_on": [
+    "base"
+   ]
+  },
+  {
+   "id": "upper_arm",
+   "name": "上臂",
+   "parent": "base",
+   "position": [
+    0.9,
+    4.4,
+    0
+   ],
+   "bound": [
+    1.5,
+    2.0,
+    0.5
+   ],
+   "source_terms": [
+    "arm",
+    "parallelogram"
+   ],
+   "desc": "上半截连杆臂",
+   "depends_on": [
+    "lower_arm"
+   ]
+  },
+  {
+   "id": "balance_weight",
+   "name": "配重",
+   "parent": "base",
+   "position": [
+    -0.7,
+    0.9,
+    0
+   ],
+   "bound": 0.8,
+   "source_terms": [
+    "weight"
+   ],
+   "desc": "有些衍生款用重配重代替弹簧",
+   "depends_on": [
+    "base"
+   ]
+  },
+  {
+   "id": "socket",
+   "name": "灯座接口",
+   "parent": "base",
+   "position": [
+    2.0,
+    5.2,
+    0
+   ],
+   "bound": 0.5,
+   "source_terms": [
+    "socket"
+   ],
+   "desc": "连接灯臂和灯罩",
+   "depends_on": [
+    "upper_arm"
+   ]
+  },
+  {
+   "id": "reflector",
+   "name": "反光罩",
+   "parent": "base",
+   "position": [
+    2.3,
+    5.2,
+    0
+   ],
+   "bound": [
+    0.9,
+    0.8,
+    0.9
+   ],
+   "source_terms": [
+    "reflector"
+   ],
+   "desc": "锥形反光罩",
+   "depends_on": [
+    "socket"
+   ]
+  },
+  {
+   "id": "bulb",
+   "name": "灯泡",
+   "parent": "base",
+   "position": [
+    2.3,
+    5.2,
+    0
+   ],
+   "bound": 0.4,
+   "source_terms": [
+    "bulb"
+   ],
+   "desc": "灯泡",
+   "depends_on": [
+    "socket"
+   ],
+   "allow_overlap": true
+  }
+ ]
+}

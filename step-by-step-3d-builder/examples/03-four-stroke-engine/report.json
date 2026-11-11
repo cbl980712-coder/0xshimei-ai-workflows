@@ -1,0 +1,188 @@
+{
+  "title": "单缸四冲程发动机 3D 互动模型",
+  "parts": [
+    {
+      "id": "engine_block",
+      "name": "机体（气缸与曲轴箱）",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.8,
+      "extent": [
+        2.6,
+        4.4,
+        2.2
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "cylinder_head",
+      "name": "气缸盖与气道",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 2.1,
+      "extent": [
+        3.432,
+        0.992,
+        2.1
+      ],
+      "world": [
+        0,
+        3.9,
+        0
+      ]
+    },
+    {
+      "id": "crankshaft",
+      "name": "曲轴",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 1.5,
+      "extent": [
+        1.748,
+        1.851,
+        2
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "connecting_rod",
+      "name": "连杆",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.7,
+      "extent": [
+        1.514,
+        3.86,
+        0.24
+      ],
+      "world": [
+        0,
+        0.6,
+        0
+      ]
+    },
+    {
+      "id": "piston",
+      "name": "活塞",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 3.4,
+      "extent": [
+        1.98,
+        1.893,
+        1.98
+      ],
+      "world": [
+        0,
+        2.2,
+        0
+      ]
+    },
+    {
+      "id": "camshaft",
+      "name": "凸轮轴",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.9,
+      "extent": [
+        0.759,
+        0.816,
+        1.6
+      ],
+      "world": [
+        0,
+        5.25,
+        0
+      ]
+    },
+    {
+      "id": "intake_valve",
+      "name": "进气门",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.3,
+      "extent": [
+        0.72,
+        1.824,
+        0.72
+      ],
+      "world": [
+        0,
+        3.5,
+        -0.6
+      ]
+    },
+    {
+      "id": "exhaust_valve",
+      "name": "排气门",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.2,
+      "extent": [
+        0.72,
+        1.525,
+        0.72
+      ],
+      "world": [
+        0,
+        3.5,
+        0.6
+      ]
+    },
+    {
+      "id": "spark_plug",
+      "name": "火花塞",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.3,
+      "extent": [
+        0.346,
+        1.625,
+        0.4
+      ],
+      "world": [
+        0,
+        3.5,
+        0
+      ]
+    },
+    {
+      "id": "flywheel",
+      "name": "飞轮",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 1.1,
+      "extent": [
+        2.68,
+        2.68,
+        0.4
+      ],
+      "world": [
+        0,
+        0,
+        1.2
+      ]
+    }
+  ],
+  "total": 10,
+  "passed": 10,
+  "warnings": 0
+}

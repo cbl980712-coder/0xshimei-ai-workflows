@@ -1,0 +1,54 @@
+{
+ "shapes": [
+  {
+   "type": "gear",
+   "module": 0.05,
+   "teeth": 10,
+   "thick": 0.08,
+   "hole": 0.03,
+   "pos": [
+    0,
+    -0.1,
+    0
+   ],
+   "color": "#d8b24a",
+   "metal": 0.85,
+   "rough": 0.3
+  },
+  {
+   "type": "gear",
+   "module": 0.05,
+   "teeth": 15,
+   "thick": 0.08,
+   "hole": 0.12,
+   "pos": [
+    0,
+    0.1,
+    0
+   ],
+   "color": "#e6e9ee",
+   "metal": 0.85,
+   "rough": 0.3
+  },
+  {
+   "type": "cylinder",
+   "r": 0.06,
+   "h": 1.36,
+   "pos": [
+    0,
+    -0.38,
+    0
+   ],
+   "color": "#aab4c0",
+   "metal": 0.9,
+   "rough": 0.25
+  }
+ ],
+ "anim": {
+  "rotate": [
+   0,
+   -1.92,
+   0
+  ]
+ }
+}

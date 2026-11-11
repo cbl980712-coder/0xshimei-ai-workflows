@@ -1,0 +1,242 @@
+{
+  "title": "动物细胞 3D 互动模型",
+  "parts": [
+    {
+      "id": "membrane",
+      "name": "细胞膜",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 4.4,
+      "extent": [
+        8.006,
+        8.039,
+        7.969
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "cytoplasm",
+      "name": "细胞质",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.7,
+      "extent": [
+        7.779,
+        7.8,
+        7.779
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "nucleus",
+      "name": "细胞核",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.4,
+      "extent": [
+        2.792,
+        2.8,
+        2.792
+      ],
+      "world": [
+        0.3,
+        0.2,
+        0
+      ]
+    },
+    {
+      "id": "nucleolus",
+      "name": "核仁",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.2,
+      "extent": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "world": [
+        0.65,
+        0.2,
+        0.2
+      ]
+    },
+    {
+      "id": "chromatin",
+      "name": "染色质",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 3.5,
+      "extent": [
+        1.351,
+        1.846,
+        1.615
+      ],
+      "world": [
+        0.3,
+        0.2,
+        0
+      ]
+    },
+    {
+      "id": "nuclear_pores",
+      "name": "核孔",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.4,
+      "extent": [
+        2.759,
+        2.11,
+        2.653
+      ],
+      "world": [
+        0.3,
+        0.2,
+        0
+      ]
+    },
+    {
+      "id": "mitochondria",
+      "name": "线粒体",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 2.4,
+      "extent": [
+        5.766,
+        4.325,
+        4.301
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "er",
+      "name": "内质网",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 3.4,
+      "extent": [
+        3.547,
+        2.875,
+        3.511
+      ],
+      "world": [
+        0.3,
+        0.2,
+        0
+      ]
+    },
+    {
+      "id": "golgi",
+      "name": "高尔基体",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.9,
+      "extent": [
+        1.66,
+        1.258,
+        1.08
+      ],
+      "world": [
+        2.2,
+        0.2,
+        -1.8
+      ]
+    },
+    {
+      "id": "lysosomes",
+      "name": "溶酶体",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.6,
+      "extent": [
+        4.4,
+        6.2,
+        3.7
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "centrosome",
+      "name": "中心体",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0,
+      "extent": [
+        0.136,
+        0.42,
+        0.51
+      ],
+      "world": [
+        -1.3,
+        1.7,
+        0.9
+      ]
+    },
+    {
+      "id": "cytoskeleton",
+      "name": "细胞骨架（微管）",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 1.3,
+      "extent": [
+        7.172,
+        5.976,
+        7.096
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "ribosomes",
+      "name": "核糖体",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.6,
+      "extent": [
+        6.271,
+        6.579,
+        6.799
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "total": 13,
+  "passed": 13,
+  "warnings": 0
+}

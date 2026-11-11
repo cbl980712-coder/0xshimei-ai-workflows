@@ -1,0 +1,3 @@
+{
+ "code": "const g=new THREE.Group();\nconst rnd=ctx.rngFrom(21);\nconst mat=ctx.makeMat({color:'#7bd88f',opacity:0.6,rough:0.5});\nconst start=new THREE.Vector3(-1.3,1.7,0.9);\nfor(let k=0;k<16;k++){\n  const th=2*Math.PI*rnd(), ph=Math.acos(2*rnd()-1);\n  const end=new THREE.Vector3(Math.sin(ph)*Math.cos(th),Math.cos(ph),Math.sin(ph)*Math.sin(th)).multiplyScalar(3.7);\n  const mid=start.clone().lerp(end,0.5).add(new THREE.Vector3(rnd()-.5,rnd()-.5,rnd()-.5).multiplyScalar(0.5));\n  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([start,mid,end]),24,0.018,5,false),mat));\n}\nreturn g;"
+}

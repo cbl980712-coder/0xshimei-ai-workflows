@@ -1,0 +1,239 @@
+{
+  "title": "单缸四冲程发动机 3D 互动模型",
+  "subtitle": "10 个独立部件；活塞/连杆按曲柄滑块公式联动，气门按进气、排气冲程开合（示意动画）。资料来源：Wikipedia「Four-stroke engine」",
+  "description": "单缸四冲程发动机（活塞、连杆、曲轴、气门、凸轮轴）",
+  "source_url": "https://en.wikipedia.org/wiki/Four-stroke_engine",
+  "background": "#0d1118",
+  "camera": {
+    "position": [
+      7.5,
+      5.5,
+      8.5
+    ],
+    "target": [
+      0,
+      2.3,
+      0
+    ]
+  },
+  "parts": [
+    {
+      "id": "engine_block",
+      "name": "机体（气缸与曲轴箱）",
+      "parent": null,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "bound": [
+        3.6,
+        6.4,
+        3.0
+      ],
+      "source_terms": [
+        "cylinder",
+        "crankcase"
+      ],
+      "desc": "气缸套和曲轴箱，活塞在气缸里上下运动；这里做成半透明，方便看里面。",
+      "color": "#7a8aa0"
+    },
+    {
+      "id": "cylinder_head",
+      "name": "气缸盖与气道",
+      "parent": "engine_block",
+      "position": [
+        0,
+        3.9,
+        0
+      ],
+      "bound": [
+        2.8,
+        0.9,
+        1.7
+      ],
+      "source_terms": [
+        "cylinder head",
+        "intake",
+        "exhaust"
+      ],
+      "desc": "盖住气缸顶部，里面有进气道（蓝）、排气道（红）和气门座。",
+      "color": "#6b7889"
+    },
+    {
+      "id": "crankshaft",
+      "name": "曲轴",
+      "parent": "engine_block",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "bound": 1.3,
+      "source_terms": [
+        "crankshaft"
+      ],
+      "desc": "把活塞的直线往复运动变成旋转。",
+      "color": "#aab4c0"
+    },
+    {
+      "id": "connecting_rod",
+      "name": "连杆",
+      "parent": "engine_block",
+      "position": [
+        0,
+        0.6,
+        0
+      ],
+      "bound": [
+        1.0,
+        2.6,
+        0.4
+      ],
+      "depends_on": [
+        "crankshaft"
+      ],
+      "source_terms": [
+        "connecting rod"
+      ],
+      "desc": "连接活塞和曲轴销，一端随活塞上下、一端随曲轴转圈。",
+      "color": "#8fa0b3"
+    },
+    {
+      "id": "piston",
+      "name": "活塞",
+      "parent": "engine_block",
+      "position": [
+        0,
+        2.2,
+        0
+      ],
+      "bound": 1.45,
+      "depends_on": [
+        "connecting_rod"
+      ],
+      "source_terms": [
+        "piston"
+      ],
+      "desc": "被燃烧气体推着往下走，是做功的主角。",
+      "color": "#d7dbe2"
+    },
+    {
+      "id": "camshaft",
+      "name": "凸轮轴",
+      "parent": "engine_block",
+      "position": [
+        0,
+        5.25,
+        0
+      ],
+      "bound": [
+        0.75,
+        0.75,
+        1.2
+      ],
+      "depends_on": [
+        "crankshaft"
+      ],
+      "source_terms": [
+        "camshaft"
+      ],
+      "desc": "转速是曲轴的一半，凸轮顶开进气门和排气门。",
+      "color": "#4aa3ff",
+      "allow_overlap": true
+    },
+    {
+      "id": "intake_valve",
+      "name": "进气门",
+      "parent": "engine_block",
+      "position": [
+        0,
+        3.5,
+        -0.6
+      ],
+      "bound": [
+        0.5,
+        1.7,
+        0.5
+      ],
+      "depends_on": [
+        "camshaft",
+        "cylinder_head"
+      ],
+      "source_terms": [
+        "intake valve",
+        "valve"
+      ],
+      "desc": "进气冲程打开，让混合气进入气缸。",
+      "color": "#4aa3ff"
+    },
+    {
+      "id": "exhaust_valve",
+      "name": "排气门",
+      "parent": "engine_block",
+      "position": [
+        0,
+        3.5,
+        0.6
+      ],
+      "bound": [
+        0.5,
+        1.7,
+        0.5
+      ],
+      "depends_on": [
+        "camshaft",
+        "cylinder_head"
+      ],
+      "source_terms": [
+        "exhaust valve",
+        "valve"
+      ],
+      "desc": "排气冲程打开，把燃烧后的废气排出去。",
+      "color": "#ff6b6b"
+    },
+    {
+      "id": "spark_plug",
+      "name": "火花塞",
+      "parent": "engine_block",
+      "position": [
+        0,
+        3.5,
+        0
+      ],
+      "bound": 1.5,
+      "depends_on": [
+        "cylinder_head"
+      ],
+      "source_terms": [
+        "spark plug"
+      ],
+      "desc": "压缩冲程末尾点火。",
+      "color": "#f4f1e8"
+    },
+    {
+      "id": "flywheel",
+      "name": "飞轮",
+      "parent": "engine_block",
+      "position": [
+        0,
+        0,
+        1.2
+      ],
+      "bound": [
+        1.5,
+        1.5,
+        0.3
+      ],
+      "depends_on": [
+        "crankshaft"
+      ],
+      "source_terms": [
+        "flywheel",
+        "crankshaft"
+      ],
+      "desc": "储存转动能量，让三个不做功的冲程也能转得平稳。",
+      "color": "#59616f"
+    }
+  ]
+}

@@ -8,6 +8,7 @@
 | [`ashare-watcher`](ashare-watcher/) | 海外 AI 交易教程用的平台国内用不了，换成国内免登录的 A 股行情：信号、回测、模拟盘、盯盘提醒 | 只要 Python 3.8+，不用装包 |
 | [`video-prompt-guard`](video-prompt-guard/) | AI 视频生成前先检查分镜：哪些镜头容易崩、怎么拆怎么改，写好首尾帧提示词，算修改前后的预估成本；也能当 Claude Code Skill 用 | 只要 Python 3.8+，不用装包 |
 | [`claude-fable-vs-opus`](claude-fable-vs-opus/) | Claude Fable 5.2 和 Opus 5.5 用同一句话各做的两个币圈小工具：合约仓位计算器、K 线回放练习器，附实测用时花费和截图 | 浏览器打开就能用 |
+| [`step-by-step-3d-builder`](step-by-step-3d-builder/) | 我们做的工具：输入想要构建的 3D 复合对象描述（如‘动物细胞结构’或‘机械腕表机芯’） → 自动化工作流先将其拆解为独立部件树与坐标装配图，随后循环生成各部件的三维代码并执行依赖 | 见文件夹里的 README |
 
 ## 怎么下载
 

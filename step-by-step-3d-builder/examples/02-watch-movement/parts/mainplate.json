@@ -1,0 +1,32 @@
+{
+ "shapes": [
+  {
+   "type": "cylinder",
+   "r": 3.4,
+   "h": 0.2,
+   "seg": 96,
+   "color": "#e0bd62",
+   "metal": 0.7,
+   "rough": 0.4
+  },
+  {
+   "type": "torus",
+   "R": 3.3,
+   "r": 0.04,
+   "seg": 64,
+   "rot": [
+    90,
+    0,
+    0
+   ],
+   "pos": [
+    0,
+    0.1,
+    0
+   ],
+   "color": "#e8d28a",
+   "metal": 0.9,
+   "rough": 0.2
+  }
+ ]
+}

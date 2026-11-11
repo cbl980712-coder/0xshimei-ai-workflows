@@ -1,0 +1,56 @@
+{
+ "shapes": [
+  {
+   "type": "gear",
+   "module": 0.05,
+   "teeth": 48,
+   "thick": 0.08,
+   "hole": 0.95,
+   "pos": [
+    0,
+    0.1,
+    0
+   ],
+   "color": "#d8b24a",
+   "metal": 0.85,
+   "rough": 0.3
+  },
+  {
+   "type": "cylinder",
+   "r": 1.1,
+   "h": 0.3,
+   "open": true,
+   "seg": 48,
+   "pos": [
+    0,
+    -0.09,
+    0
+   ],
+   "color": "#9aa3ad",
+   "metal": 0.9,
+   "rough": 0.3,
+   "opacity": 0.7
+  },
+  {
+   "type": "cylinder",
+   "r": 0.15,
+   "h": 0.45,
+   "pos": [
+    0,
+    -0.024999999999999994,
+    0
+   ],
+   "color": "#aab4c0",
+   "metal": 0.9,
+   "rough": 0.25
+  }
+ ],
+ "code": "const g=new THREE.Group();\nconst pts=[];\nfor(let i=0;i<=140;i++){ const a=i*0.19, r=0.22+0.7*i/140; pts.push(new THREE.Vector3(r*Math.cos(a),-0.09,r*Math.sin(a))); }\ng.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),400,0.025,6,false),ctx.makeMat({color:'#2f6fb5',metal:0.8,rough:0.3})));\nreturn g;",
+ "anim": {
+  "rotate": [
+   0,
+   -0.01,
+   0
+  ]
+ }
+}

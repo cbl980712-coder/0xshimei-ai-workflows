@@ -1,0 +1,12 @@
+{
+ "shapes": [
+  {
+   "type": "sphere",
+   "r": 1.4,
+   "seg": 40,
+   "color": "#6f8cff",
+   "opacity": 0.28,
+   "rough": 0.3
+  }
+ ]
+}

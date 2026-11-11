@@ -1,0 +1,158 @@
+{
+  "title": "Anglepoise 台灯 3D 模型",
+  "parts": [
+    {
+      "id": "base",
+      "name": "底座",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 1.4,
+      "extent": [
+        4,
+        1.4,
+        4
+      ],
+      "world": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "springs",
+      "name": "弹簧组",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.8,
+      "extent": [
+        1.089,
+        1.598,
+        0.16
+      ],
+      "world": [
+        0,
+        0.9,
+        0
+      ]
+    },
+    {
+      "id": "lower_arm",
+      "name": "下臂",
+      "ok": true,
+      "issues": [],
+      "warnings": [
+        "与同级「弹簧组」包围盒大幅重叠（40%）"
+      ],
+      "ms": 0.3,
+      "extent": [
+        1.067,
+        3.514,
+        0.38
+      ],
+      "world": [
+        0.6,
+        2.2,
+        0
+      ]
+    },
+    {
+      "id": "upper_arm",
+      "name": "上臂",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.4,
+      "extent": [
+        2.065,
+        2.865,
+        0.38
+      ],
+      "world": [
+        0.9,
+        4.4,
+        0
+      ]
+    },
+    {
+      "id": "balance_weight",
+      "name": "配重",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.6,
+      "extent": [
+        1,
+        1,
+        1
+      ],
+      "world": [
+        -0.7,
+        0.9,
+        0
+      ]
+    },
+    {
+      "id": "socket",
+      "name": "灯座接口",
+      "ok": true,
+      "issues": [],
+      "warnings": [
+        "与同级「上臂」包围盒大幅重叠（36%）"
+      ],
+      "ms": 0.2,
+      "extent": [
+        0.5,
+        0.36,
+        0.36
+      ],
+      "world": [
+        2,
+        5.2,
+        0
+      ]
+    },
+    {
+      "id": "reflector",
+      "name": "反光罩",
+      "ok": true,
+      "issues": [],
+      "warnings": [
+        "与同级「灯座接口」包围盒大幅重叠（40%）"
+      ],
+      "ms": 0.2,
+      "extent": [
+        0.7,
+        1.4,
+        1.4
+      ],
+      "world": [
+        2.3,
+        5.2,
+        0
+      ]
+    },
+    {
+      "id": "bulb",
+      "name": "灯泡",
+      "ok": true,
+      "issues": [],
+      "warnings": [],
+      "ms": 0.6,
+      "extent": [
+        0.56,
+        0.56,
+        0.56
+      ],
+      "world": [
+        2.3,
+        5.2,
+        0
+      ]
+    }
+  ],
+  "total": 8,
+  "passed": 8,
+  "warnings": 3
+}

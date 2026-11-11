@@ -6,7 +6,7 @@ description: 把"一句话描述的复杂 3D 对象"（动物细胞、机械表�
 # 分步建模 Skill
 
 核心原则：**永远不要一次写完整个场景。** 先定装配图（不写几何），再一次只写一个部件，每写一个就自检。
-所有命令在本目录（有 `step_by_step_3d_builder.py` 的地方）运行，Python 3.8+，需要本机有 Chrome 或 Edge。`DIR` = 项目目录，例如 `my3d/cell`。
+所有命令在「工具包目录」（有 `step_by_step_3d_builder.py` 和本文件 `SKILL.md` 的那一层）运行；项目目录用相对它的路径，例如 `my3d/cell`。已验证环境：macOS + Python 3.9.6 + Chrome，其他系统/版本未验证。脚本本身不调用大模型：JSON 由你（Claude Code / Cursor）写并保存，脚本只检查、组装。`DIR` = 项目目录。
 
 ## 第 0 步：确认环境
 ```bash
@@ -58,7 +58,7 @@ shapes 可用：sphere box cylinder cone torus capsule tube gear scatter；复�
 python3 step_by_step_3d_builder.py build DIR --screenshot DIR/preview.png
 ```
 全部通过才会输出 `DIR/index.html`（单文件，three.js 走 CDN，首次打开需联网）。`--allow-fail` 可在有未通过部件时强行输出。
-最后把 `report.json` 里的通过数、`run_log.json` 里的耗时告诉用户，并用无头浏览器或真实浏览器点开 index.html 确认能点击高亮。
+**自检全绿不等于模型好看**：它不检查部件之间有没有接上，必须打开成品/预览图人工看连接关系和整体形状，如实告诉用户有无明显问题，不要因为 8/8 就说"完成且正确"。最后把 `report.json` 里的通过数、`run_log.json` 里的耗时告诉用户，并用无头浏览器或真实浏览器点开 index.html 确认能点击高亮。
 
 ## 不要做的事
 - 不要一次写多个部件再统一测试。

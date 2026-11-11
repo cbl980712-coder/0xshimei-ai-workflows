@@ -3,7 +3,7 @@
 """
 step_by_step_3d_builder.py —— 分步拆解、逐部件自检、自动组装成单文件 Three.js 网页。
 
-只用 Python 3.8+ 标准库 + 一个本机已有的 Chrome/Edge（无头模式做自检和截图）。不调用任何收费 API。
+只用 Python 标准库（仅在 macOS + Python 3.9.6 + Chrome 上验证过） + 一个本机已有的 Chrome/Edge（无头模式做自检和截图）。不调用任何收费 API。
 大模型（Claude Code / Cursor / 网页版聊天）负责"写每个部件的 JSON"，本脚本负责：
     拆解检查 → 逐部件自检（循环） → 组装 → 输出单文件 HTML + 报告。
 
@@ -55,7 +55,7 @@ def load_json(path, what):
     except FileNotFoundError:
         die("找不到 %s：%s" % (what, path))
     except json.JSONDecodeError as e:
-        die("%s 不是合法 JSON（第 %d 行第 %d 列）：%s\n   常见原因：多了结尾逗号、用了中文引号、注释没删。" % (what, e.lineno, e.colno, path))
+        die("%s 不是合法 JSON（第 %d 行第 %d 列）：%s\n   常见原因：把 ```json 代码围栏一起存进去了、多了结尾逗号、用了中文引号、注释没删。" % (what, e.lineno, e.colno, path))
 
 
 def bound_arr(b):
@@ -649,6 +649,8 @@ def cmd_build(a):
     (d / "run_log.json").write_text(json.dumps(log, ensure_ascii=False, indent=2), encoding="utf-8")
     print("\n✓ 输出 %s（%.0f KB），自检 %d/%d，脚本总用时 %.1f 秒（各阶段 %s）" %
           (out, out.stat().st_size / 1024, rep["passed"], rep["total"], log["total_seconds"], json.dumps(log["stages"])))
+    print("\n⚠ 几何自检通过不等于模型外观正确：自检只查尺寸和范围，不查部件之间有没有连上、整体像不像。\n"
+          "  请打开 %s 人工检查连接关系和整体形状（可参考 examples/04-anglepoise-lamp：8/8 通过但上下灯臂没接上）。" % out)
 
 
 def main():

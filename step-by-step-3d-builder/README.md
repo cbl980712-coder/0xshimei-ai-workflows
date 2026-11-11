@@ -4,11 +4,11 @@
 输出一个单文件网页：能拖拽旋转，点击高亮每个部件。
 
 ## 先看目录：你应该在哪里敲命令
-下载（git clone 或 zip 解压）后，会得到一个文件夹，名字通常是 `step-by-step-3d-builder`（zip 解压可能带 `-main` 后缀，不影响使用）。
-**下面把它叫「工具包目录」：就是直接放着 `step_by_step_3d_builder.py` 和 `README.md` 的那一层。** 如果你打开文件夹只看到另一个文件夹，再点进去一层。
+下载（git clone 或 zip 解压）后会得到一个文件夹，**不管它叫什么名字**（`step-by-step-3d-builder`、带 `-main` 后缀、或者别的），都不影响使用。
+**下面把它叫「工具包目录」：进入直接放着 `step_by_step_3d_builder.py` 和 `README.md` 的那一层，后面所有命令都在这一层执行。** 如果你打开文件夹只看到另一个文件夹，再点进去一层，直到能看到这两个文件为止。
 
 ```
-step-by-step-3d-builder/          ← 工具包目录：终端先 cd 到这里，本文所有命令都从这里执行
+（你的文件夹，名字不限）/          ← 工具包目录：终端先 cd 到这里，本文所有命令都从这里执行
 ├── README.md
 ├── SKILL.md                      ← 给 Claude Code / Cursor 用，路径就是 ./SKILL.md
 ├── step_by_step_3d_builder.py    ← 命令行脚本
@@ -17,7 +17,6 @@ step-by-step-3d-builder/          ← 工具包目录：终端先 cd 到这里�
 ├── examples/                     ← 4 个现成例子（每个都有 index.html）
 └── my3d/                         ← 你自己的项目放这里（第一次 init 时自动创建）
 ```
-（作者本机打包时这个文件夹叫 `kit/`，里面内容与上图完全一致；你下载到的名字以 GitHub 仓库为准。）
 本文所有命令都写成 `python3 step_by_step_3d_builder.py ...`，项目目录都写成 `my3d/xxx`（相对工具包目录）。
 
 ## 先看效果（不用装任何东西，有浏览器、能上网就行）
@@ -74,10 +73,11 @@ python3 step_by_step_3d_builder.py test my3d/lamp --only <id>      # 不通过�
 1. **建项目、抓资料**：跑上面的 `init` 和 `fetch`。此时 `my3d/lamp/` 文件夹已经有了。
 2. **拿拆解提示词**：跑 `prompt decompose my3d/lamp`，把终端打印出来的整段文字全部复制，粘贴到网页版聊天里发送。
 3. **保存 plan.json**：模型会回一段 JSON。只复制 JSON 本身（从第一个 `{` 到最后一个 `}`），用**纯文本编辑器**（Mac 的 VS Code / 文本编辑里选「纯文本」；Windows 记事本）新建文件，保存为 `my3d/lamp/plan.json`（就在第 1 步生成的文件夹里，编码选 UTF-8）。
+   **保存后先核对路径**：如果之后运行 `check` 提示「plan.json 里没有 parts」或找不到 plan.json（`init` 已经建了一个空的 plan.json 占位，所以你的内容可能存到了别处），先看文件是不是真的在 `my3d/lamp/` 这个文件夹里（不是桌面、下载文件夹，也不是工具包目录本身），再看文件名有没有被编辑器自动加上 `.txt` 后缀（实际变成 `plan.json.txt`；Windows 默认隐藏扩展名，要在资源管理器里打开「文件扩展名」才看得见）。
 4. **检查**：跑 `check my3d/lamp`。报冲突就按提示改（可以把报错发回模型让它改 plan.json，再覆盖保存）；通过后继续。想看保存成功后 plan.json 长什么样，对照 `examples/04-anglepoise-lamp/plan.json`。
 5. **看该写谁**：跑 `status my3d/lamp`，它会列出部件 ID（台灯例子是 `base`、`springs`、`lower_arm`、`upper_arm`、`balance_weight`、`socket`、`reflector`、`bulb`）和下一个该写的。
 6. **逐个部件**：跑 `prompt part my3d/lamp base`（`base` 换成 status 给的 ID），复制整段发给模型，把返回的 JSON 保存为 `my3d/lamp/parts/base.json`（`parts` 文件夹 `init` 时已建好）。格式参照 `examples/04-anglepoise-lamp/parts/base.json`。
-7. **测这一个**：`test my3d/lamp --only base`。通过就回到第 5 步写下一个，直到全部完成，再 `build`。
+7. **测这一个，并看进度**：每生成一个部件，先跑 `test my3d/lamp --only base`（`base` 换成这个部件的 ID），再跑 `status my3d/lamp` 看进度。**注意：`status` 的 ✓ 只代表文件存在且是合法 JSON，不代表几何检查通过**——几何是否合格只看 `test` 的结果。通过就回到第 5 步写下一个；等所有部件的文件都准备好、并且**逐个通过了 `test`**，再执行 `build`。
 8. **这一个生成失败了**：`test` 报错时跑 `prompt fix my3d/lamp base`，把整段发给模型，拿到新 JSON 后**直接覆盖** `my3d/lamp/parts/base.json`（只覆盖这个文件），再 `test` 一次。不用动别的部件。
 
 保存 JSON 的三条硬规矩：

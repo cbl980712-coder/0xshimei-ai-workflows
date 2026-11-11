@@ -51,7 +51,12 @@ def die(msg, code=1):
 
 def load_json(path, what):
     try:
-        return json.loads(Path(path).read_text(encoding="utf-8"))
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+        if what == "plan.json" and isinstance(data, dict) and not data.get("parts"):
+            for name in ("plan.json.txt", "plan.txt"):
+                if (Path(path).parent / name).exists():
+                    print("⚠ 同一文件夹里有 %s：你的编辑器可能把 plan.json 存成了 .txt。把它改名为 plan.json（覆盖现在这个空的），再重跑。" % name, file=sys.stderr)
+        return data
     except FileNotFoundError:
         die("找不到 %s：%s" % (what, path))
     except json.JSONDecodeError as e:

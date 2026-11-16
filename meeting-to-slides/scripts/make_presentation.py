@@ -295,6 +295,30 @@ def fit_bullets(bullets, width_in, height_in, sizes=(28, 26, 24, 22, 20, 18, 17,
 # ---------------------------------------------------------------- 生成 PPTX
 NAVY, ACCENT, INK, GREY, PALE = "1F3A5F", "D9480F", "222B38", "6B7685", "EEF2F7"
 
+CLIENT_CLEAR_FIELDS = ("author", "last_modified_by", "comments", "keywords", "subject", "title",
+                       "category", "content_status", "identifier", "language", "version")
+
+def client_leftovers(path):
+    """回读客户版，返回仍有内容的项（空列表 = 通过）：备注页/备注母版部件、批注、自定义属性、
+    docProps/core.xml 的文本字段、docProps/app.xml 的 Company/Manager/HyperlinkBase、幻灯片备注文字。"""
+    import zipfile, re
+    from pptx import Presentation
+    left = []
+    with zipfile.ZipFile(path) as z:
+        for n in z.namelist():
+            if n.startswith(("ppt/notesSlides/", "ppt/notesMasters/", "ppt/comments/")) or n in ("ppt/commentAuthors.xml", "docProps/custom.xml"):
+                left.append(f"含部件 {n}")
+        app = z.read("docProps/app.xml").decode("utf-8") if "docProps/app.xml" in z.namelist() else ""
+    for tag in ("Company", "Manager", "HyperlinkBase"):
+        m = re.search(rf"<{tag}>([^<]+)</{tag}>", app)
+        if m: left.append(f"app.xml 的 {tag} = {m.group(1)!r}")
+    prs = Presentation(path); cp = prs.core_properties
+    for f in CLIENT_CLEAR_FIELDS:
+        if getattr(cp, f): left.append(f"core 属性 {f} = {getattr(cp, f)!r}")
+    n = sum(1 for sl in prs.slides if sl.has_notes_slide and sl.notes_slide.notes_text_frame.text.strip())
+    if n: left.append(f"{n} 页带备注文字")
+    return left
+
 def build_pptx(outline, path, client=False):
     from pptx import Presentation
     from pptx.util import Inches, Pt, Emu
@@ -426,7 +450,7 @@ def build_pptx(outline, path, client=False):
         sd["_font"] = checks[-1]["font"] if checks else None
     if client:
         cp = prs.core_properties
-        cp.author = cp.last_modified_by = cp.comments = cp.keywords = cp.subject = ""
+        for f in CLIENT_CLEAR_FIELDS: setattr(cp, f, "")
     prs.save(path)
     return checks
 
@@ -497,6 +521,8 @@ def read_text_file(path):
     try: data = open(path, "rb").read()
     except OSError as e: die(f"打不开 {path}：{e.strerror}")
     if not data.strip(): die(f"{path} 是空文件。请放入会议记录文字后再运行。")
+    if data[:2] in (b"\xff\xfe", b"\xfe\xff") or b"\x00" in data:   # UTF-16/32 的 BOM 或 NUL 字节：几乎肯定不是 UTF-8/GBK 文本
+        die(f"{path} 看起来是 UTF-16/UTF-32 或二进制文件（含 BOM 或空字节）。请另存为 UTF-8 的 .txt。")
     for enc in ("utf-8-sig", "gb18030"):
         try: text = data.decode(enc)
         except UnicodeDecodeError: continue
@@ -572,10 +598,9 @@ def main():
         cpath = os.path.join(a.out, f"{name}.client.pptx")
         try: build_pptx(outline, cpath, client=True)
         except ImportError: die("没有安装 python-pptx。请先运行：pip install python-pptx")
-        from pptx import Presentation
-        left = sum(1 for sl in Presentation(cpath).slides if sl.has_notes_slide and sl.notes_slide.notes_text_frame.text.strip())
-        if left: die(f"客户版里仍有 {left} 页带备注，已中止，请反馈这个问题。")
-        print(f"OK  客户版 {len(outline['slides'])} 页 -> {cpath}\n  已回读核对：备注 0 条，作者等属性已清空。页面正文里的人名、数字、风险与分歧、预算仍在，请你逐页读一遍再外发。")
+        left = client_leftovers(cpath)
+        if left: die("客户版回读发现仍有内容，已中止，请反馈这个问题：\n  " + "\n  ".join(left))
+        print(f"OK  客户版 {len(outline['slides'])} 页 -> {cpath}\n  已回读核对：无备注页/备注母版/批注/自定义属性部件；文档属性（作者、最后修改者、标题、主题、关键词、说明、类别等 11 项）与 app.xml 的 Company/Manager 为空。创建/修改时间是模板自带的固定日期，不是你的信息。页面正文里的人名、数字、风险与分歧、预算仍在，请你逐页读一遍再外发。")
         sys.exit(0)
     pptx = os.path.join(a.out, f"{name}.pptx")
     try: checks = build_pptx(outline, pptx)

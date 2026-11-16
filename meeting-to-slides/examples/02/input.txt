@@ -1,0 +1,356 @@
+ 
+Will Wong, RingCentral, Inc. – Vice President, Investor Relations 
+Thank you. Good afternoon and welcome to RingCentral’s third quarter 2024 earnings conference 
+call. Joining me today are Vlad Shmunis,  Founder, Chairman, and CEO, and Vaibhav Agarwal, 
+Senior Vice President of FP&A and Chief Accounting Officer. Our format today will include 
+prepared remarks by Vlad and Vaibhav, followed by Q&A.  
+ 
+We also have a slide presentation available on our investor relations website that will coincide 
+with today’s call, which you can find under the Financial Results section at ir.ringcentral.com.  
+ 
+Some of our discussion and responses to your questions will contain forward-looking statements 
+regarding the Company’s business operations, financial performance, and outlook. These 
+statements are subject to risks and uncertainties, some of which are beyond our control, and are 
+not guarantees of future performance. Actual results may dif fer materially from our forward-
+looking statements, and we undertake no obligation to update these statements after this call. For 
+a complete discussion of the risks and unc ertainties related to our business, please refer to the 
+information contained in our filings with the Securities and Exchange Commission, as well as 
+today’s earnings release. 
+ 
+Unless otherwise indicated, all measures that follow are non- GAAP with year over year 
+comparisons. A reconciliation of all GAAP to non- GAAP results is provided with our earnings 
+release and in the slide deck. For certain forward- looking guidance, a reconciliation of the non-
+GAAP financial guidance to the corresponding GAAP measure is not available as discussed in 
+detail in the slide deck posted on our Investor Relations website. 
+ 
+ With that, I’ll turn the call over to Vlad.
+
+ 
+Vlad Shmunis, RingCentral, Inc. – Founder, Chairman, and CEO 
+ 
+Before I discuss our results and highlights from the quarter, I’d like to provide a management 
+update. 
+ 
+I want to extend a warm welcome to Abhey Lamba, who we announced today as our new Chief 
+Financial Officer. Building from his start as a software engineer at Bentley Systems, Abhey is a 
+seasoned finance and technology leader with over 30 years of experience. Abhey joins us from 
+Amazon Web Services, where he is Vice President of Finance for Global Infrastructure, including 
+Gen AI investments. Prior to Amazon, he held finance leadership roles at Cisco Systems and 
+Autodesk. In his various roles, he has driven growth and profitability for multi -billion-dollar 
+businesses. Previously, he served as a sell-side analyst on Wall Street for over 15 years, where 
+he covered enterprise technology, hardware and SaaS companies at UBS, ISI Group and Mizuho 
+Securities. Abhey will join in his new role in the coming weeks.  
+ 
+I would also like to sincerely thank Vaibhav Agarwal, our SVP of FP&A and Chief Accounting 
+Officer, for his valuable contributions to our company during this transition. His selfless dedication 
+and outstanding leadership ensured that we did not miss a beat during this  transition period. 
+Vaibhav will partner with Abhey and myself as we scale the company in the next stage of growth.  
+ 
+Now moving to results. 
+ 
+We had a solid third quarter. Revenue was above our guidance range. Our outperformance was 
+driven by continued strength in our core UCaaS market combined with strong traction from our 
+new products, in particular RingCX. We also delivered on our profitabili ty goals, including 
+achieving GAAP operating profitability in the quarter. The combination of strong growth and 
+operating margin expansion, a material reduction in SBC, and the return of capital via buybacks 
+has driven a 56% year-over-year increase in free cash flow per share this quarter.  
+ 
+Our results demonstrate we are executing against our strategic priorities. They are:  
+ 
+• One, solidifying our UCaaS leadership by infusing AI across our entire portfolio amongst 
+other initiatives.  
+• Two, expanding TAM through new AI-powered products. These include: 
+o RingCX - our native, AI-powered CCaaS solution;  
+o RingSense - our conversation intelligence offering; and  
+o RingCentral Events - our virtual and hybrid events platform.  
+• And third, broadening our reach by nurturing and growing our large and diverse partner 
+network and expanding into new geographies.  
+ 
+We believe these priorities will drive long-term, profitable growth through increased wallet share, 
+improved retention and more efficient new logo acquisition.  
+ 
+Now, let me share more about each priority and how we performed against it during the quarter.  
+
+ 
+ 
+First, solidifying our UCaaS leadership. We  have built a leading business communications 
+platform grounded in TIP, which stands for Trust, Innovation and Partnerships. On Trust. We’ve 
+been delivering five nines or better reliability for over 6 years. Customers of all sizes including 
+some of the world’s best-known brands choose us because of our robust feature set, ease of 
+deployment and use, and carrier grade reliability -  all built on our secure, standards compliant, 
+and highly scalable, global platform.  
+ 
+This continues to be a key differentiator and a competitive advantage for us, which is why we 
+have been named by Gartner for the tenth consecutive year as a Leader in the 2024 Magic 
+Quadrant for UCaaS report. Core to this recognition is our leadership in voice. Voice continues to 
+be mission critical. We see this in our user base, where voice minutes per user remains consistent 
+with historical trends. This is supported by a recent IDC survey which concluded that “78% of 
+organizations agree that voice calling will remain a priority mode of communication in their 
+employee and customer interactions.”  
+ 
+Given our leadership in voice, Enterprises are choosing RingCentral’s business phone platform 
+to complement their use of Microsoft Teams messaging and video. Teams customers turn to 
+RingCentral for advanced phone capabilities that are not available with Teams. These include but 
+are not limited to SMS, fax, call monitoring, call queue management, IVR, rich communication 
+APIs, broader global reach, native integrations with major CRMs, and robust analytics and 
+reporting. 
+ 
+Based on these advantages and our deep integration with Teams, this quarter we booked a $ 1 
+million plus TCV win with a large European healthcare provider who is also a Teams customer. 
+This customer will deploy us in their 35 plus offices across Europe.  
+ 
+Voice is the primary mode of business communication, and AI is a tailwind for voice. Businesses 
+can now unlock the power of their voice conversations as a rich source of data that enables more 
+insights and smarter decisions. This is why we recently announc ed RingCentral AI Assistant, 
+which is now included at no additional cost for all RingEX customers. RingCentral AI Assistant 
+automatically generates detailed, real-time notes for voice calls; helps write and translate texts; 
+and summarizes meetings to creat e action items, reducing time spent on mundane tasks and 
+freeing up employees’ time for more critical work. Omdia Research recently cited the transcription 
+by RingCentral AI Assistant as “amazingly accurate”. A long time RingCentral customer, the 
+Detroit P istons, is already implementing AI -powered note- taking for their team meetings and 
+strategy sessions. Paul Rapier, their VP of IT, said that “it has been a game- changer for the 
+Pistons’ operations. Previously, we worried about missing crucial details, especially during fast -
+paced, pre-game preparations. It has significantly enhanced our ability to stay organized and 
+aligned. This technology isn't just improving our administrative efficiency; it's giving us a 
+competitive edge by ensuring no valuable insight or strategy falls through the cracks." 
+ 
+To further our competitive moat, we recently achieved a significant milestone by receiving a PAN-
+India license from the Indian Department of Telecommunications. This authorization allows us to 
+
+ 
+operate across all 22 telecommunications circles in India, making us the first cloud provider to 
+deliver fully compliant UCaaS and CCaaS solutions throughout the country. Multinational 
+organizations can now seamlessly connect their global offices with Indi an branches, facilitating 
+efficient communication and collaboration. 
+ 
+Now let’s move on to the new products.  
+ 
+First, our new native CCaaS product, RingCX. IDC recently highlighted that over 80% of 
+organizations believe it is important that their UCaaS solution includes CCaaS capabilities. 
+Benefits of a joint UCaaS & CCaaS solution include improved collaboration between call center 
+agents and the rest of the organization, resulting in overall improved customer experience, 
+integrated conversation intelligence, unified usage analytics, a better overall user and 
+administrator experience, and uniform SLAs for all internal and external communications.  
+ 
+RingCX is a modern, AI -powered, omnichannel CCaaS platform, offering native conversation 
+intelligence and quality management in over 20 digital channels, in addition to voice and SMS. It 
+is seamlessly integrated with our industry leading RingEX platform, and further differentiates on 
+combining ease of deployment and use with depth of functionality, reliability and security.  
+ 
+Based on these strengths, this quarter we booked a $1 million plus TCV deal with one of North 
+America’s largest manufacturers of automotive replacement tires that will be deploying RingEX, 
+RingCX and RingSense across their entire international footprint.  
+ 
+As an additional proof point of RingCX’s ability to scale, including more advanced use cases, we 
+have also recently moved the entire RingCentral customer service team of over 1,000 support 
+agents to RingCX. This was done cost efficiently, in a few short weeks, and without disruption. 
+ 
+We now have over 500 customers on the platform, up over 45% sequentially. In addition to strong 
+customer growth we are also seeing strong ARPU expansion, which was up sequentially. The 
+RingCX AI Quality Management Add On has been a key driver of this ARPU expansion, with a 
+nearly 50% attach rate to new bookings in the quarter.  
+ 
+AUTOPAY, an auto loan specialist, said “Since we migrated to RingCX, we estimate a 20% time 
+savings for customer success reps due to sophisticated AI -based technology that RingCX 
+delivers.” 
+ 
+To further enhance the value proposition of RingCX in the mid-market and enterprise segments, 
+today we have announced a strategic partnership with Verint. Through this partnership, RingCX 
+customers will be able to leverage Verint’s leading WEM and CX autom ation solutions, which 
+complement RingCentral’s native AI capabilities . This is  to enhance employee productivity and 
+improve customer experiences, ultimately driving competitive advantage and operational 
+efficiency to our customers. 
+ 
+
+ 
+With the ability to address a full range of use cases, we will be prioritizing our native CCaaS 
+platform, RingCX. The strong traction we are seeing with RingCX has validated its value 
+proposition in the market. As RingCX grows its base, it has the potential to capture a meaningful 
+share of the multi-billion-dollar CCaaS TAM with owner economics for RingCentral.  
+ 
+Second, RingSense, our conversation intelligence platform that was formerly called RingSense 
+for Sales, now has over 1,200 customers, up over 45% sequentially. The RingSense customer 
+base and use cases are diverse. For example, legal firms are using it to simplify case 
+management, and healthcare organizations such as REE Medical are using it to automatically 
+review approximately 75,000 calls a month for specific keywords versus previously only being 
+able to manually review a few hundred calls per month.  
+ 
+And third, our virtual and hybrid events solution, RingCentral Events, added over 100 new  
+customers during the quarter . These included Trimble, a Fortune 500 technology company. 
+Trimble picked RingCentral Events for its ability to easily create high production quality branded 
+events. We also renewed relationships with key RingCentral Events customers such as Block, 
+DHL, eBay, NYU, Rutgers and TELUS, amongst others. 
+ 
+In February of this year, we set a target of achieving at least $100M of exit ARR from our new 
+products by the end of 2025. We are encouraged by our results so far, and believe we are well 
+on our way to achieving this target. 
+ 
+Now on to Partnerships.  
+ 
+Our differentiated go to market includes a large, direct salesforce, top global service providers, or 
+GSPs, and a large partner and reseller network. This allows us to have access to multiple 
+customer groups, geographies and verticals. It is an important part of our competitive moat that 
+allows us to successfully scale our multi-product business. Let me give you some highlights from 
+the quarter.  
+ 
+First, GSPs. Our GSP business again grew faster than our overall business. This network of GSP 
+partners and the deep engagements that we have built with them on both product and go- to-
+market are unmatched by UC and CC peers. A great example of this deep engagement is our 10 
+year plus partnership with AT&T, the nation’s premier fiber, fixed wireless and wireless provider, 
+which we recently renewed.   
+ 
+We are also leveraging our large GSP network to grow internationally. We recently added Optus, 
+a leading service provider in Australia, and are now seeing early traction together. We also 
+continue to see success with Vodafone, as well as British Telecom and TELUS.  
+ 
+Leveraging our unique GSP network is also a key opportunity and differentiator for RingCX 
+growth. Vodafone, Cox and Zayo have already chosen RingCX as the CCaaS solution to bring to 
+their diverse customer bases, and we are optimistic of further progress with these and other key 
+partners on this front.  
+
+ 
+ 
+In summary, we had a strong quarter in delivering against our strategic priorities. RingCentral is 
+a proven leader in UCaaS, where the opportunity remains large, and our new CCaaS, AI, and 
+Events products are showing good early traction. We are also execut ing on our efficiency 
+initiatives, which is resulting in expanded profitability and free cash flow, as well as reducing SBC. 
+We are on an exciting path, and I am confident that we can continue to execute in the quarters 
+and years ahead. 
+ 
+With that, I would like to again thank Vaibhav for his outstanding contributions, and will now turn 
+the call over to him to discuss our financial results in more detail. 
+
+ 
+Vaibhav Agarwal, RingCentral, Inc. – SVP FP&A and Chief Accounting Officer 
+ 
+Thanks Vlad.  
+ 
+Now, I’ll provide highlights from the third quarter, and then discuss our business outlook for the 
+fourth quarter and full year.  
+ 
+In 3Q, we executed well across all our key financial metrics - revenue growth, operating profit, 
+SBC and share count reduction - and are raising our full year revenue and free cash flow guide.  
+In Q3, subscription revenue of $583 million was up 10% year over year, solidly above the high 
+end of our guidance range.   
+  
+ARR of $2.48 billion was up 9% year over year on a reported and constant currency basis. On a 
+sequential basis, currency was a moderate tailwind. By customer group, Enterprise ARR rose 
+11%, with both mid- market and small business up 8% versus last year. As  Vlad noted, new 
+products, in particular RingCX, continue to perform well, with sequential ARR growth in 3Q 
+consistent with 2Q. 
+ 
+Moving to profitability. I’ll be referring to non-GAAP results, unless otherwise noted. Subscription 
+gross margin was 81%, down slightly sequentially, as we invest in infrastructure to support the 
+strong growth of our new products as they scale. Overall AR PU remained over $30, with new 
+product ARPU meaningfully higher than overall ARPUs. Over time, as the contribution from new 
+products grows and its penetration within our large base increases, we expect new products to 
+be accretive to overall ARPU.  
+ 
+Operating margin rose approximately 2 points year over year to 21.0%. The year over year 
+increase is driven by continued spending discipline and focus on operating efficiency. Sales and 
+marketing expense as a percent of total revenue declined 220 bps to 39 .0%, as we continue to 
+drive down costs in the sales and marketing organization and optimize for higher margin routes 
+to market.  
+ 
+Overall, we view operating margin expansion in conjunction with reducing stock-based 
+compensation, as both ultimately drive higher free cash flow and free cash flow per share.  
+ 
+During the third quarter, we generated free cash flow of $105 million, up 51% versus last year . 
+Free cash flow margin was 17.3%, up 480 basis points year over year. In addition to continued 
+operating leverage and disciplined spending, free cash flow has also benefited from working 
+capital efficiencies.  
+ 
+Moving to stock-based compensation. Stock-based compensation was $85 million, or 14% of total 
+revenue, down 630 bps versus last year.  
+ 
+Through the first three quarters of 2024, net new share grants are down more than 60% versus 
+last year, and we are on track to exceed our goal to reduce share grants by 50% of 2023 levels. 
+
+ 
+The reduction in grants is important, as the lower number of shares granted and lower grant value 
+will result in continued improvement in SBC going forward.  
+ 
+Importantly, free cash flow again exceeded SBC, and is  a reflection of our discipline in 
+meaningfully reducing stock-based compensation while significantly growing free cash flow. 
+ 
+Moving to our balance sheet and capital allocation. 
+ 
+We will continue to employ a balanced and disciplined approach to returning cash to shareholders 
+through both debt repayment and share repurchase.   
+ 
+Net debt to adjusted EBITDA improved to 2.3x, down from 3.0x last year, as we meaningfully 
+increased our profitability.  
+ 
+Consistent with what we shared last quarter, we plan to address our $161 million of 2025 
+Convertible Notes with available cash and cash flow.  
+ 
+In Q3, we secured an additional $275 million delayed draw commitment to our Term Loan A, 
+bringing total commitments to $350 million. We have until May 2025 to draw down on this 
+commitment. We plan to address our Convertible notes coming due in March 2026 with this 
+commitment plus the free cash flow we expect to generate between now and March 2026. As part 
+of deploying a dynamic capital allocation approach, we continue to target reducing our gross debt 
+from $1.5 billion today to no more than $1 billion befor e the end of 2026. Note our liquidity as of 
+Q3 stands at $788M, which is comprised of cash on hand plus the undrawn commitments on our 
+Term Loan A and Revolver. 
+ 
+We believe that share repurchase continues to provide an attractive relative return. In Q3, we 
+repurchased 2.6 million shares for $83 million. So far in 2024, we have repurchased 7.5 million 
+shares for $245 million and have approximately $243 million remai ning on our authorization at 
+September 30, 2024.  
+ 
+Our recent share buybacks combined with continued discipline on stock-based compensation will 
+result in our fully diluted share count continuing to decline further. We are making good progress, 
+with fully diluted share count declining by 1% sequentially and 3% versus last year. Going forward, 
+we plan to continue to at least fully  offset dilution from SBC via buybacks, all while preserving 
+financial flexibility with respect to excess cash. Overall, our results this quarter demonstrate  our 
+ability to execute on our plan to deliver growth from our core and new products, expand margins 
+through continued spend efficiencies, reduce stock-based compensation and deploy a balanced 
+capital allocation approach that includes share repurchase and debt paydown. With this strategy, 
+we believe we can continue to strengthen our financial profile, and believe we are well positioned 
+for the future.    
+ 
+
+ 
+Now, let me turn to guidance. Embedded in our guidance is the expectation that the macro 
+environment and the current business trends remain relatively stable, with no further material 
+improvement or deterioration in conditions. With that backdrop: 
+ 
+For the fourth quarter of 2024, we expect: 
+• Subscription revenue growth of 7% to 8% 
+• Total revenue growth of 7%  
+• Non-GAAP operating margin of approximately 21%, and 
+• Non-GAAP EPS of $0.96 to $0.97, based on a fully diluted share count of 92.5 to 93.0 
+million shares. 
+ 
+For the full year, we are raising our revenue outlook. 
+• We now expect subscription revenue of $2.295 billion to $2.297 billion, representing 
+growth of 9%, and total revenue of $2.397 billion to $2.399 billion, representing annual 
+growth of 9%. 
+• We continue to expect a non-GAAP operating margin of 21%, as we balance profitability 
+with reinvesting back into the business. Importantly, we now expect stock -based 
+compensation of $350 to $355 million, down from $370 to $380 million previously. 
+ 
+We also expect: 
+• Non-GAAP EPS of $3.69, up from $3.62 to $3.67, driven in part by our lower share count 
+outlook, as we now expect 94.5 million fully diluted shares outstanding in 2024, down from 
+95 to 96 million shares previously. 
+ 
+Regarding free cash flow, we now expect free cash flow of $400 to $405 million, up from $395 to 
+$400 million. Our outlook includes capitalized expenditures of $85 million, cash paid for interest 
+of $60 million, restructuring and other payments of $27 milli on, as well as $25 million of cash 
+received from certain strategic partners. 
+ 
+As Vlad noted, prioritizing RingCX will be a key long-term growth driver with a significantly better 
+margin profile given its owner economics. We are excited about the opportunity to meet the 
+emerging customer demand for our fully scaled, native UC+ CC sol ution. RingCX is our own 
+proprietary technology that will allow us to innovate faster and better serve our customers’ needs. 
+While it’s still early for RingCX, we believe that over time its bookings will eventually meet or 
+exceed those of RingCentral Contact Center bookings at its peak levels. 
+ 
+In summary, we had a good quarter. We are executing against our strategy of delivering growth 
+from our core, expanding our addressable markets through our new products, and driving a strong 
+financial profile while reducing our reliance on third parties for  core competencies that will result 
+in continued free cash flow generation while materially lowering our share count. We believe this 
+strategy will maximize returns for all stakeholders. 
+ 
+With that, let’s open up the call for questions. 

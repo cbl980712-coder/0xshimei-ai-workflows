@@ -1,0 +1,238 @@
+{
+  "title": "Return Type Notation",
+  "lang": "zh",
+  "source": "input.md",
+  "words": 4704,
+  "slides": [
+    {
+      "type": "cover",
+      "title": "Return Type Notation",
+      "subtitle": "发言人: nikomatsakis, pnkfelix, TC, tmandry | 4704 字 → 自动提取草稿",
+      "notes": []
+    },
+    {
+      "type": "bullets",
+      "title": "背景与议题",
+      "bullets": [
+        {
+          "text": "Therefore, to meet our goal of shipping usable (if not perfect) support for async fn in traits in 2023…",
+          "strong": [
+            "Therefore"
+          ]
+        },
+        {
+          "text": "In this doc though we will focus on examples of async functions and send bounds, with only minimal discussion of other examples and applications",
+          "strong": [
+            "we will"
+          ]
+        },
+        {
+          "text": "本次讨论的议题: The \"send bound\" problem / Proposed solution: return type notation / How it works: HRTB / Limitation: only RPITIT methods, only lifetime parameters / Experience",
+          "strong": [
+            "本次讨论的议题:"
+          ]
+        }
+      ],
+      "notes": [
+        "Therefore, to meet our goal of shipping usable (if not perfect) support for async fn in traits in 2023, we must solve the send bound problem in some way.",
+        "In this doc though we will focus on examples of async functions and send bounds, with only minimal discussion of other examples and applications."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "关键事实",
+      "bullets": [
+        {
+          "text": "I don't have a problem with the parens, but I do have a problem with stabilizing but not generalizing to all type positions",
+          "strong": [
+            "stabilizing"
+          ]
+        },
+        {
+          "text": "whatever successor we do is going to take 6 months - a year to be stabilized, so it's something we're going to have to live with for a bit",
+          "strong": [
+            "6 months",
+            "stabilized"
+          ]
+        },
+        {
+          "text": "Agree, but I'm thinking about the mental model we expect people to have",
+          "strong": [
+            "Agree"
+          ]
+        },
+        {
+          "text": "I don't mind ().await, it's actually pretty natural, but I do want us to be clear on what trajectory we expect to be on",
+          "strong": [
+            "we expect"
+          ]
+        }
+      ],
+      "notes": [
+        "I don't have a problem with the parens, but I do have a problem with stabilizing but not generalizing to all type positions.",
+        "whatever successor we do is going to take 6 months - a year to be stabilized, so it's something we're going to have to live with for a bit.",
+        "Agree, but I'm thinking about the mental model we expect people to have.",
+        "I don't mind ().await, it's actually pretty natural, but I do want us to be clear on what trajectory we expect to be on."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "各方观点",
+      "bullets": [
+        {
+          "text": "nikomatsakis: We should not support HC: HealthCheck<check(T): Send> as the way to constrain or specify the value of parameters…",
+          "strong": [
+            "nikomatsakis:",
+            "We should"
+          ]
+        },
+        {
+          "text": "pnkfelix: I strongly recommend that you do not use the notation foo(): Send as it is currently shown",
+          "strong": [
+            "pnkfelix:",
+            "recommend"
+          ]
+        },
+        {
+          "text": "TC: I don't like the verbosity of ::return, but reading through the document I see suggestion that () will be a problem in terms of…",
+          "strong": [
+            "TC:",
+            "don't"
+          ]
+        },
+        {
+          "text": "tmandry: Also think that functions are special, e.g., Fn trait syntax, coupled with the potential for confusion that Yosh mentioned",
+          "strong": [
+            "tmandry:",
+            "confusion"
+          ]
+        },
+        {
+          "text": "Yosh: for reference Jules Berthold made this same case Felix made here - this apparently has interactions/prior art with \"unsized fn params\"",
+          "strong": [
+            "Yosh:"
+          ]
+        }
+      ],
+      "notes": [
+        "We should not support HC: HealthCheck<check(T): Send> as the way to constrain or specify the value of parameters, but we should rather have some way to make impl Trait arguments be listed in the turbofish listing.",
+        "I strongly recommend that you do not use the notation foo(): Send as it is currently shown.",
+        "I don't like the verbosity of ::return, but reading through the document I see suggestion that () will be a problem in terms of generalizing this to more type positions.",
+        "Also think that functions are special, e.g., Fn trait syntax, coupled with the potential for confusion that Yosh mentioned.",
+        "for reference Jules Berthold made this same case Felix made here - this apparently has interactions/prior art with \"unsized fn params\""
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "风险与分歧",
+      "bullets": [
+        {
+          "text": "The future possibilities section below walks through ways that all of these limitations could be lifted…",
+          "strong": [
+            "limitations",
+            "limitations"
+          ]
+        },
+        {
+          "text": "It might appear that typeof can be used in a similar way to RTN, but in fact it is significantly more complex",
+          "strong": [
+            "but",
+            "but"
+          ]
+        },
+        {
+          "text": "However, it may be surprising to permit T::m() in these \"type-like\" positions without going \"all the way\" to permiting T::m() in other type contexts",
+          "strong": [
+            "However",
+            "However"
+          ]
+        },
+        {
+          "text": "It could be confusing that Output refers to the future in some cases but the value of awaiting in others",
+          "strong": [
+            "confusing",
+            "confusing"
+          ]
+        }
+      ],
+      "notes": [
+        "The future possibilities section below walks through ways that all of these limitations could be lifted, but each of them has tradeoffs of their own (even ignoring implementation complexity), and it's not obvious that we want to do them.",
+        "It might appear that typeof can be used in a similar way to RTN, but in fact it is significantly more complex.",
+        "However, it may be surprising to permit T::m() in these \"type-like\" positions without going \"all the way\" to permiting T::m() in other type contexts.",
+        "yosh: It could be confusing that Output refers to the future in some cases but the value of awaiting in others."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "结论与决策",
+      "bullets": [
+        {
+          "text": "I recommend you consider some alternative like foo(...): Send",
+          "strong": [
+            "recommend"
+          ]
+        },
+        {
+          "text": "I demote my objection from \"strongly recommend\" to \"weak\"",
+          "strong": [
+            "recommend"
+          ]
+        },
+        {
+          "text": "agreed that would be the obvious thing",
+          "strong": [
+            "agreed"
+          ]
+        },
+        {
+          "text": "If there were a syntax that didn't cause a problem in generalizing this to more positions, maybe we'd extend it to more positions faster…",
+          "strong": [
+            "problem"
+          ]
+        }
+      ],
+      "notes": [
+        "pnkfelix: I recommend you consider some alternative like foo(...): Send.",
+        "pnkfelix: I demote my objection from \"strongly recommend\" to \"weak\"",
+        "nikomatsakis: agreed that would be the obvious thing.",
+        "TC: If there were a syntax that didn't cause a problem in generalizing this to more positions, maybe we'd extend it to more positions faster, and we might wind up with a more consistent language overall."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "下一步与待办",
+      "bullets": [
+        {
+          "text": "compiler-errors: it's basically ready to go, there is a question around implied bounds, need to file an issue about it",
+          "strong": [
+            "need to"
+          ]
+        },
+        {
+          "text": "Only this second form is implemented, presently, so we will focus on that",
+          "strong": [
+            "will focus"
+          ]
+        },
+        {
+          "text": "RTN is too verbose to be widely typed anyway and people are going to use trait aliases, so it'd be ok to do something even more verbose, e.g",
+          "strong": [
+            "going to"
+          ]
+        },
+        {
+          "text": "With typeof, one would also expect to be able to reference local variables and parameters freely",
+          "strong": [
+            "expect to"
+          ]
+        }
+      ],
+      "notes": [
+        "nikomatsakis: compiler-errors: it's basically ready to go, there is a question around implied bounds, need to file an issue about it.",
+        "Only this second form is implemented, presently, so we will focus on that.",
+        "nikomatsakis: RTN is too verbose to be widely typed anyway and people are going to use trait aliases, so it'd be ok to do something even more verbose, e.g.",
+        "With typeof, one would also expect to be able to reference local variables and parameters freely."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "title": "2022-08-31 Lang team GATs meeting",
+  "lang": "zh",
+  "source": "input.md",
+  "words": 5816,
+  "slides": [
+    {
+      "type": "cover",
+      "title": "2022-08-31 Lang team GATs meeting",
+      "subtitle": "发言人: nikomatsakis, joshtriplett, jackh726 | 5816 字 → 自动提取草稿",
+      "notes": []
+    },
+    {
+      "type": "bullets",
+      "title": "背景与议题",
+      "bullets": [
+        {
+          "text": "None of the comments have raised new issues that were not addressed in the stabilization proposal…",
+          "strong": [
+            "stabilization"
+          ]
+        },
+        {
+          "text": "This is an interim report to bring folks up to date on GAT stabilization and summarize the questions and comments that have been raised",
+          "strong": [
+            "stabilization"
+          ]
+        },
+        {
+          "text": "本次讨论的议题: History and links / The major options / Review of what is proposed for stabilization / Referencing GATs from where-clauses / Known limitations",
+          "strong": [
+            "本次讨论的议题:"
+          ]
+        }
+      ],
+      "notes": [
+        "None of the comments have raised new issues that were not addressed in the stabilization proposal, but some folks have taken issue with the recommendations therein.",
+        "This is an interim report to bring folks up to date on GAT stabilization and summarize the questions and comments that have been raised."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "关键事实",
+      "bullets": [
+        {
+          "text": "This section describes the known limitations of what is being stabilized with some notes on how we expect to address these problems over time",
+          "strong": [
+            "stabilized"
+          ]
+        },
+        {
+          "text": "(link) As a solidly intermediate Rust user I can say that I have tried wrap my mind around GATs several times over the past 3-4 years…",
+          "strong": [
+            "4 years"
+          ]
+        },
+        {
+          "text": "(link) I am mildly surprised that I am here writing a comment asking for gats to not be stabilised given how much I am looking forward to them…",
+          "strong": [
+            "stabilised"
+          ]
+        },
+        {
+          "text": "Note that where clauses are allowed both after the specified type and before the equals sign; however…",
+          "strong": [
+            "however"
+          ]
+        }
+      ],
+      "notes": [
+        "This section describes the known limitations of what is being stabilized with some notes on how we expect to address these problems over time.",
+        "(link) As a solidly intermediate Rust user I can say that I have tried wrap my mind around GATs several times over the past 3-4 years, and I don't really \"get\" it.",
+        "(link) I am mildly surprised that I am here writing a comment asking for gats to not be stabilised given how much I am looking forward to them but here I am 😅 I do not think gats should be stabilised until the bug around implied bounds are fixed.",
+        "Note that where clauses are allowed both after the specified type and before the equals sign; however, the latter is a warn-by-default deprecation (decided in this issue):"
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "各方观点",
+      "bullets": [
+        {
+          "text": "nikomatsakis: I do want to adopt that model, but it doesn't apply to traits/impls",
+          "strong": [
+            "nikomatsakis:",
+            "but"
+          ]
+        },
+        {
+          "text": "jackh726: as part of the mir-formality work, it's a very general piece of work",
+          "strong": [
+            "jackh726:"
+          ]
+        }
+      ],
+      "notes": [
+        "I do want to adopt that model, but it doesn't apply to traits/impls.",
+        "as part of the mir-formality work, it's a very general piece of work."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "风险与分歧",
+      "bullets": [
+        {
+          "text": "To summarize in a sentence: I think language complexity is a big problem, but I think GATs themselves are a great addition…",
+          "strong": [
+            "complexity",
+            "complexity"
+          ]
+        },
+        {
+          "text": "This isn't an argument against implementing GATs, but there are some concerns I have about both syntax and some... non-obvious uses",
+          "strong": [
+            "against",
+            "against"
+          ]
+        },
+        {
+          "text": "I'm also concerned with forcing significant changes too quickly: I see a lot of NLL and scoped thread breakage…",
+          "strong": [
+            "concerned",
+            "concerned"
+          ]
+        },
+        {
+          "text": "But this tendency to only do so in the narrow window between FPC and the next release is concerning and problematic",
+          "strong": [
+            "But",
+            "But"
+          ]
+        }
+      ],
+      "notes": [
+        "To summarize in a sentence: I think language complexity is a big problem, but I think GATs themselves are a great addition, but I think their interaction with WF is a leaky abstraction that needs to be plugged.",
+        "This isn't an argument against implementing GATs, but there are some concerns I have about both syntax and some... non-obvious uses.",
+        "I'm also concerned with forcing significant changes too quickly: I see a lot of NLL and scoped thread breakage and soundness issues in the queue right now, for example.",
+        "But this tendency to only do so in the narrow window between FPC and the next release is concerning and problematic."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "结论与决策",
+      "bullets": [
+        {
+          "text": "The \"Review of what is proposed for stabilization\" seems better to read before \"Major options\"",
+          "strong": [
+            "stabilization"
+          ]
+        },
+        {
+          "text": "I'd rather these issues be resolved before pushing the feature into stable, not after",
+          "strong": [
+            "resolved"
+          ]
+        },
+        {
+          "text": "I am in favor of keeping up the momentum to fix the problems and get these features stabilized",
+          "strong": [
+            "stabilized"
+          ]
+        },
+        {
+          "text": "(link) Agree with @skyzh, without GAT it's really hard for us to write vectorized expressions in simple way",
+          "strong": [
+            "Agree"
+          ]
+        }
+      ],
+      "notes": [
+        "The \"Review of what is proposed for stabilization\" seems better to read before \"Major options\"",
+        "I'd rather these issues be resolved before pushing the feature into stable, not after.",
+        "I am in favor of keeping up the momentum to fix the problems and get these features stabilized.",
+        "(link) Agree with @skyzh, without GAT it's really hard for us to write vectorized expressions in simple way."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "下一步与待办",
+      "bullets": [
+        {
+          "text": "Most of the \"big\" issues with gats are not actually related to gats and are just other issues with the compiler that are pre-existing…",
+          "strong": []
+        },
+        {
+          "text": "(link) I am going to chime in here regarding the stabilization of GATs",
+          "strong": [
+            "going to"
+          ]
+        },
+        {
+          "text": "(link) Outsider viewpoint here, which might actually be valuable in the discussion (with the risk of all you type system pro's telling me…",
+          "strong": []
+        },
+        {
+          "text": "However, that would make the trait less general than it might need to be…",
+          "strong": [
+            "need to"
+          ]
+        }
+      ],
+      "notes": [
+        "Most of the \"big\" issues with gats are not actually related to gats and are just other issues with the compiler that are pre-existing and observable on stable (so there is really no harm in shipping gats with them- everyone is already suffering gats isnt going to make it worse).",
+        "(link) I am going to chime in here regarding the stabilization of GATs.",
+        "(link) Outsider viewpoint here, which might actually be valuable in the discussion (with the risk of all you type system pro's telling me there's a better way to go about this anyway). \\[..\\] I've been looking forward to GATs being stabilized for a while now.",
+        "However, that would make the trait less general than it might need to be, and we don't know exactly the right set of rules to add by default anyway."
+      ]
+    }
+  ]
+}

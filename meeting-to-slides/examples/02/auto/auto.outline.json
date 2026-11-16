@@ -1,0 +1,229 @@
+{
+  "title": "input.txt",
+  "lang": "zh",
+  "source": "input.txt",
+  "words": 3510,
+  "slides": [
+    {
+      "type": "cover",
+      "title": "input.txt",
+      "subtitle": "发言人: Vlad Shmunis, Vaibhav Agarwal, Will Wong | 3510 字 → 自动提取草稿",
+      "notes": []
+    },
+    {
+      "type": "bullets",
+      "title": "背景与议题",
+      "bullets": [
+        {
+          "text": "We also delivered on our profitability goals, including achieving GAAP operating profitability in the quarter",
+          "strong": [
+            "delivered"
+          ]
+        },
+        {
+          "text": "We believe these priorities will drive long-term, profitable growth through increased wallet share, improved retention…",
+          "strong": [
+            "We believe"
+          ]
+        }
+      ],
+      "notes": [
+        "We also delivered on our profitability goals, including achieving GAAP operating profitability in the quarter.",
+        "We believe these priorities will drive long-term, profitable growth through increased wallet share, improved retention and more efficient new logo acquisition."
+      ]
+    },
+    {
+      "type": "metrics",
+      "title": "核心指标",
+      "metrics": [
+        {
+          "value": "56%",
+          "label": "The combination of strong growth and operating margin expansion, a material…",
+          "source": "The combination of strong growth and operating margin expansion, a material reduction in SBC, and the return of capital via buybacks has driven a 56% year-over-year increase in free cash flow per share this quarter."
+        },
+        {
+          "value": "50%",
+          "label": "The RingCX AI Quality Management Add On has been a key driver of this ARPU expansion…",
+          "source": "The RingCX AI Quality Management Add On has been a key driver of this ARPU expansion, with a nearly 50% attach rate to new bookings in the quarter."
+        },
+        {
+          "value": "20%",
+          "label": "AUTOPAY, an auto loan specialist, said “Since we migrated to RingCX, we estimate a…",
+          "source": "AUTOPAY, an auto loan specialist, said “Since we migrated to RingCX, we estimate a 20% time savings for customer success reps due to sophisticated AI -based technology that RingCX delivers.”"
+        },
+        {
+          "value": "$100M",
+          "label": "In February of this year, we set a target of achieving at least $100M of exit ARR…",
+          "source": "In February of this year, we set a target of achieving at least $100M of exit ARR from our new products by the end of 2025."
+        },
+        {
+          "value": "$583 million",
+          "label": "In Q3, subscription revenue of $583 million was up 10% year over year, solidly above…",
+          "source": "In Q3, subscription revenue of $583 million was up 10% year over year, solidly above the high end of our guidance range."
+        },
+        {
+          "value": "$2.48 billion",
+          "label": "ARR of $2.48 billion was up 9% year over year on a reported and constant currency…",
+          "source": "ARR of $2.48 billion was up 9% year over year on a reported and constant currency basis."
+        }
+      ],
+      "takeaway": "The combination of strong growth and operating margin expansion, a material reduction in SBC…",
+      "notes": [
+        "The combination of strong growth and operating margin expansion, a material reduction in SBC, and the return of capital via buybacks has driven a 56% year-over-year increase in free cash flow per share this quarter.",
+        "The RingCX AI Quality Management Add On has been a key driver of this ARPU expansion, with a nearly 50% attach rate to new bookings in the quarter.",
+        "AUTOPAY, an auto loan specialist, said “Since we migrated to RingCX, we estimate a 20% time savings for customer success reps due to sophisticated AI -based technology that RingCX delivers.”",
+        "In February of this year, we set a target of achieving at least $100M of exit ARR from our new products by the end of 2025.",
+        "In Q3, subscription revenue of $583 million was up 10% year over year, solidly above the high end of our guidance range.",
+        "ARR of $2.48 billion was up 9% year over year on a reported and constant currency basis."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "各方观点",
+      "bullets": [
+        {
+          "text": "Vlad Shmunis: This is supported by a recent IDC survey which concluded that “78% of organizations agree that voice calling will remain a priority…",
+          "strong": [
+            "Vlad Shmunis:",
+            "78%"
+          ]
+        },
+        {
+          "text": "Vaibhav Agarwal: For the fourth quarter of 2024, we expect: • Subscription revenue growth of 7% to 8% • Total revenue growth of 7% • Non-GAAP operating…",
+          "strong": [
+            "Vaibhav Agarwal:",
+            "7%"
+          ]
+        },
+        {
+          "text": "Will Wong: Joining me today are Vlad Shmunis, Founder, Chairman, and CEO, and Vaibhav Agarwal, Senior Vice President of FP&A…",
+          "strong": [
+            "Will Wong:"
+          ]
+        }
+      ],
+      "notes": [
+        "This is supported by a recent IDC survey which concluded that “78% of organizations agree that voice calling will remain a priority mode of communication in their employee and customer interactions.”",
+        "For the fourth quarter of 2024, we expect: • Subscription revenue growth of 7% to 8% • Total revenue growth of 7% • Non-GAAP operating margin of approximately 21%, and • Non-GAAP EPS of $0.96 to $0.97, based on a fully diluted share count of 92.5 to 93.0 million shares.",
+        "Joining me today are Vlad Shmunis, Founder, Chairman, and CEO, and Vaibhav Agarwal, Senior Vice President of FP&A and Chief Accounting Officer."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "风险与分歧",
+      "bullets": [
+        {
+          "text": "Sales and marketing expense as a percent of total revenue declined 220 bps to 39 .0%, as we continue to drive down costs in the sales…",
+          "strong": [
+            "declined",
+            "220 bps"
+          ]
+        },
+        {
+          "text": "These include but are not limited to SMS, fax, call monitoring, call queue management, IVR, rich communication APIs, broader global reach…",
+          "strong": [
+            "but",
+            "but"
+          ]
+        },
+        {
+          "text": "In summary, we had a strong quarter in delivering against our strategic priorities",
+          "strong": [
+            "against",
+            "delivering"
+          ]
+        },
+        {
+          "text": "Our results demonstrate we are executing against our strategic priorities",
+          "strong": [
+            "against",
+            "priorities"
+          ]
+        }
+      ],
+      "notes": [
+        "Vaibhav Agarwal: Sales and marketing expense as a percent of total revenue declined 220 bps to 39 .0%, as we continue to drive down costs in the sales and marketing organization and optimize for higher margin routes to market.",
+        "Vlad Shmunis: These include but are not limited to SMS, fax, call monitoring, call queue management, IVR, rich communication APIs, broader global reach, native integrations with major CRMs, and robust analytics and reporting.",
+        "Vlad Shmunis: In summary, we had a strong quarter in delivering against our strategic priorities.",
+        "Vlad Shmunis: Our results demonstrate we are executing against our strategic priorities."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "结论与决策",
+      "bullets": [
+        {
+          "text": "We also expect: • Non-GAAP EPS of $3.69, up from $3.62 to $3.67, driven in part by our lower share count outlook…",
+          "strong": [
+            "$3.69",
+            "$3.62",
+            "outlook"
+          ]
+        },
+        {
+          "text": "Our outlook includes capitalized expenditures of $85 million, cash paid for interest of $60 million, restructuring and other payments of $27 milli on…",
+          "strong": [
+            "$85 million",
+            "$60 million",
+            "outlook"
+          ]
+        },
+        {
+          "text": "Overall AR PU remained over $30, with new product ARPU meaningfully higher than overall ARPUs",
+          "strong": [
+            "$30,",
+            "Overall"
+          ]
+        },
+        {
+          "text": "We believe this strategy will maximize returns for all stakeholders",
+          "strong": [
+            "We believe"
+          ]
+        }
+      ],
+      "notes": [
+        "Vaibhav Agarwal: We also expect: • Non-GAAP EPS of $3.69, up from $3.62 to $3.67, driven in part by our lower share count outlook, as we now expect 94.5 million fully diluted shares outstanding in 2024, down from 95 to 96 million shares previously.",
+        "Vaibhav Agarwal: Our outlook includes capitalized expenditures of $85 million, cash paid for interest of $60 million, restructuring and other payments of $27 milli on, as well as $25 million of cash received from certain strategic partners.",
+        "Vaibhav Agarwal: Overall AR PU remained over $30, with new product ARPU meaningfully higher than overall ARPUs.",
+        "Vaibhav Agarwal: We believe this strategy will maximize returns for all stakeholders."
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "下一步与待办",
+      "bullets": [
+        {
+          "text": "We plan to address our Convertible notes coming due in March 2026 with this commitment plus the free cash flow we expect to generate…",
+          "strong": [
+            "plan to"
+          ]
+        },
+        {
+          "text": "Consistent with what we shared last quarter, we plan to address our $161 million of 2025 Convertible Notes with available cash and cash flow",
+          "strong": [
+            "plan to"
+          ]
+        },
+        {
+          "text": "Overall, our results this quarter demonstrate our ability to execute on our plan to deliver growth from our core and new products…",
+          "strong": [
+            "plan to"
+          ]
+        },
+        {
+          "text": "Going forward, we plan to continue to at least fully offset dilution from SBC via buybacks, all…",
+          "strong": [
+            "plan to"
+          ]
+        }
+      ],
+      "notes": [
+        "Vaibhav Agarwal: We plan to address our Convertible notes coming due in March 2026 with this commitment plus the free cash flow we expect to generate between now and March 2026.",
+        "Vaibhav Agarwal: Consistent with what we shared last quarter, we plan to address our $161 million of 2025 Convertible Notes with available cash and cash flow.",
+        "Vaibhav Agarwal: Overall, our results this quarter demonstrate our ability to execute on our plan to deliver growth from our core and new products, expand margins through continued spend efficiencies, reduce stock-based compensation and deploy a balanced capital allocation approach that includes share repurchase and debt paydown.",
+        "Vaibhav Agarwal: Going forward, we plan to continue to at least fully offset dilution from SBC via buybacks, all while preserving financial flexibility with respect to excess cash."
+      ]
+    }
+  ]
+}

@@ -11,6 +11,7 @@
 | [`step-by-step-3d-builder`](step-by-step-3d-builder/) | 我们做的工具：输入想要构建的 3D 复合对象描述（如‘动物细胞结构’或‘机械腕表机芯’） → 自动化工作流先将其拆解为独立部件树与坐标装配图，随后循环生成各部件的三维代码并执行依赖 | 见文件夹里的 README |
 | [`design-site-picker`](design-site-picker/) | 设计网站筛选器。导入带链接和简介的收藏清单，填写项目类型和眼下卡点 → 合并重复链接，按用途筛选，把信息不足的网站标为待补 → 从已有收藏里推荐最多 3 个网站，并说明每个适合解决 | 见文件夹里的 README |
 | [`reference-redesign-card`](reference-redesign-card/) | 参考图改版指令卡。输入自己的页面截图、页面目标和参考图，圈出想借鉴的位置 → 把留白、标题层级或按钮样式对应到自己页面的具体区域，并标明哪些地方不动 → 输出按优先级排列的改版清单 | 见文件夹里的 README |
+| [`meeting-to-slides`](meeting-to-slides/) | 输入杂乱的会议速记文本或语音转写稿 → Claude Code 执行发言人观点归纳、核心指标提取与结论分层 → 调用 python-pptx 自动套用商务母版，生成排版整齐的幻灯片 | 见文件夹里的 README |
 
 ## 怎么下载
 

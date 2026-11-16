@@ -20,7 +20,7 @@
    "check": {
     "ok": true,
     "detail": "HTTP 200，正文约 5805 字，命中词：design system、component、ui kit、style guide、icon、icons、svg、emoji",
-    "secs": 1.2
+    "secs": 1.4
    }
   },
   {
@@ -35,7 +35,7 @@
    "check": {
     "ok": true,
     "detail": "HTTP 200，正文约 16933 字，命中词：component、icon、icons、svg",
-    "secs": 3.2
+    "secs": 3.5
    }
   },
   {
@@ -49,10 +49,10 @@
    "check": {
     "ok": true,
     "detail": "HTTP 200，正文约 595 字，命中词：icon、icons、svg；注意：已跳转到 https://pictogrammers.com/library/mdi/?welcome",
-    "secs": 2.7
+    "secs": 2.5
    }
   }
  ],
  "skipped": [],
- "secs": 7.22
+ "secs": 7.53
 }

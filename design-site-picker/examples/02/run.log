@@ -24,4 +24,4 @@
 - 联网核对：HTTP 200，正文约 595 字，命中词：icon、icons、svg；注意：已跳转到 https://pictogrammers.com/library/mdi/?welcome
 
 
-耗时 7.22 秒，输出在 examples/02/output
+耗时 7.53 秒，输出在 examples/02/output

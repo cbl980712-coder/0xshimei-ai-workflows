@@ -30,13 +30,21 @@ button{font:inherit;padding:8px 16px;border-radius:8px;border:1px solid var(--ac
 const R=__RULES__; const SAMPLE=__SAMPLE__;
 const $=id=>document.getElementById(id);
 $('pt').innerHTML=Object.keys(R.project_types).map(k=>'<option>'+k+'</option>').join('');
-$('f').onchange=e=>{const r=new FileReader();r.onload=()=>{$('t').value=r.result};r.readAsText(e.target.files[0],'utf-8')};
-$('ex').onclick=()=>{$('t').value=SAMPLE;$('sk').value=$('sk').value||'配色老是不协调，想找个能直接抄的字体搭配'};
+let importErr='';
+const BADENC='这个文件不是有效的 UTF-8 CSV，请另存为 CSV UTF-8 后重新导入。（表头本身没问题，不用改表头。）';
+function showImportErr(m){importErr=m;$('t').value='';$('msg').textContent='';$('out').innerHTML='<div class="box warn">'+esc(m)+'</div>'}
+$('f').onchange=e=>{const file=e.target.files[0]; if(!file)return; importErr='';
+  const r=new FileReader();
+  r.onload=()=>{try{$('t').value=new TextDecoder('utf-8',{fatal:true}).decode(r.result);$('out').innerHTML='';$('msg').textContent=''}catch(x){showImportErr(BADENC)}; e.target.value=''};
+  r.onerror=()=>showImportErr('读不了这个文件，请换一个文件或直接把内容粘贴到文本框里。');
+  r.readAsArrayBuffer(file)};
+$('ex').onclick=()=>{importErr='';$('out').innerHTML='';$('t').value=SAMPLE;$('sk').value=$('sk').value||'配色老是不协调，想找个能直接抄的字体搭配'};
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function csvOut(head,rows){return '﻿'+[head,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')}
 function dl(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download=name;a.click()}
 $('go').onclick=()=>{
   const t0=performance.now(); let o;
+  if(importErr&&!$('t').value.trim()){$('msg').textContent=importErr;return}
   try{o=runPick($('t').value,$('pt').value,$('sk').value,R,3)}catch(e){$('msg').textContent=e.message;return}
   const ms=Math.round(performance.now()-t0);
   $('msg').textContent='用时 '+ms+' 毫秒';

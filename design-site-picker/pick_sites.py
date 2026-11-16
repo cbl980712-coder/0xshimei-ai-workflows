@@ -146,7 +146,11 @@ def fetch_check(url, kws, timeout=12):
             code = r.status; final = r.geturl()
     except urllib.error.HTTPError as e:
         if e.code in (401, 403, 429, 503):
-            return {'ok': True, 'unverified': True, 'detail': 'HTTP %s：对方拒绝脚本访问（常见于反爬），没法自动核对，请你在浏览器里点开确认' % e.code, 'secs': round(time.time() - t0, 1)}
+            try: eb = e.read(100000).decode('utf-8', 'ignore').lower()
+            except Exception: eb = ''
+            if 'cloudflare' in eb and any(x in eb for x in ('just a moment', 'security verification', 'challenge-platform', 'cf-chl')):
+                return {'ok': True, 'unverified': True, 'detail': 'HTTP %s：返回的是 Cloudflare 人机验证页，没法自动核对，请你在浏览器里点开确认' % e.code, 'secs': round(time.time() - t0, 1)}
+            return {'ok': True, 'unverified': True, 'detail': 'HTTP %s：脚本没法确认这个页面能不能用（原因不确定），请你在浏览器里点开确认' % e.code, 'secs': round(time.time() - t0, 1)}
         return {'ok': False, 'detail': '打不开：HTTP %s' % e.code, 'secs': round(time.time() - t0, 1)}
     except Exception as e:
         return {'ok': False, 'detail': '打不开：%s' % str(e)[:60], 'secs': round(time.time() - t0, 1)}

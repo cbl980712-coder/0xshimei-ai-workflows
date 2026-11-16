@@ -21,7 +21,7 @@
 - 网址：http://www.lapa.ninja/
 - 用途标签：排版布局、灵感案例
 - 适合解决：排版布局。依据（来自你清单里的简介）：is a gallery featuring the best 1920 landing page examples from around the web.
-- 联网核对：HTTP 403：对方拒绝脚本访问（常见于反爬），没法自动核对，请你在浏览器里点开确认
+- 联网核对：HTTP 403：返回的是 Cloudflare 人机验证页，没法自动核对，请你在浏览器里点开确认
 
 
-耗时 3.69 秒，输出在 examples/01/output
+耗时 3.94 秒，输出在 examples/01/output

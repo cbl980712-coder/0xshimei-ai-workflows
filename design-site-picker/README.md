@@ -7,24 +7,23 @@
 ## 先下载（从 GitHub 拿到工具）
 **兼容性（先看这句）：网页版用 Chrome 打开，其他浏览器未验证。命令行需要 Python，已验证版本为 3.9。**
 
-GitHub 的 Download ZIP 解压后只有一层文件夹，名字是「仓库名-分支名」（下面写成 `<仓库名>-main`，以你实际看到的为准）。本 README、提示词、脚本、网页版都直接在这一层里，**下面所有文件和命令都以这一层为准**，不用再往里找：
+GitHub 的 Download ZIP 下载的是**整个仓库**，解压后第一层是「仓库名-分支名」（下面写成 `<仓库名>-main`，以你实际看到的为准）。工具在仓库里的 `design-site-picker/` 子目录中，**要再往里进一层**。README、提示词、脚本、网页版都在这个子目录里，**下面所有文件和命令都以这个子目录为准**：
 ```
-<仓库名>-main/                 ← 解压出来的这一层，命令都在这里运行
-├── README.md  SKILL.md  prompts.md      ← 说明、Claude Code 入口、提示词
-├── 设计站筛选器.html                     ← 网页版，双击打开
-├── pick_sites.py  md_to_csv.py  build_index.py  build_html.py  run_examples.sh   ← 脚本
-├── rules.json                           ← 可改的关键词表
-├── 设计参考索引.html                     ← 索引页样例（例子 3 生成）
-├── templates/                           ← 示例清单.csv、设计网站导入模板.csv 等
-└── examples/                            ← 三组真实例子（01、02、03）
+<仓库名>-main/                      ← 解压出来的第一层（整个仓库），先别在这里运行命令
+└── design-site-picker/             ← 工具在这一层，命令都在这里运行
+    ├── README.md  SKILL.md  prompts.md      ← 说明、Claude Code 入口、提示词
+    ├── 设计站筛选器.html                     ← 网页版，双击打开
+    ├── pick_sites.py  md_to_csv.py  build_index.py  build_html.py  run_examples.sh   ← 脚本
+    ├── rules.json                           ← 可改的关键词表
+    ├── 设计参考索引.html                     ← 索引页样例（例子 3 生成）
+    ├── templates/                           ← 示例清单.csv、设计网站导入模板.csv 等
+    └── examples/                            ← 三组真实例子（01、02、03）
 ```
 1. 打开仓库首页，点绿色的 **Code** → **Download ZIP**，下载后解压。
-2. 进入解压出来的 `<仓库名>-main` 文件夹（里面直接就能看到 `README.md`、`设计站筛选器.html` 和 `templates/`）。
+2. 解压整仓 ZIP 后，进入 `<仓库名>-main/design-site-picker/`，看到 HTML、脚本和 `templates/` 再继续。（只看到别的文件夹，说明还在上一层。）
 3. 用 Chrome 打开：双击 `设计站筛选器.html`（不用装任何东西；其他浏览器没验证过）。
-4. 页面里点「选择文件」，选 `templates/示例清单.csv`（路径相对 HTML 所在的这一层；点「用示例清单」也行）；项目类型选「落地页」；眼下卡点填「配色老是不协调」；点「筛选」。**应看到 Colors & Fonts、Blend 和 Colorffy** 这三个站。
+4. 页面里点「选择文件」，选 `templates/示例清单.csv`（路径相对 HTML 所在的 `design-site-picker/` 这一层；点「用示例清单」也行）；项目类型选「落地页」；眼下卡点填「配色老是不协调」；点「筛选」。**应看到 Colors & Fonts、Blend 和 Colorffy** 这三个站。
    - 没出现这三个站？先核对：① 导入的是不是 `templates/示例清单.csv`（换成自己的清单，推荐当然不同）；② 项目类型是不是「落地页」；③ 卡点是不是填了「配色老是不协调」（配色这个词要在里面）。
-
-想用命令行版或 Claude Code 版，继续看下面的三步上手。
 
 想用命令行版或 Claude Code 版，继续看下面的三步上手。
 
@@ -32,12 +31,12 @@ GitHub 的 Download ZIP 解压后只有一层文件夹，名字是「仓库名-�
 
 ### 1. 装什么
 - 想用命令行版：需要 Python，已验证版本为 3.9（其他版本没测过）。
-  - Mac：打开「终端」，输入 `python3 --version`；没有的话 `xcode-select --install` 或到 python.org 下载。
-  - Windows：到 python.org 下载安装，安装时勾选 "Add python to PATH"；之后用 `python`（或 `py`）代替下面的 `python3`。
+  - Mac：打开「终端」，先运行 `python3 --version`，当前已验证的是 3.9。没有 Python 时到 python.org 下载所需版本。
+  - Windows：到 python.org 下载安装，安装时勾选 "Add python to PATH"；之后用 `python`（或 `py`）代替下面的 `python3`（**`python` 和 `py` 都未实测**）。
 - 不想装任何东西：用 Chrome 双击 `设计站筛选器.html`，不联网、数据不上传（但没有联网核对链接的功能）。
-- 想让 Claude Code 带你做：把解压出来的整个文件夹复制到你项目的 `.claude/skills/design-site-picker/`（`SKILL.md` 要和 `pick_sites.py`、`rules.json` 放在同一层，只拷 `SKILL.md` 跑不起来）。也可以不装，只用 `prompts.md` 里的提示词。
+- 想让 Claude Code 带你做：把解压出来的 `design-site-picker/` 整个文件夹复制到你项目的 `.claude/skills/design-site-picker/`（`SKILL.md` 要和 `pick_sites.py`、`rules.json` 放在同一层，只拷 `SKILL.md` 跑不起来）。也可以不装，只用 `prompts.md` 里的提示词。
 
-**先确认环境好了**，在解压出来的这一层（和 `pick_sites.py` 同级）打开终端，跑这一条，应当看到「推荐结果」和 3 个站：
+**先确认环境好了**，在 `<仓库名>-main/design-site-picker/` 这一层（和 `pick_sites.py` 同级）打开终端，跑这一条，应当看到「推荐结果」和 3 个站：
 ```
 python3 pick_sites.py templates/示例清单.csv --type 落地页 --stuck "配色老是不协调" --out test_out
 ```

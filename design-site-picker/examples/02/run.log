@@ -1,0 +1,27 @@
+# 推荐结果
+
+- 项目类型：产品界面
+- 眼下卡点：后台表格和按钮样式不统一，想要一套组件规范和图标
+- 识别到的卡点用途：组件设计系统、图标
+- 输入 601 行 → 合并重复后 595 个站（合并掉 6 行）→ 待补 153 个
+
+## 1. Cabana
+- 网址：https://cabanadesignsystem.com/
+- 用途标签：组件设计系统、原型交互
+- 适合解决：组件设计系统。依据（来自你清单里的简介）：a Premium Design System for Sketch that helps you create amazing products faster than ever before.
+- 联网核对：HTTP 200，正文约 5805 字，命中词：design system、component、ui kit、style guide、icon、icons、svg、emoji
+
+## 2. Tilda Icons
+- 网址：https://tilda.cc/free-icons/
+- 用途标签：排版布局、图标、配图素材
+- 适合解决：图标。依据（来自你清单里的简介）：download free icons for landing pages. More than 700 vector icons, collected in 43 sets for business.
+- 联网核对：HTTP 200，正文约 16933 字，命中词：component、icon、icons、svg
+
+## 3. Material Design Icons
+- 网址：https://materialdesignicons.com/
+- 用途标签：组件设计系统、图标
+- 适合解决：组件设计系统、图标。依据（来自你清单里的简介）：free material design icons made possible by open source contributons.
+- 联网核对：HTTP 200，正文约 595 字，命中词：icon、icons、svg；注意：已跳转到 https://pictogrammers.com/library/mdi/?welcome
+
+
+耗时 7.22 秒，输出在 examples/02/output

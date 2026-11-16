@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设计站筛选器</title>
+<style>
+:root{--bg:#faf8f4;--fg:#1d1b17;--mu:#6b665c;--card:#fff;--ln:#e4dfd3;--ac:#c2410c;--ok:#166534;--warn:#92400e}
+@media (prefers-color-scheme:dark){:root{--bg:#161512;--fg:#f1ede4;--mu:#a39d8e;--card:#201e1a;--ln:#38352e;--ac:#fb923c;--ok:#4ade80;--warn:#fbbf24}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+main{max-width:860px;margin:0 auto;padding:28px 16px 64px}h1{font-size:26px;margin:0 0 4px}p.s{color:var(--mu);margin:0 0 20px}
+.box{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:16px;margin:14px 0}
+label{display:block;font-weight:600;margin:10px 0 4px}input[type=text],select,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--fg)}
+textarea{height:110px;font:13px/1.4 ui-monospace,Menlo,monospace}
+button{font:inherit;padding:8px 16px;border-radius:8px;border:1px solid var(--ac);background:var(--ac);color:#fff;cursor:pointer;margin:8px 8px 0 0}button.g{background:none;color:var(--ac)}
+.rec{border-left:4px solid var(--ac)}.rec h3{margin:0 0 4px;font-size:18px}.rec a{color:var(--ac);word-break:break-all}.tag{display:inline-block;font-size:12px;padding:1px 8px;border:1px solid var(--ln);border-radius:99px;margin-right:4px;color:var(--mu)}
+.st{color:var(--mu);font-size:14px}table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--ln);padding:5px 6px;text-align:left;vertical-align:top;word-break:break-all}
+.warn{color:var(--warn)}@media(max-width:560px){main{padding:20px 16px 48px}}
+</style></head><body><main>
+<h1>设计网站筛选器</h1>
+<p class="s">导入你的收藏清单 → 合并重复链接、按用途打标签、简介不足的标「待补」→ 最多推荐 3 个，并说明各自解决什么。数据只在你的浏览器里处理，不上传。</p>
+<div class="box">
+<label>① 收藏清单 CSV（表头含「网址」，建议有「名称、简介、分类」）</label>
+<input type="file" id="f" accept=".csv,text/csv"> <button class="g" id="ex">用示例清单</button>
+<textarea id="t" placeholder="或把 CSV 内容粘贴在这里"></textarea>
+<label>② 项目类型</label><select id="pt"></select>
+<label>③ 眼下卡点（一句话）</label><input type="text" id="sk" placeholder="例如：首屏配色老是不协调，标题字体也不会搭">
+<button id="go">筛选</button><span class="st" id="msg"></span>
+</div>
+<div id="out"></div>
+<script>
+/*__CORE__*/
+const R=__RULES__; const SAMPLE=__SAMPLE__;
+const $=id=>document.getElementById(id);
+$('pt').innerHTML=Object.keys(R.project_types).map(k=>'<option>'+k+'</option>').join('');
+$('f').onchange=e=>{const r=new FileReader();r.onload=()=>{$('t').value=r.result};r.readAsText(e.target.files[0],'utf-8')};
+$('ex').onclick=()=>{$('t').value=SAMPLE;$('sk').value=$('sk').value||'配色老是不协调，想找个能直接抄的字体搭配'};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function csvOut(head,rows){return '﻿'+[head,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')}
+function dl(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download=name;a.click()}
+$('go').onclick=()=>{
+  const t0=performance.now(); let o;
+  try{o=runPick($('t').value,$('pt').value,$('sk').value,R,3)}catch(e){$('msg').textContent=e.message;return}
+  const ms=Math.round(performance.now()-t0);
+  $('msg').textContent='用时 '+ms+' 毫秒';
+  let h='<div class="box st">输入 '+o.rows+' 行 → 合并重复后 '+o.sites.length+' 个站（合并掉 '+(o.rows-o.sites.length)+' 行）→ 待补 '+o.pending.length+' 个。识别到的卡点用途：'+(o.hit.join('、')||'没识别到，按项目类型默认用途推荐')+'</div>';
+  if(!o.chosen.length)h+='<div class="box warn">没有找到符合的站：多半是清单里相关简介太少，先看下面的待补清单。</div>';
+  o.chosen.forEach((s,i)=>{h+='<div class="box rec"><h3>'+(i+1)+'. '+esc(s.name||s.url)+'</h3><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.url)+'</a><div>'+s.tags.map(t=>'<span class="tag">'+t+'</span>').join('')+'</div><p>'+esc(s.reason)+'</p></div>'});
+  h+='<div class="box"><button id="d1">下载整理后清单.csv</button><button class="g" id="d2">下载待补清单.csv</button>'
+   +'<p class="st">推荐没联网核对过链接是否还能打开；想核对请用 kit 里的 pick_sites.py --check。</p>'
+   +'<h3>待补清单（前 30 个）</h3><table><tr><th>名称</th><th>网址</th><th>原因</th></tr>'+o.pending.slice(0,30).map(s=>'<tr><td>'+esc(s.name)+'</td><td>'+esc(s.url)+'</td><td>'+esc(s.pending)+'</td></tr>').join('')+'</table></div>';
+  $('out').innerHTML=h;
+  $('d1').onclick=()=>dl('清单整理.csv',csvOut(['名称','网址','简介','用途标签','状态','合并重复次数','待补原因'],o.sites.map(s=>[s.name,s.url,s.desc,s.tags.join('/'),s.pending?'待补':'可用',s.dup,s.pending])));
+  $('d2').onclick=()=>dl('待补清单.csv',csvOut(['名称','网址','待补原因','你来补：这个站解决什么问题'],o.pending.map(s=>[s.name,s.url,s.pending,''])));
+};
+</script></main></body></html>

@@ -1,0 +1,345 @@
+{
+  "说明": "用途关键词表。读者可以直接改：每个用途一组词，名称/简介/分类里出现任一词就算命中。英文词按小写匹配。",
+  "purposes": {
+    "配色": [
+      "color",
+      "colour",
+      "palette",
+      "gradient",
+      "配色",
+      "颜色",
+      "色彩",
+      "渐变",
+      "swatch",
+      "hue"
+    ],
+    "字体": [
+      "font",
+      "typeface",
+      "typography",
+      "type foundry",
+      "foundry",
+      "typ.io",
+      "字体",
+      "字型",
+      "排字",
+      "lettering"
+    ],
+    "排版布局": [
+      "layout",
+      "grid",
+      "wireframe",
+      "whitespace",
+      "排版",
+      "布局",
+      "栅格",
+      "线框",
+      "editorial",
+      "landing page",
+      "landing"
+    ],
+    "灵感案例": [
+      "inspiration",
+      "gallery",
+      "showcase",
+      "portfolio",
+      "award",
+      "awwwards",
+      "case study",
+      "best websites",
+      "beautiful",
+      "灵感",
+      "案例",
+      "作品集",
+      "展示",
+      "curated",
+      "trend"
+    ],
+    "组件设计系统": [
+      "design system",
+      "component",
+      "ui kit",
+      "pattern",
+      "styleguide",
+      "style guide",
+      "guideline",
+      "material design",
+      "组件",
+      "设计系统",
+      "规范",
+      "ui library",
+      "dashboard"
+    ],
+    "图标": [
+      "icon",
+      "icons",
+      "glyph",
+      "svg",
+      "图标",
+      "emoji"
+    ],
+    "配图素材": [
+      "stock",
+      "photo",
+      "photos",
+      "image",
+      "images",
+      "illustration",
+      "illustrations",
+      "video",
+      "footage",
+      "vector",
+      "texture",
+      "素材",
+      "配图",
+      "摄影",
+      "插画",
+      "图库",
+      "royalty free",
+      "creative commons",
+      "cc0"
+    ],
+    "样机Mockup": [
+      "mockup",
+      "mock-up",
+      "mock up",
+      "device frame",
+      "样机",
+      "template",
+      "templates",
+      "psd"
+    ],
+    "原型交互": [
+      "prototype",
+      "prototyping",
+      "interaction",
+      "wireframing",
+      "user flow",
+      "原型",
+      "交互",
+      "figma",
+      "sketch",
+      "xd"
+    ],
+    "动效": [
+      "animation",
+      "animate",
+      "motion",
+      "lottie",
+      "transition",
+      "动效",
+      "动画",
+      "gif"
+    ],
+    "无障碍": [
+      "accessibility",
+      "contrast",
+      "a11y",
+      "wcag",
+      "colorblind",
+      "无障碍",
+      "对比度"
+    ],
+    "品牌Logo": [
+      "logo",
+      "brand",
+      "branding",
+      "identity",
+      "品牌",
+      "标志"
+    ],
+    "学习教程": [
+      "tutorial",
+      "course",
+      "learn",
+      "book",
+      "podcast",
+      "article",
+      "blog",
+      "teaching",
+      "教程",
+      "课程",
+      "学习",
+      "读物",
+      "书"
+    ]
+  },
+  "stuck_words": {
+    "配色": [
+      "配色",
+      "颜色",
+      "色彩",
+      "调色",
+      "color",
+      "colour",
+      "palette",
+      "渐变",
+      "撞色",
+      "主色"
+    ],
+    "字体": [
+      "字体",
+      "字号",
+      "font",
+      "typeface",
+      "字型",
+      "标题字",
+      "中英文"
+    ],
+    "排版布局": [
+      "排版",
+      "布局",
+      "版式",
+      "对齐",
+      "留白",
+      "layout",
+      "栅格",
+      "首屏",
+      "层级",
+      "结构",
+      "太乱",
+      "挤"
+    ],
+    "灵感案例": [
+      "灵感",
+      "参考",
+      "案例",
+      "不知道长什么样",
+      "风格",
+      "好看的",
+      "同行",
+      "竞品",
+      "inspiration",
+      "没思路",
+      "没想法",
+      "起步"
+    ],
+    "组件设计系统": [
+      "组件",
+      "设计系统",
+      "规范",
+      "按钮",
+      "表单",
+      "表格",
+      "后台",
+      "dashboard",
+      "component",
+      "一致",
+      "统一"
+    ],
+    "图标": [
+      "图标",
+      "icon"
+    ],
+    "配图素材": [
+      "配图",
+      "素材",
+      "图片",
+      "照片",
+      "插画",
+      "插图",
+      "图库",
+      "封面",
+      "海报",
+      "视频素材",
+      "stock",
+      "运营图"
+    ],
+    "样机Mockup": [
+      "样机",
+      "mockup",
+      "展示图",
+      "效果图",
+      "装进手机",
+      "设备"
+    ],
+    "原型交互": [
+      "原型",
+      "交互",
+      "流程",
+      "prototype",
+      "线框",
+      "跳转"
+    ],
+    "动效": [
+      "动效",
+      "动画",
+      "动起来",
+      "animation",
+      "motion",
+      "转场"
+    ],
+    "无障碍": [
+      "对比度",
+      "无障碍",
+      "看不清",
+      "色盲",
+      "accessibility",
+      "可读"
+    ],
+    "品牌Logo": [
+      "logo",
+      "品牌",
+      "标志",
+      "vi"
+    ],
+    "学习教程": [
+      "学习",
+      "入门",
+      "教程",
+      "怎么学",
+      "基础",
+      "原理"
+    ]
+  },
+  "project_types": {
+    "落地页": {
+      "灵感案例": 2,
+      "排版布局": 2,
+      "配色": 1,
+      "字体": 1,
+      "配图素材": 1
+    },
+    "产品界面": {
+      "组件设计系统": 2,
+      "灵感案例": 1,
+      "图标": 2,
+      "原型交互": 1,
+      "排版布局": 1
+    },
+    "运营图": {
+      "配图素材": 2,
+      "字体": 2,
+      "配色": 1,
+      "样机Mockup": 1,
+      "灵感案例": 1
+    }
+  },
+  "min_desc_chars": 12,
+  "demote_categories": [
+    "podcast",
+    "book",
+    "conference",
+    "festival",
+    "community",
+    "contributors",
+    "播客",
+    "书籍",
+    "会议"
+  ],
+  "demote_note": "这些分类下的站（播客、书、会议）一般不能直接解决眼前的做图卡点，推荐时降权；卡点里提到学习/入门时不降。",
+  "exclude_phrases": [
+    "not public yet",
+    "shut down",
+    "shutting down",
+    "discontinued",
+    "no longer maintained",
+    "no longer available",
+    "has been closed",
+    "已停止",
+    "已关闭",
+    "停止维护",
+    "不再维护"
+  ],
+  "exclude_note": "简介里出现这些话的站直接标待补，不推荐（例如『还没公开』『已停止维护』）。"
+}

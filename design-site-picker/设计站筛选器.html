@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设计站筛选器</title>
+<style>
+:root{--bg:#faf8f4;--fg:#1d1b17;--mu:#6b665c;--card:#fff;--ln:#e4dfd3;--ac:#c2410c;--ok:#166534;--warn:#92400e}
+@media (prefers-color-scheme:dark){:root{--bg:#161512;--fg:#f1ede4;--mu:#a39d8e;--card:#201e1a;--ln:#38352e;--ac:#fb923c;--ok:#4ade80;--warn:#fbbf24}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+main{max-width:860px;margin:0 auto;padding:28px 16px 64px}h1{font-size:26px;margin:0 0 4px}p.s{color:var(--mu);margin:0 0 20px}
+.box{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:16px;margin:14px 0}
+label{display:block;font-weight:600;margin:10px 0 4px}input[type=text],select,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--fg)}
+textarea{height:110px;font:13px/1.4 ui-monospace,Menlo,monospace}
+button{font:inherit;padding:8px 16px;border-radius:8px;border:1px solid var(--ac);background:var(--ac);color:#fff;cursor:pointer;margin:8px 8px 0 0}button.g{background:none;color:var(--ac)}
+.rec{border-left:4px solid var(--ac)}.rec h3{margin:0 0 4px;font-size:18px}.rec a{color:var(--ac);word-break:break-all}.tag{display:inline-block;font-size:12px;padding:1px 8px;border:1px solid var(--ln);border-radius:99px;margin-right:4px;color:var(--mu)}
+.st{color:var(--mu);font-size:14px}table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--ln);padding:5px 6px;text-align:left;vertical-align:top;word-break:break-all}
+.warn{color:var(--warn)}@media(max-width:560px){main{padding:20px 16px 48px}}
+</style></head><body><main>
+<h1>设计网站筛选器</h1>
+<p class="s">导入你的收藏清单 → 合并重复链接、按用途打标签、简介不足的标「待补」→ 最多推荐 3 个，并说明各自解决什么。数据只在你的浏览器里处理，不上传。</p>
+<div class="box">
+<label>① 收藏清单 CSV（表头含「网址」，建议有「名称、简介、分类」）</label>
+<input type="file" id="f" accept=".csv,text/csv"> <button class="g" id="ex">用示例清单</button>
+<textarea id="t" placeholder="或把 CSV 内容粘贴在这里"></textarea>
+<label>② 项目类型</label><select id="pt"></select>
+<label>③ 眼下卡点（一句话）</label><input type="text" id="sk" placeholder="例如：首屏配色老是不协调，标题字体也不会搭">
+<button id="go">筛选</button><span class="st" id="msg"></span>
+</div>
+<div id="out"></div>
+<script>
+// 筛选核心（和 pick_sites.py 同一套规则，浏览器和 node 都能跑）
+function parseCSV(text){
+  text=text.replace(/^﻿/,''); const fl=text.trim().split('\n')[0]||''; const D=[',',';','\t'].reduce((a,b)=>fl.split(b).length>fl.split(a).length?b:a); const rows=[]; let row=[],f='',q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];
+    if(q){ if(c=='"'){ if(text[i+1]=='"'){f+='"';i++} else q=false } else f+=c }
+    else if(c=='"') q=true; else if(c==D){row.push(f);f=''}
+    else if(c=='\n'||c=='\r'){ if(c=='\r'&&text[i+1]=='\n')i++; row.push(f);f=''; if(row.some(x=>x!==''))rows.push(row); row=[] }
+    else f+=c }
+  if(f!==''||row.length){row.push(f); if(row.some(x=>x!==''))rows.push(row)}
+  return rows;
+}
+const COLS={name:['名称','网站','name','title','标题'],url:['网址','链接','url','link','href'],desc:['简介','描述','备注','description','desc','note','notes'],cat:['分类','标签','类别','category','tags','tag']};
+function readRows(text){
+  if(!text.trim()) throw new Error('输入是空的：请选择 CSV 文件，或把内容粘贴到文本框里。');
+  const t=parseCSV(text);
+  const head=t[0].map(h=>h.trim().toLowerCase()), pick={};
+  for(const k in COLS){ for(const n of COLS[k]){ const i=head.indexOf(n.toLowerCase()); if(i>=0){pick[k]=i;break} } }
+  if(pick.url===undefined) throw new Error('找不到网址列。第一行必须是表头，且包含「网址」/ url / link 之一。当前读到的表头：'+t[0].slice(0,6).join(' | '));
+  const g=(r,k)=>pick[k]===undefined?'':(r[pick[k]]||'').trim();
+  const out=t.slice(1).filter(r=>g(r,'url')).map(r=>({name:g(r,'name'),url:g(r,'url'),desc:g(r,'desc'),cat:g(r,'cat')}));
+  if(!out.length) throw new Error('表头没问题，但没有任何一行填了网址。请在「网址」列里填内容后再试。');
+  return out;
+}
+function normUrl(u){
+  u=u.trim(); let x; try{x=new URL(u.includes('://')?u:'http://'+u)}catch(e){return u.toLowerCase()}
+  let host=x.host.toLowerCase().replace(/^www\./,'');
+  const q=[...x.searchParams].filter(([k])=>!/^(utm_|ref|fbclid)/i.test(k)).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
+  return host+x.pathname.replace(/\/+$/,'')+(q?'?'+q:'');
+}
+function merge(rows){
+  const m=new Map();
+  for(const r of rows){const k=normUrl(r.url);
+    if(!m.has(k)) m.set(k,{...r,key:k,dup:0,cats:r.cat?[r.cat]:[]});
+    else{const s=m.get(k);s.dup++; if(r.desc.length>s.desc.length)s.desc=r.desc; if(!s.name)s.name=r.name; if(r.cat&&!s.cats.includes(r.cat))s.cats.push(r.cat)}}
+  return [...m.values()];
+}
+function has(text,w){w=w.toLowerCase();
+  if(/^[a-z0-9 .\-]+$/.test(w)){const e=w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); return new RegExp('(?<![a-z0-9])'+e+'(?:s|es)?(?![a-z0-9])').test(text)}
+  return text.includes(w)}
+function tagSites(sites,R){
+  for(const s of sites){
+    const text=(s.name+' '+s.desc+' '+s.cats.join(' ')).toLowerCase();
+    s.tags=Object.keys(R.purposes).filter(p=>R.purposes[p].some(w=>has(text,w)));
+    const why=[]; if([...s.desc].length<R.min_desc_chars)why.push('简介少于'+R.min_desc_chars+'字');
+    if(!s.tags.length)why.push('名称/简介/分类里没出现任何用途关键词');
+    const bad=(R.exclude_phrases||[]).find(x=>text.includes(x)); if(bad)why.push('简介提示已不可用：'+bad);
+    s.pending=why.join('；');
+  } return sites;
+}
+function wantPurposes(R,ptype,stuck){
+  const w={},low=stuck.toLowerCase();
+  const hit=Object.keys(R.stuck_words).filter(p=>R.stuck_words[p].some(x=>low.includes(x.toLowerCase())));
+  hit.forEach(p=>w[p]=(w[p]||0)+5);
+  const pt=R.project_types[ptype]||{}; for(const p in pt) w[p]=(w[p]||0)+pt[p];
+  return {w,hit};
+}
+function score(s,w,R){
+  let sc=s.tags.reduce((a,t)=>a+(w[t]||0),0); const cl=s.cats.join(' ').toLowerCase();
+  for(const p in R.purposes){ if(p in w && R.purposes[p].some(x=>has(cl,x))) sc+=2*w[p]; }
+  if(!('学习教程' in w) && (R.demote_categories||[]).some(d=>cl.includes(d))) sc-=6;
+  sc+=Math.min([...s.desc].length,160)/160; sc-=0.3*Math.max(0,s.tags.length-4); return sc;
+}
+function recommend(sites,w,hit,top,R){
+  const ok=sites.filter(s=>!s.pending&&s.tags.some(t=>t in w));
+  const ranked=ok.map(s=>[s,score(s,w,R)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+  const chosen=[],covered=new Set();
+  const focus=hit.length?hit:Object.entries(w).sort((a,b)=>b[1]-a[1]).slice(0,2).map(x=>x[0]);
+  for(const p of focus){
+    const pool=ranked.filter(s=>s.tags.includes(p)&&!chosen.includes(s));
+    const catHit=s=>R.purposes[p].some(x=>has(s.cats.join(' ').toLowerCase(),x))?1:0;
+    pool.sort((a,b)=>(catHit(b)-catHit(a))||((a.tags.some(t=>covered.has(t))?1:0)-(b.tags.some(t=>covered.has(t))?1:0))||(score(b,w,R)-score(a,w,R)));
+    if(pool.length&&chosen.length<top){chosen.push(pool[0]);pool[0].tags.forEach(t=>{if(focus.includes(t))covered.add(t)})}
+  }
+  for(const s of ranked){ if(chosen.length>=top)break; if(!chosen.includes(s))chosen.push(s) }
+  return chosen;
+}
+function reason(s,w,hit){
+  let f=s.tags.filter(t=>hit.length?hit.includes(t):t in w); if(!f.length)f=s.tags.slice(0,2);
+  const d=[...s.desc].slice(0,110).join('')+([...s.desc].length>110?'…':'');
+  return '适合解决：'+f.join('、')+'。依据（来自你清单里的简介）：'+d;
+}
+function runPick(csvText,ptype,stuck,R,top){
+  const rows=readRows(csvText), sites=tagSites(merge(rows),R), {w,hit}=wantPurposes(R,ptype,stuck);
+  const chosen=recommend(sites,w,hit,Math.min(top||3,3),R);
+  return {rows:rows.length,sites,hit,chosen:chosen.map(s=>({name:s.name,url:s.url,tags:s.tags,reason:reason(s,w,hit)})),pending:sites.filter(s=>s.pending)};
+}
+if(typeof module!=='undefined') module.exports={runPick};
+
+const R={
+  "说明": "用途关键词表。读者可以直接改：每个用途一组词，名称/简介/分类里出现任一词就算命中。英文词按小写匹配。",
+  "purposes": {
+    "配色": [
+      "color",
+      "colour",
+      "palette",
+      "gradient",
+      "配色",
+      "颜色",
+      "色彩",
+      "渐变",
+      "swatch",
+      "hue"
+    ],
+    "字体": [
+      "font",
+      "typeface",
+      "typography",
+      "type foundry",
+      "foundry",
+      "typ.io",
+      "字体",
+      "字型",
+      "排字",
+      "lettering"
+    ],
+    "排版布局": [
+      "layout",
+      "grid",
+      "wireframe",
+      "whitespace",
+      "排版",
+      "布局",
+      "栅格",
+      "线框",
+      "editorial",
+      "landing page",
+      "landing"
+    ],
+    "灵感案例": [
+      "inspiration",
+      "gallery",
+      "showcase",
+      "portfolio",
+      "award",
+      "awwwards",
+      "case study",
+      "best websites",
+      "beautiful",
+      "灵感",
+      "案例",
+      "作品集",
+      "展示",
+      "curated",
+      "trend"
+    ],
+    "组件设计系统": [
+      "design system",
+      "component",
+      "ui kit",
+      "pattern",
+      "styleguide",
+      "style guide",
+      "guideline",
+      "material design",
+      "组件",
+      "设计系统",
+      "规范",
+      "ui library",
+      "dashboard"
+    ],
+    "图标": [
+      "icon",
+      "icons",
+      "glyph",
+      "svg",
+      "图标",
+      "emoji"
+    ],
+    "配图素材": [
+      "stock",
+      "photo",
+      "photos",
+      "image",
+      "images",
+      "illustration",
+      "illustrations",
+      "video",
+      "footage",
+      "vector",
+      "texture",
+      "素材",
+      "配图",
+      "摄影",
+      "插画",
+      "图库",
+      "royalty free",
+      "creative commons",
+      "cc0"
+    ],
+    "样机Mockup": [
+      "mockup",
+      "mock-up",
+      "mock up",
+      "device frame",
+      "样机",
+      "template",
+      "templates",
+      "psd"
+    ],
+    "原型交互": [
+      "prototype",
+      "prototyping",
+      "interaction",
+      "wireframing",
+      "user flow",
+      "原型",
+      "交互",
+      "figma",
+      "sketch",
+      "xd"
+    ],
+    "动效": [
+      "animation",
+      "animate",
+      "motion",
+      "lottie",
+      "transition",
+      "动效",
+      "动画",
+      "gif"
+    ],
+    "无障碍": [
+      "accessibility",
+      "contrast",
+      "a11y",
+      "wcag",
+      "colorblind",
+      "无障碍",
+      "对比度"
+    ],
+    "品牌Logo": [
+      "logo",
+      "brand",
+      "branding",
+      "identity",
+      "品牌",
+      "标志"
+    ],
+    "学习教程": [
+      "tutorial",
+      "course",
+      "learn",
+      "book",
+      "podcast",
+      "article",
+      "blog",
+      "teaching",
+      "教程",
+      "课程",
+      "学习",
+      "读物",
+      "书"
+    ]
+  },
+  "stuck_words": {
+    "配色": [
+      "配色",
+      "颜色",
+      "色彩",
+      "调色",
+      "color",
+      "colour",
+      "palette",
+      "渐变",
+      "撞色",
+      "主色"
+    ],
+    "字体": [
+      "字体",
+      "字号",
+      "font",
+      "typeface",
+      "字型",
+      "标题字",
+      "中英文"
+    ],
+    "排版布局": [
+      "排版",
+      "布局",
+      "版式",
+      "对齐",
+      "留白",
+      "layout",
+      "栅格",
+      "首屏",
+      "层级",
+      "结构",
+      "太乱",
+      "挤"
+    ],
+    "灵感案例": [
+      "灵感",
+      "参考",
+      "案例",
+      "不知道长什么样",
+      "风格",
+      "好看的",
+      "同行",
+      "竞品",
+      "inspiration",
+      "没思路",
+      "没想法",
+      "起步"
+    ],
+    "组件设计系统": [
+      "组件",
+      "设计系统",
+      "规范",
+      "按钮",
+      "表单",
+      "表格",
+      "后台",
+      "dashboard",
+      "component",
+      "一致",
+      "统一"
+    ],
+    "图标": [
+      "图标",
+      "icon"
+    ],
+    "配图素材": [
+      "配图",
+      "素材",
+      "图片",
+      "照片",
+      "插画",
+      "插图",
+      "图库",
+      "封面",
+      "海报",
+      "视频素材",
+      "stock",
+      "运营图"
+    ],
+    "样机Mockup": [
+      "样机",
+      "mockup",
+      "展示图",
+      "效果图",
+      "装进手机",
+      "设备"
+    ],
+    "原型交互": [
+      "原型",
+      "交互",
+      "流程",
+      "prototype",
+      "线框",
+      "跳转"
+    ],
+    "动效": [
+      "动效",
+      "动画",
+      "动起来",
+      "animation",
+      "motion",
+      "转场"
+    ],
+    "无障碍": [
+      "对比度",
+      "无障碍",
+      "看不清",
+      "色盲",
+      "accessibility",
+      "可读"
+    ],
+    "品牌Logo": [
+      "logo",
+      "品牌",
+      "标志",
+      "vi"
+    ],
+    "学习教程": [
+      "学习",
+      "入门",
+      "教程",
+      "怎么学",
+      "基础",
+      "原理"
+    ]
+  },
+  "project_types": {
+    "落地页": {
+      "灵感案例": 2,
+      "排版布局": 2,
+      "配色": 1,
+      "字体": 1,
+      "配图素材": 1
+    },
+    "产品界面": {
+      "组件设计系统": 2,
+      "灵感案例": 1,
+      "图标": 2,
+      "原型交互": 1,
+      "排版布局": 1
+    },
+    "运营图": {
+      "配图素材": 2,
+      "字体": 2,
+      "配色": 1,
+      "样机Mockup": 1,
+      "灵感案例": 1
+    }
+  },
+  "min_desc_chars": 12,
+  "demote_categories": [
+    "podcast",
+    "book",
+    "conference",
+    "festival",
+    "community",
+    "contributors",
+    "播客",
+    "书籍",
+    "会议"
+  ],
+  "demote_note": "这些分类下的站（播客、书、会议）一般不能直接解决眼前的做图卡点，推荐时降权；卡点里提到学习/入门时不降。",
+  "exclude_phrases": [
+    "not public yet",
+    "shut down",
+    "shutting down",
+    "discontinued",
+    "no longer maintained",
+    "no longer available",
+    "has been closed",
+    "已停止",
+    "已关闭",
+    "停止维护",
+    "不再维护"
+  ],
+  "exclude_note": "简介里出现这些话的站直接标待补，不推荐（例如『还没公开』『已停止维护』）。"
+}; const SAMPLE="名称,网址,简介,分类\nLIFE OF PIX,http://www.lifeofpix.com/,\"Free high-resolution photos, no copyrights restrictions for personal and commercial use.\",Stock\nLife of Pix,https://www.lifeofpix.com/,\"free high-resolution photos, created by the LEEROY team.\",Stock Photos Tools\nUnsplash,https://unsplash.com/,,Stock\nUnsplash,https://unsplash.com,stock photos free to use.,Stock Photos Tools\nDeath to Stock,http://deathtothestockphoto.com/,,Stock\nDeath to Stock,https://deathtothestockphoto.com/,\"paid-for stock photo service with a mailing list for occasional free packs, and a focus on not looking like stock photography.\",Stock Photos Tools\nGratisography,http://www.gratisography.com/,The world’s quirkiest collection of high-resolution free stock images.,Stock\nGratisography,https://gratisography.com,a collection of free high-resolution pictures.,Stock Photos Tools\npicjumbo,https://picjumbo.com/,\"Download free stock photos, backgrounds and images in high‑resolution for personal and commercial use.\",Stock\nPicjumbo,http://picjumbo.com/,a collection of totally free photos for your commercial & personal works.,Stock Photos Tools\nPexels,https://www.pexels.com/,The best free stock photos & videos shared by talented creators.,Stock\nPexels,https://www.pexels.com/,an aggregate of many free stock photo resources.,Stock Photos Tools\nCoolors,https://coolors.co/,The super fast color schemes generator!,Color\nColordot,https://color.hailpixel.com/,,Color\nBrand Colors,https://brandcolors.net/,The biggest collection of official brand color codes around.,Color\nMaterial Design Palette,https://www.materialpalette.com/,,Color\ntypography,https://www.typography.com/,,Typography\ni love typography,http://ilovetypography.com/,\"was born on August 7, 2007. It exists because I have a passion for typography, type design, and lettering, and for the pages, words, and letters born of those disciplines.\",Typography\nType is Beautiful,https://www.typeisbeautiful.com/,是一个关于文字设计和视觉文化的媒体计划。我们关注的话题包括字体、排版、平面设计、公共设计、技术和视觉文化。,Typography\nButterick's Practical Typography,http://practicaltypography.com/,,Typography\nAlbumarium,http://albumarium.com/,The best place to find & share beautiful images.,Stock\nThe Stocks,http://thestocks.im/,\"The best royalty free stock photos are delivered now along with videos, audios, icons, fonts and colors.\",Stock\nPolayoutu,http://www.polayoutu.com/collections,is community of photographers based in China who contribute photos under the Creative Common Zero License.,Stock\nIllusion,http://illusion.scene360.com/,,Stock\nmacOS Icon Gallery,http://macosicongallery.com/,,Icon and Logo\nicon54,https://icon54.com,,Icon and Logo\nicons8,https://icons8.com/,,Icon and Logo\nIconfinder,https://www.iconfinder.com/,provides high-quality icons to millions of creative professionals.,Icon and Logo\nBrand Style Guide Examples,https://saijogeorge.com/brand-style-guide-examples/,,Styleguide and Branding\nMozilla,https://www.mozilla.org/en-US/styleguide/,,Styleguide and Branding\nMailchimp,http://ux.mailchimp.com/patterns/,,Styleguide and Branding\nLonely Planet,http://rizzo.lonelyplanet.com/styleguide/design-elements/colours,,Styleguide and Branding\nMockup World,https://www.mockupworld.co/,handpicks and presents the best photorealistic Photoshop mockups that designers and agencies worldwide have published online.,Mockup\nPlaceit,https://placeit.net/,marry design and technology to create high-quality branding and marketing tools so anyone from individuals to large companies can create amazing visual assets for their brand regardless of technical or artistic skills.,Mockup\nEpicpxls,https://www.epicpxls.com/,\"Free & premium curated fonts, graphics, templates, mobile app designs & UI Kits.\",Mockup\n360 Mockups,https://360mockups.com/,Totally FREE to download PSD Mockups to present your works.,Mockup\nBeFonts,https://befonts.com/,a Decent collection of free fonts.,Font Tools\nBehance Free Fonts,https://www.behance.net/search/?search=free%20font,a list of free fonts uploaded on Behance.,Font Tools\nDaFont,https://www.dafont.com/,\"archive of freely downloadable fonts. Browse by alphabetical listing, by style, by author or by popularity.\",Font Tools\nAnimaticons,http://animaticons.co/,\"a growing set of beautiful, high-resolution, animated GIF icons that you can customize.\",Icons Tools\nCoreUI Icons,https://coreui.io/icons/,\"premium designed free icon set with marks in SVG, Webfont and raster formats.\",Icons Tools\nDigital Nomad Icons,http://digitalnomadicons.com/,lifestyle icon & emoji pack for your next project. 25 high-resolution flat icons.,Icons Tools\nBurst,https://burst.shopify.com/,free stock photos for websites and commercial use.,Stock Photos Tools\nDuotone,https://duotone.shapefactory.co/,\"free duotone images to use in any project, or make custom duotone images.\",Stock Photos Tools\nFoodiesFeed,https://foodiesfeed.com/,thousands of beautiful realistic free food pictures in high resolution.,Stock Photos Tools\nCabana,https://cabanadesignsystem.com/,a Premium Design System for Sketch that helps you create amazing products faster than ever before.,Design System Tools\nCatalog,https://www.catalog.style/,\"a living style guide for digital products, combining design documentation with real live components.\",Design System Tools\nDesign System Manager,https://www.invisionapp.com/design-system-manager/,Invision's design system manager.,Design System Tools\nArtboard Studio,https://artboard.studio/,online graphic design application mainly focused on product mockups.,Mockup Tools\nCleanmock,https://cleanmock.com,create stunning mockups using the latest device frames like iPhone & custom backgrounds.,Mockup Tools\nCraftwork Design,https://craftwork.design/,free and premium high-quality digital products that make your work faster and easier.,Mockup Tools\nBlend,http://www.colinkeany.com/blend/,create and customize beautiful CSS3 gradients.,Gradient Tools\nColorffy,https://www.colorffy.com/,\"get CSS, images, UI previews or create own gradients.\",Gradient Tools\nColors & Fonts,https://www.colorsandfonts.com/,\"a curated library of colors, gradients and fonts for digital designers and web developers.\",Gradient Tools\nStokpic,http://stokpic.com/,,Stock\nRaumrot,https://www.howtostartanllc.org/free-stock-photos/,,Stock\nimcreator,http://imcreator.com/,,Stock\nLittle Visuals,http://littlevisuals.co/,,Stock\n";
+const $=id=>document.getElementById(id);
+$('pt').innerHTML=Object.keys(R.project_types).map(k=>'<option>'+k+'</option>').join('');
+$('f').onchange=e=>{const r=new FileReader();r.onload=()=>{$('t').value=r.result};r.readAsText(e.target.files[0],'utf-8')};
+$('ex').onclick=()=>{$('t').value=SAMPLE;$('sk').value=$('sk').value||'配色老是不协调，想找个能直接抄的字体搭配'};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function csvOut(head,rows){return '﻿'+[head,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')}
+function dl(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download=name;a.click()}
+$('go').onclick=()=>{
+  const t0=performance.now(); let o;
+  try{o=runPick($('t').value,$('pt').value,$('sk').value,R,3)}catch(e){$('msg').textContent=e.message;return}
+  const ms=Math.round(performance.now()-t0);
+  $('msg').textContent='用时 '+ms+' 毫秒';
+  let h='<div class="box st">输入 '+o.rows+' 行 → 合并重复后 '+o.sites.length+' 个站（合并掉 '+(o.rows-o.sites.length)+' 行）→ 待补 '+o.pending.length+' 个。识别到的卡点用途：'+(o.hit.join('、')||'没识别到，按项目类型默认用途推荐')+'</div>';
+  if(!o.chosen.length)h+='<div class="box warn">没有找到符合的站：多半是清单里相关简介太少，先看下面的待补清单。</div>';
+  o.chosen.forEach((s,i)=>{h+='<div class="box rec"><h3>'+(i+1)+'. '+esc(s.name||s.url)+'</h3><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.url)+'</a><div>'+s.tags.map(t=>'<span class="tag">'+t+'</span>').join('')+'</div><p>'+esc(s.reason)+'</p></div>'});
+  h+='<div class="box"><button id="d1">下载整理后清单.csv</button><button class="g" id="d2">下载待补清单.csv</button>'
+   +'<p class="st">推荐没联网核对过链接是否还能打开；想核对请用 kit 里的 pick_sites.py --check。</p>'
+   +'<h3>待补清单（前 30 个）</h3><table><tr><th>名称</th><th>网址</th><th>原因</th></tr>'+o.pending.slice(0,30).map(s=>'<tr><td>'+esc(s.name)+'</td><td>'+esc(s.url)+'</td><td>'+esc(s.pending)+'</td></tr>').join('')+'</table></div>';
+  $('out').innerHTML=h;
+  $('d1').onclick=()=>dl('清单整理.csv',csvOut(['名称','网址','简介','用途标签','状态','合并重复次数','待补原因'],o.sites.map(s=>[s.name,s.url,s.desc,s.tags.join('/'),s.pending?'待补':'可用',s.dup,s.pending])));
+  $('d2').onclick=()=>dl('待补清单.csv',csvOut(['名称','网址','待补原因','你来补：这个站解决什么问题'],o.pending.map(s=>[s.name,s.url,s.pending,''])));
+};
+</script></main></body></html>

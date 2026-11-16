@@ -1,0 +1,71 @@
+{
+ "type": "运营图",
+ "stuck": "公众号封面要配图素材，还要找能装进手机的展示样机",
+ "hit": [
+  "配图素材",
+  "样机Mockup"
+ ],
+ "rows_in": 1027,
+ "sites": 941,
+ "pending": 359,
+ "recommend": [
+  {
+   "name": "Stocksy",
+   "url": "https://www.stocksy.com",
+   "tags": [
+    "灵感案例",
+    "配图素材"
+   ],
+   "reason": "适合解决：配图素材。依据（来自你清单里的简介）：is home to a highly curated collection of royalty-free stock photography and video footage that is beautiful, …",
+   "check": {
+    "ok": true,
+    "unverified": true,
+    "detail": "HTTP 403：对方拒绝脚本访问（常见于反爬），没法自动核对，请你在浏览器里点开确认",
+    "secs": 0.4
+   }
+  },
+  {
+   "name": "Epicpxls",
+   "url": "https://www.epicpxls.com/",
+   "tags": [
+    "字体",
+    "灵感案例",
+    "组件设计系统",
+    "样机Mockup"
+   ],
+   "reason": "适合解决：样机Mockup。依据（来自你清单里的简介）：Free & premium curated fonts, graphics, templates, mobile app designs & UI Kits.",
+   "check": {
+    "ok": true,
+    "unverified": true,
+    "detail": "HTTP 403：对方拒绝脚本访问（常见于反爬），没法自动核对，请你在浏览器里点开确认",
+    "secs": 0.4
+   }
+  },
+  {
+   "name": "Screeener",
+   "url": "https://github.com/zehfernandes/screeener",
+   "tags": [
+    "配图素材",
+    "样机Mockup"
+   ],
+   "reason": "适合解决：配图素材、样机Mockup。依据（来自你清单里的简介）：use this app to insert a bunch of images to a keynote file, using the mockup you choose.",
+   "check": {
+    "ok": true,
+    "detail": "HTTP 200，正文约 3996 字，命中词：image、images、mockup、template",
+    "secs": 1.3
+   }
+  }
+ ],
+ "skipped": [
+  {
+   "name": "The Stocks",
+   "url": "http://thestocks.im/",
+   "check": {
+    "ok": false,
+    "detail": "HTTP 200，正文约 67 字，命中词：stock、photo、photos、image、mockup",
+    "secs": 0.8
+   }
+  }
+ ],
+ "secs": 3.21
+}

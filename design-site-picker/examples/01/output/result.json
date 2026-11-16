@@ -1,0 +1,60 @@
+{
+ "type": "落地页",
+ "stuck": "首屏配色老是不协调，标题字体也不会搭",
+ "hit": [
+  "配色",
+  "字体",
+  "排版布局"
+ ],
+ "rows_in": 426,
+ "sites": 425,
+ "pending": 232,
+ "recommend": [
+  {
+   "name": "Color Hunt",
+   "url": "http://colorhunt.co/",
+   "tags": [
+    "配色",
+    "灵感案例"
+   ],
+   "reason": "适合解决：配色。依据（来自你清单里的简介）：is a free and open platform for color inspiration with thousands of trendy hand-picked color palettes.",
+   "check": {
+    "ok": true,
+    "detail": "HTTP 200，正文约 777 字，命中词：color、palette、gradient、font",
+    "secs": 0.7
+   }
+  },
+  {
+   "name": "Type is Beautiful",
+   "url": "https://www.typeisbeautiful.com/",
+   "tags": [
+    "字体",
+    "排版布局",
+    "灵感案例"
+   ],
+   "reason": "适合解决：字体、排版布局。依据（来自你清单里的简介）：是一个关于文字设计和视觉文化的媒体计划。我们关注的话题包括字体、排版、平面设计、公共设计、技术和视觉文化。",
+   "check": {
+    "ok": true,
+    "detail": "HTTP 200，正文约 1416 字，命中词：color、colour、font、typeface、typography、type foundry、foundry、layout、排版、布局；注意：已跳转到 https://www.thetype.com/",
+    "secs": 2.2
+   }
+  },
+  {
+   "name": "Lapa",
+   "url": "http://www.lapa.ninja/",
+   "tags": [
+    "排版布局",
+    "灵感案例"
+   ],
+   "reason": "适合解决：排版布局。依据（来自你清单里的简介）：is a gallery featuring the best 1920 landing page examples from around the web.",
+   "check": {
+    "ok": true,
+    "unverified": true,
+    "detail": "HTTP 403：对方拒绝脚本访问（常见于反爬），没法自动核对，请你在浏览器里点开确认",
+    "secs": 0.7
+   }
+  }
+ ],
+ "skipped": [],
+ "secs": 3.69
+}

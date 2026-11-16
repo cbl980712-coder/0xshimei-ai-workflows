@@ -1,0 +1,58 @@
+{
+ "type": "产品界面",
+ "stuck": "后台表格和按钮样式不统一，想要一套组件规范和图标",
+ "hit": [
+  "组件设计系统",
+  "图标"
+ ],
+ "rows_in": 601,
+ "sites": 595,
+ "pending": 153,
+ "recommend": [
+  {
+   "name": "Cabana",
+   "url": "https://cabanadesignsystem.com/",
+   "tags": [
+    "组件设计系统",
+    "原型交互"
+   ],
+   "reason": "适合解决：组件设计系统。依据（来自你清单里的简介）：a Premium Design System for Sketch that helps you create amazing products faster than ever before.",
+   "check": {
+    "ok": true,
+    "detail": "HTTP 200，正文约 5805 字，命中词：design system、component、ui kit、style guide、icon、icons、svg、emoji",
+    "secs": 1.2
+   }
+  },
+  {
+   "name": "Tilda Icons",
+   "url": "https://tilda.cc/free-icons/",
+   "tags": [
+    "排版布局",
+    "图标",
+    "配图素材"
+   ],
+   "reason": "适合解决：图标。依据（来自你清单里的简介）：download free icons for landing pages. More than 700 vector icons, collected in 43 sets for business.",
+   "check": {
+    "ok": true,
+    "detail": "HTTP 200，正文约 16933 字，命中词：component、icon、icons、svg",
+    "secs": 3.2
+   }
+  },
+  {
+   "name": "Material Design Icons",
+   "url": "https://materialdesignicons.com/",
+   "tags": [
+    "组件设计系统",
+    "图标"
+   ],
+   "reason": "适合解决：组件设计系统、图标。依据（来自你清单里的简介）：free material design icons made possible by open source contributons.",
+   "check": {
+    "ok": true,
+    "detail": "HTTP 200，正文约 595 字，命中词：icon、icons、svg；注意：已跳转到 https://pictogrammers.com/library/mdi/?welcome",
+    "secs": 2.7
+   }
+  }
+ ],
+ "skipped": [],
+ "secs": 7.22
+}

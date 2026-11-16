@@ -5,33 +5,39 @@
 不需要登录、不需要付费 API、不需要装任何 Python 包。
 
 ## 先下载（从 GitHub 拿到工具）
-解压后的 `design-site-picker` 文件夹长这样，**下面所有文件和命令都以这一层为准**，不用再往里或往外找：
+**兼容性（先看这句）：网页版用 Chrome 打开，其他浏览器未验证。命令行需要 Python，已验证版本为 3.9。**
+
+GitHub 的 Download ZIP 解压后只有一层文件夹，名字是「仓库名-分支名」（下面写成 `<仓库名>-main`，以你实际看到的为准）。本 README、提示词、脚本、网页版都直接在这一层里，**下面所有文件和命令都以这一层为准**，不用再往里找：
 ```
-design-site-picker/            ← 命令都在这一层运行
-├── 设计站筛选器.html           ← 网页版，双击打开
-├── pick_sites.py  md_to_csv.py  build_index.py  build_html.py   ← Python 脚本
-├── rules.json  SKILL.md  prompts.md  README.md
-├── templates/                 ← 示例清单.csv、设计网站导入模板.csv 等
-└── examples/                  ← 三组真实例子
+<仓库名>-main/                 ← 解压出来的这一层，命令都在这里运行
+├── README.md  SKILL.md  prompts.md      ← 说明、Claude Code 入口、提示词
+├── 设计站筛选器.html                     ← 网页版，双击打开
+├── pick_sites.py  md_to_csv.py  build_index.py  build_html.py  run_examples.sh   ← 脚本
+├── rules.json                           ← 可改的关键词表
+├── 设计参考索引.html                     ← 索引页样例（例子 3 生成）
+├── templates/                           ← 示例清单.csv、设计网站导入模板.csv 等
+└── examples/                            ← 三组真实例子（01、02、03）
 ```
 1. 打开仓库首页，点绿色的 **Code** → **Download ZIP**，下载后解压。
-2. 进入解压出来的 `design-site-picker` 文件夹（上图最外层，里面直接就能看到 `设计站筛选器.html` 和 `templates/`）。
-3. 双击 `设计站筛选器.html`（用 Chrome、Edge 等常见浏览器打开，不用装任何东西）。
+2. 进入解压出来的 `<仓库名>-main` 文件夹（里面直接就能看到 `README.md`、`设计站筛选器.html` 和 `templates/`）。
+3. 用 Chrome 打开：双击 `设计站筛选器.html`（不用装任何东西；其他浏览器没验证过）。
 4. 页面里点「选择文件」，选 `templates/示例清单.csv`（路径相对 HTML 所在的这一层；点「用示例清单」也行）；项目类型选「落地页」；眼下卡点填「配色老是不协调」；点「筛选」。**应看到 Colors & Fonts、Blend 和 Colorffy** 这三个站。
    - 没出现这三个站？先核对：① 导入的是不是 `templates/示例清单.csv`（换成自己的清单，推荐当然不同）；② 项目类型是不是「落地页」；③ 卡点是不是填了「配色老是不协调」（配色这个词要在里面）。
+
+想用命令行版或 Claude Code 版，继续看下面的三步上手。
 
 想用命令行版或 Claude Code 版，继续看下面的三步上手。
 
 ## 三步上手
 
 ### 1. 装什么
-- 想用命令行版：Python 3.8 或更新。
+- 想用命令行版：需要 Python，已验证版本为 3.9（其他版本没测过）。
   - Mac：打开「终端」，输入 `python3 --version`；没有的话 `xcode-select --install` 或到 python.org 下载。
   - Windows：到 python.org 下载安装，安装时勾选 "Add python to PATH"；之后用 `python`（或 `py`）代替下面的 `python3`。
-- 不想装任何东西：用浏览器双击 `设计站筛选器.html`，不联网、数据不上传（但没有联网核对链接的功能）。
-- 想让 Claude Code 带你做：把这一层的 `SKILL.md` 放进 `.claude/skills/design-site-picker/`。也可以只用 `prompts.md` 里的提示词。
+- 不想装任何东西：用 Chrome 双击 `设计站筛选器.html`，不联网、数据不上传（但没有联网核对链接的功能）。
+- 想让 Claude Code 带你做：把解压出来的整个文件夹复制到你项目的 `.claude/skills/design-site-picker/`（`SKILL.md` 要和 `pick_sites.py`、`rules.json` 放在同一层，只拷 `SKILL.md` 跑不起来）。也可以不装，只用 `prompts.md` 里的提示词。
 
-**先确认环境好了**，在 `design-site-picker` 文件夹这一层（和 `pick_sites.py` 同级）打开终端，跑这一条，应当看到「推荐结果」和 3 个站：
+**先确认环境好了**，在解压出来的这一层（和 `pick_sites.py` 同级）打开终端，跑这一条，应当看到「推荐结果」和 3 个站：
 ```
 python3 pick_sites.py templates/示例清单.csv --type 落地页 --stuck "配色老是不协调" --out test_out
 ```
@@ -73,7 +79,7 @@ python3 pick_sites.py 你的清单.csv --type 落地页 --stuck "首屏配色老
 - `素材清单.csv`：推荐站 × 要找什么，「授权已核对」留给你填；
 - `result.json`：同样的内容，给别的程序用。
 
-想把整理后的清单做成可搜索的静态索引页：在 `design-site-picker` 文件夹这一层运行（接上面 `--out result` 的路径）。**索引只收录「清单整理.csv」里标为「可用」的站**；标「待补」的站不会出现在索引里、搜不到，它们仍在 `待补清单.csv`（同在 `result/` 里），补好简介重跑 `pick_sites.py` 后才会进索引。
+想把整理后的清单做成可搜索的静态索引页：在解压出来的这一层运行（接上面 `--out result` 的路径）。**索引只收录「清单整理.csv」里标为「可用」的站。可用指简介达到筛选门槛，不表示网址已逐一核对。**标「待补」的站不会出现在索引里、搜不到，它们仍在 `待补清单.csv`（同在 `result/` 里），补好简介重跑 `pick_sites.py` 后才会进索引。
 ```
 python3 build_index.py "result/清单整理.csv" "索引.html"
 ```
@@ -85,7 +91,7 @@ python3 build_index.py "result/清单整理.csv" "索引.html"
 全在 `rules.json`：每个用途的关键词、卡点说法、项目类型的默认用途权重、「简介少于几个字算待补」。改完重跑即可；要更新浏览器版再跑 `python3 build_html.py`。
 
 ## 限制（老实说）
-- 只在 Mac + Python 3.9 + Chrome 上测过。Windows 的写法（`python`/`py`）、Safari、Firefox 没实测。
+- 只在 Mac + Python 3.9 + Chrome 上测过：网页版用 Chrome，其他浏览器（含 Edge、Safari、Firefox）未验证；命令行已验证 Python 3.9，其他版本和 Windows 写法（`python`/`py`）没实测。
 - 超大清单会慢：实测 10 万行约 25 秒（本机，估算你的电脑会不同）。浏览器版没测这么大。
 - 单元格里超过 2000 字的简介会被截断。
 - 标签是**关键词匹配**，不是理解。简介里一句话带到"字体"就会打上字体标签；"The Stocks"这种综合素材站会同时命中好几个用途。推荐理由只引用你简介里的原文，不替你评价网站质量。

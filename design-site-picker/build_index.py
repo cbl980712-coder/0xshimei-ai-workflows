@@ -23,7 +23,7 @@ doc = '''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta nam
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}main{max-width:900px;margin:0 auto;padding:24px 16px 60px}
 h1{margin:0}p{color:var(--mu)}input{width:100%%;font:inherit;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--fg)}
 h2{border-bottom:1px solid var(--ln);padding-bottom:4px;margin-top:28px}small{color:var(--mu);font-weight:400}ul{list-style:none;padding:0}li{padding:3px 0}a{color:var(--ac)}li span{color:var(--mu);font-size:13px}</style></head>
-<body><main><h1>设计参考索引</h1><p>由「设计网站筛选器」从 %d 个可用站整理而成（简介不足的已排除，在待补清单里）。按用途分组，一个站可出现在多组。</p>
+<body><main><h1>设计参考索引</h1><p>由「设计网站筛选器」从 %d 个可用站整理而成（简介不足的已排除，在待补清单里）。「可用」指简介达到筛选门槛，不表示网址已逐一核对，打开前请自己确认链接还在。按用途分组，一个站可出现在多组。</p>
 <input id="q" placeholder="搜索名称或简介，如 font / icon / 配色"><div id="g">%s</div>
 <script>document.getElementById('q').oninput=function(){var q=this.value.toLowerCase();document.querySelectorAll('li').forEach(function(l){l.style.display=l.dataset.k.indexOf(q)>=0?'':'none'})}</script></main></body></html>''' % (len(ok), ''.join(parts))
 open(out, 'w', encoding='utf-8').write(doc); print('写出', out, len(ok), '站,', len(groups), '组')

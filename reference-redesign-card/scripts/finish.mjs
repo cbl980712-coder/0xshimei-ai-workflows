@@ -1,4 +1,4 @@
-// 第三步一条命令：只重新打开「你的页面」（own_url）两次——改前量一遍、套 patch.css 后量一遍；不会重新打开参考页，也不重生成 对比.md / 红圈图。
+// 第 4 步一条命令：只重新打开「你的页面」（own_url）两次——改前量一遍、套 patch.css 后量一遍；不会重新打开参考页，也不重生成 对比.md / 红圈图。
 // 套 patch.css 验收 + 生成改版清单.md 和 指令卡.html。
 // 用法：node scripts/finish.mjs <目录>   （目录里要有 checklist.json，可选 patch.css）
 import { spawnSync } from 'node:child_process'; import fs from 'node:fs'; import path from 'node:path'; import { fileURLToPath } from 'node:url';

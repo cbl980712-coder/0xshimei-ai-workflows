@@ -6,15 +6,15 @@
 
 | 环节 | 谁来做 | 产出 |
 |---|---|---|
-| 抓图、量尺寸、画红圈、生成对比表 | **脚本**（`run.mjs`） | 两张带编号红圈的截图 + `对比.md`（字号、间距、按钮样式并排的数字） |
+| 抓图、量尺寸、画红圈、生成对比表 | **脚本**（`run.mjs`） | 每侧一张首屏截图和量测数据；传入圈选文件才生成对应的红圈图，两侧都是可量测页面（网址或本地 html）才生成 `对比.md`（字号、间距、按钮样式并排的数字） |
 | 判断参考页哪里好、对应到你页面的哪个区域、哪些地方不动、该怎么改 | **AI 助手或你自己** | `checklist.json`（改版清单）和 `patch.css`（对应的样式） |
 | 把 `patch.css` 临时套到你的页面上，重新量**清单里配置过的数值项**，生成清单和指令卡 | **脚本**（`finish.mjs`） | `改后验收清单.md`、`改版清单.md`、`指令卡.html`、改前改后截图 |
 
 脚本只负责“量”和“检查你写下的数字”；“位置对应”和“怎么改”是 AI 或人写的判断。`finish.mjs` 只会检查你在 `checklist.json` 的 `checks` 里写过的数值项，没写的它不会管，改得好不好看也要你自己看改后截图。
 
-不用登录、不调付费 API、不装任何 npm 包。
+本地脚本和随包成品不用登录、不调付费 API、不装任何 npm 包。（可选的 AI 助手，例如 Claude Code，要自己先装好并登录它的账号，不在这个限定里。）
 
-## 一、三步上手
+## 一、四步上手
 
 ### 第 1 步：装什么
 
@@ -24,11 +24,11 @@
 |---|---|---|
 | Node.js **22 或更新** | 去 nodejs.org 下 LTS 安装包，或 `brew install node` | 去 nodejs.org 下 LTS 安装包，或在 PowerShell 里：`winget install --id OpenJS.NodeJS.LTS --exact`（包名 `OpenJS.NodeJS.LTS` 已对照 Node.js 官网的包管理器页面和 winget-pkgs 仓库确认存在，但没在 Windows 上执行过；装完要重开终端，再用 `node -v` 看版本） |
 | Chrome（或 Edge） | 装 Chrome 最稳；Mac 上用的是 Chrome | Chrome 或 Edge 任一个。脚本会找 Edge 的默认安装路径，但没在 Windows 上试过；找不到就设 `CHROME_PATH`（见下） |
-| 一个能看图、能写文件的 AI 助手（推荐 Claude Code） | 见下 | 见下 |
+| 一个能看图、能写文件的 AI 助手（可选，推荐 Claude Code；要先装好它，并确认终端里能运行 `claude`） | 见下 | 见下 |
 
-**没有 AI 助手也能用**：见「第 4 步」后面的“没有 AI 助手的最小例子”。
+**没有 AI 助手也能用**：直接跳到「第 4 步」后面的“没有 AI 助手的最小例子”，手写一条清单即可。
 
-把 `kit/` 整个文件夹放到任意位置，终端 `cd` 进 `kit/`，**之后所有命令都在 `kit/` 里执行**。用 Claude Code 的话，就在这个终端里启动它（`claude`），它的工作目录就是 `kit/`，会读当前目录的 `SKILL.md`。
+把 `kit/` 整个文件夹放到任意位置，终端 `cd` 进 `kit/`，**之后所有命令都在 `kit/` 里执行**。用 Claude Code 的话，需要先装好它、确认这个终端里 `claude` 能运行（输入 `claude --version` 有版本号），再在这个终端里启动它（`claude`），它的工作目录就是 `kit/`，会读当前目录的 `SKILL.md`。
 
 ### 先确认环境（必跑）
 
@@ -44,15 +44,23 @@ node scripts/doctor.mjs
 
 **路线 A：只想看成品（不联网、不跑任何命令）**
 
-直接用浏览器打开随包提供的 `examples/01/output/指令卡.html`（Mac：`open examples/01/output/指令卡.html`；Windows：`start examples\01\output\指令卡.html`）。里面是红圈对照图、借鉴对应表、不动清单、按优先级的改版清单，以及改前改后截图。例子 02、03、04 同理。
+直接用浏览器打开随包提供的 `examples/01/output/指令卡.html`（Mac：`open examples/01/output/指令卡.html`；Windows PowerShell：`Invoke-Item examples\01\output\指令卡.html`）。里面是红圈对照图、借鉴对应表、不动清单、按优先级的改版清单，以及改前改后截图。例子 02、03、04 同理。
 
 **路线 B：想复验旧补丁（需要联网，约 33 秒）**
 
+Mac／Linux：
 ```
+mkdir -p work
 cp -R examples/01/output work/复验01
 node scripts/finish.mjs work/复验01
 ```
-（Windows PowerShell：`Copy-Item -Recurse examples\01\output work\复验01`。先复制一份再跑，免得覆盖随包的成品。）
+Windows PowerShell：
+```
+New-Item -ItemType Directory -Force work
+Copy-Item -Recurse examples\01\output work\复验01
+node scripts\finish.mjs work\复验01
+```
+先复制一份再跑，免得覆盖随包的成品。复验请选一个**尚不存在**的目标子目录（如 `work/复验01`）：目标已存在时，`cp -R`／`Copy-Item` 会把成品复制到它里面一层，后面的路径就对不上了；想重做就换个名字或先删掉旧的。
 
 这条命令**只做这几件事**：把 `checklist.json` 里的 `own_url`（这里是 htmx.org）**联网打开两次**——一次不套补丁、一次临时套上 `patch.css`——量清单里的数值项，然后重新生成 `改后验收清单.md`、`改版清单.md`、`指令卡.html` 和改前改后截图。
 
@@ -107,7 +115,11 @@ node scripts/run.mjs --own https://htmx.org/ --ref https://linear.app/ --out wor
 cp examples/01/input/mine-marks.json work/01/我的圈.json
 cp examples/01/input/ref-marks.json work/01/参考圈.json
 ```
-（Windows PowerShell：`Copy-Item examples\01\input\mine-marks.json work\01\我的圈.json`，另一份同理。）
+Windows PowerShell：
+```
+Copy-Item examples\01\input\mine-marks.json work\01\我的圈.json
+Copy-Item examples\01\input\ref-marks.json work\01\参考圈.json
+```
 
 **③ 完整重跑（带圈）**
 
@@ -121,6 +133,8 @@ node scripts/run.mjs --own https://htmx.org/ --ref https://linear.app/ --out wor
 ```
 node scripts/run.mjs --own "https://你的页面/" --ref "https://参考页/" --out "work/我的页面" --own-marks "work/我的页面/我的圈.json" --ref-marks "work/我的页面/参考圈.json"
 ```
+上面所有 `node scripts/…` 命令都是**单行**，没有换行续写，Mac 和 Windows PowerShell 可以原样粘贴（`node` 认正斜杠路径）；只有 `cp`、`mkdir -p`、`open` 这几类命令 Windows 要换成文中给出的 PowerShell 写法。
+
 网址里带 `&`、`?` 的，不加引号终端会把它截断，所以网址更要加引号。
 
 ### 第 4 步：让 AI 写清单，再验收
@@ -153,6 +167,7 @@ node scripts/finish.mjs work/01
    ```
    cp templates/patch.minimal.css work/最小例子/patch.css
    ```
+   （Windows PowerShell：`Copy-Item templates\patch.minimal.css work\最小例子\patch.css`。）
 4. **运行：**
    ```
    node scripts/finish.mjs work/最小例子
@@ -168,6 +183,23 @@ node scripts/finish.mjs work/01
 | **参考页是截图，自己的页面能打开**（网址或本地 html） | 参考页用 `box` 圈选；自己的页面照常量（有 `mine.json`）；自己的页面能套 `patch.css`，`finish.mjs` 能完整验收、出改后截图。参考页的尺寸是**目测**，写进清单时要标“目测” | 不会自动生成 `对比.md`（它需要两边都有量测数据）；参考页的数字没有实测值，阈值只能写你自己定的目标 |
 | **自己的页面只有截图**（参考页是网址或截图都一样） | 自己的页面用 `box` 圈选，出带红圈的对照截图；`checklist.json` 的 `own_url` 写截图路径、`checks` 留空或不写，`finish.mjs` 会跳过验收，**只生成 `改版清单.md` 和 `指令卡.html`**（里面有红圈对照图、借鉴对应表、不动清单、改法清单） | **不能对图片套 CSS，不会有 `mine-after-top.png`，也没有“改后实测值”**；清单里的 `css` 只是文字建议，没有被验证过 |
 | 两边都是截图 | 同上一行：只出红圈图、清单和指令卡 | 同上，所有数字都是目测 |
+
+**可复制的完整例子（参考页是截图、自己的页面是网址）。** 先把参考图放到 `work/shot/ref.png`，再写 `work/shot/参考圈.json`（只能用 `box`）和 `work/shot/我的圈.json`（网址一侧可以用 selector）：
+
+```json
+[{"label":"1 标题区","box":[60,73,900,195]}]
+```
+```
+node scripts/run.mjs --own https://htmx.org/ --ref work/shot/ref.png --out work/shot --own-marks work/shot/我的圈.json --ref-marks work/shot/参考圈.json
+```
+跑完 `work/shot/` 里有 `ref-marked-top.png`（参考图上的红圈）、`mine-marked-top.png`、`mine.json`，**没有 `对比.md`**（这是正常的，不要找）。接着照第 4 步写 `work/shot/checklist.json`（`ref_url` 写图片路径，参考页的数字标“目测”）和 `patch.css`，再用保留下来的 `mine.json` 和截图出清单：
+
+```
+node scripts/finish.mjs work/shot
+```
+会生成 `改后验收清单.md`、`改版清单.md`、`指令卡.html` 和 `mine-after-top.png`。
+
+**自己的页面传图片时**：`checklist.json` 里把 `own_url` 写成那个图片路径，`checks` 留空，再运行 `node scripts/finish.mjs work/shot`，得到 `改版清单.md` 和 `指令卡.html`（网页卡片）；这时不验收、没有改后截图。
 
 截图的 `box` 坐标是图片像素（图片宽度超过 1440 会被缩到 1440 宽，坐标按缩后的算）。
 

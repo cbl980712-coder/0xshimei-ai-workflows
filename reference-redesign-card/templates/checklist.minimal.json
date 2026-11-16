@@ -1,0 +1,25 @@
+{
+ "title": "htmx 首页 · 最小手写例子（没有 AI 助手）",
+ "own_url": "https://htmx.org/",
+ "ref_url": "https://linear.app/",
+ "goal": "第一次来的开发者 10 秒内看懂 htmx 是什么。",
+ "date": "2026-11-16",
+ "borrow": [
+  {"id": "B1", "aspect": "标题层级", "ref_where": "Linear 的章节标题 H2 是 48px（examples/01/output/对比.md 的参考页标题表）", "why_good": "章节标题明显大于正文，一眼能扫出结构", "mine_where": "htmx 的章节标题 H2 只有 24px（同一文件的我的页标题表）", "mine_selector": "main.c.content > h2"}
+ ],
+ "keep": [
+  {"where": "黑底横幅和 logo", "why": "品牌识别，不属于这次要改的层级问题"},
+  {"where": "正文字号 16px 和行宽", "why": "对比表里行宽 618px 与参考页的 620px 几乎一样，不用动"}
+ ],
+ "items": [
+  {
+   "id": "P1-1", "priority": "P1", "borrow": "B1",
+   "title": "把章节标题从 24px 放大到 32px",
+   "where": "页面正文里的章节标题 main.c.content > h2",
+   "change": "字号 24px → 32px（目标是自己定的：介于现在的 24px 和 Linear 的 48px 之间，不照搬）",
+   "css": "main.c.content > h2 { font-size: 32px; }",
+   "how_to_check": "人看：章节标题比正文明显大；工具量：这个元素的字号 ≥ 32px",
+   "checks": [{"selector": "main.c.content > h2", "prop": "fontSize", "op": ">=", "value": 32, "note": "章节标题字号"}]
+  }
+ ]
+}

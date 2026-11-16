@@ -29,7 +29,9 @@ description: 参考图改版指令卡。用户给出自己的页面（网址或�
 node scripts/run.mjs --own <我的网址> --ref <参考网址> --out work/01 --own-marks 我的圈.json --ref-marks 参考圈.json
 ```
 产出：`ref-marked-top.png`、`mine-marked-top.png`（带编号红圈）、`对比.md`（量出来的字号、间距、按钮样式并排）。
-参考或我的是图片时没有量测数据，只能看图，此时每个数字都要写“目测”。
+哪一侧是图片，哪一侧就没有量测数据、圈选只能用 `box`，该侧每个数字都要写“目测”：
+- 参考是图片、我的能打开：我的页照常量，`finish.mjs` 能完整验收；不会生成 `对比.md`，读 `mine.json` 和截图。
+- 我的页只有图片：不能套 CSS、没有改后实测值。`checklist.json` 的 `own_url` 写截图路径，`checks` 不写，`finish.mjs` 会跳过验收，只出 `改版清单.md` 和 `指令卡.html`；`css` 只是文字建议，要如实告诉用户没验证过，也不要承诺有 `mine-after-top.png`。
 
 ### 2. 读证据，不凭感觉
 - 用 Read 工具看两张 `*-marked-top.png`，再读 `对比.md`。
@@ -55,7 +57,7 @@ node scripts/run.mjs --own <我的网址> --ref <参考网址> --out work/01 --o
 ```
 node scripts/finish.mjs work/01
 ```
-会做三件事：改前、改后各开一个全新浏览器量一遍每条 checks；写 `改后验收清单.md`；生成 `改版清单.md` 和 `指令卡.html`。
+会做三件事（只重新打开我的页面，不碰参考页）：改前、改后各开一个全新浏览器量一遍每条 checks（只检查清单里配置过的数值项）；写 `改后验收清单.md`；生成 `改版清单.md` 和 `指令卡.html`。
 - 有 ❌：回到 3/4 改 patch 或阈值。如果是 patch 写错就改 patch；如果阈值本身不合理，改阈值时要在 change 里写清为什么。
 - 全 ✅ 后，**必须再看一眼 `mine-after-top.png`**：数字通过不等于好看（例如居中被改坏、文字变得看不见，只有看图才发现）。发现新问题就补一条 check。
 

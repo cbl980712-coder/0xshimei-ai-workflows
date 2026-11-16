@@ -13,5 +13,5 @@ const refJ = path.join(a.out, 'ref.json'), mineJ = path.join(a.out, 'mine.json')
 if (fs.existsSync(refJ) && fs.existsSync(mineJ)) {
   const r = spawnSync(process.execPath, [path.join(here, 'compare.mjs'), refJ, mineJ], { encoding: 'utf8' });
   fs.writeFileSync(path.join(a.out, '对比.md'), r.stdout); console.log('✅ 对比表 → ' + path.join(a.out, '对比.md'));
-} else console.log('（参考或我的是图片，没有量测数据，只出了截图；对比交给 Claude 看图）');
+} else console.log('（有一侧是图片：图片那侧没有量测数据，只出了截图，没生成 对比.md；另一侧的数字在 ref.json / mine.json 里，对比交给 AI 或你自己看图）');
 console.log(`第一步完成，用时 ${((Date.now() - t0) / 1000).toFixed(0)} 秒。下一步：让 Claude Code 按 SKILL.md 写 ${path.join(a.out, 'checklist.json')} 和 patch.css。`);

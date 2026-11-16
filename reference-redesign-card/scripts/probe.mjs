@@ -114,7 +114,7 @@ export async function run(args) {
       await screenshot(b, path.join(out, name + '-marked.png'), { full: true });
       await screenshot(b, path.join(out, name + '-marked-top.png'));
     }
-    console.log(`✅ ${name}: ${((Date.now() - t0) / 1000).toFixed(1)} 秒 → ${out}/` + (metrics ? `（首屏 H1 ${metrics.headings.find(h=>h.tag==='H1'&&h.aboveFold)?.fontSize ?? '首屏没有H1'}px，正文 ${metrics.body.fontSize}px，首屏按钮 ${metrics.ctaAboveFold}）` : ''));
+    console.log(`✅ ${name}: ${((Date.now() - t0) / 1000).toFixed(1)} 秒 → ${out}/` + (metrics ? `（${(() => { const h = metrics.headings.find(h=>h.tag==='H1'&&h.aboveFold); return h ? '首屏 H1 ' + h.fontSize + 'px' : '首屏没有 H1'; })()}，正文 ${metrics.body.fontSize}px，首屏按钮 ${metrics.ctaAboveFold}）` : ''));
   } finally { await b.close(); }
 }
 if (import.meta.url === 'file://' + process.argv[1] || process.argv[1]?.endsWith('probe.mjs')) run(parseArgs(process.argv.slice(2))).catch(e => { console.error('❌ ' + e.message); process.exit(1); });

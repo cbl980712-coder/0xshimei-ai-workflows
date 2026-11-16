@@ -14,7 +14,7 @@
   {
    "id": "B1",
    "aspect": "按钮样式",
-   "ref_where": "导航右上 Sign up（绿色实心）+ Log in（描边），一实一空；页面里的主动作 Analyze now 高 49px",
+   "ref_where": "导航右上 Sign up（绿色实心）+ Log in（白底、无描边），一实一浅；页面里的主动作 Analyze now 高 49px",
    "why_good": "只有一个“最重”的按钮，其余退后，用户不用想点哪个",
    "mine_where": "编辑框下的按钮组：Validate 实心蓝（38px 高、14px 字），旁边 Clear / Compress / Sort Keys / Copy 四个同尺寸描边按钮 + 一个 Load Sample，共 6 个，视觉重量几乎一样",
    "mine_selector": "button.btn.btn-primary ； button.btn.btn-secondary"
@@ -24,7 +24,7 @@
    "aspect": "标题层级",
    "ref_where": "页面大标题 40px、字重 700，是正文 15px 的 2.67 倍",
    "why_good": "进页面先看到“这是什么”",
-   "mine_where": "“JSON Validator” 24px、字重 600，只有正文 16px 的 1.5 倍，与下面的说明、按钮拉不开差距",
+   "mine_where": "“JSON Validator” 24px、字重 700，只有正文 16px 的 1.5 倍，与下面的说明、按钮拉不开差距",
    "mine_selector": "h1"
   },
   {
@@ -32,7 +32,7 @@
    "aspect": "留白",
    "ref_where": "主操作区（上传框）四周留白大，块与块之间 48px（中位数）",
    "why_good": "主操作区像被放在舞台中央，不被别的元素挤着",
-   "mine_where": "编辑框与下面按钮组的间距只有 12px，首屏块间距中位数 18px",
+   "mine_where": "编辑框与下面按钮组的间距只有 12px，首屏块间距中位数 26px",
    "mine_selector": "div.space-y-3 > div.flex.flex-wrap"
   }
  ],
@@ -124,7 +124,7 @@
    "borrow": "B2",
    "title": "页面标题放大加重",
    "where": "h1（JSON Validator）",
-   "change": "24px/600 → 32px/700（与正文比从 1.5 倍到 2 倍；TinyPNG 是 2.67 倍，工具站不需要那么大，取中间值）。 注意：站点用工具类（如 text-2xl）设字号，只写 h1 { … } 压不过，要写 h1[class] { … } 抬高优先级。",
+   "change": "24px/700 → 32px（字重原本就是 700，保持不变）（与正文比从 1.5 倍到 2 倍；TinyPNG 是 2.67 倍，工具站不需要那么大，取中间值）。 注意：站点用工具类（如 text-2xl）设字号，只写 h1 { … } 压不过，要写 h1[class] { … } 抬高优先级。",
    "css": "h1[class] { font-size:32px; font-weight:700; }",
    "how_to_check": "标题明显比下面那行说明大一档；量：字号 ≥ 32px，字重 ≥ 700",
    "checks": [

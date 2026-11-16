@@ -7,13 +7,24 @@ description: 把杂乱的会议速记、语音转写稿或公开会议纪要，�
 
 脚本 `scripts/make_presentation.py` 负责排版（python-pptx，离线、不调 API）；**语义判断由你（Claude）做**：脚本只给一份规则提取的草稿，质量不够直接交付，必须按下面第 3 步精修。
 
-## 第 0 步：确认环境（只做一次）
+## 第 0 步：定下 Python 和路径（每次会话先做）
+**不要直接用系统的 `python`/`python3`**（装依赖的是工具目录里的虚拟环境，Claude 的 shell 不继承用户终端里的 activate）。按顺序找：
+1. 工具目录 = 本 SKILL.md 所在目录（用户在该目录启动 Claude，就是当前目录；若装成 Skill，是 `~/.claude/skills/meeting-to-slides/`）。
+2. 解释器 `PY` = `<工具目录>/.venv/bin/python`（Windows：`<工具目录>\.venv\Scripts\python.exe`）。不存在就告诉用户按 README 第 1 步建环境，不要自己装到系统 Python。
+3. 脚本 = `<工具目录>/scripts/make_presentation.py`；输入文件用**绝对路径**（用户说的 `my_meeting.txt` 先在当前目录找，找不到就问用户）；`--out` 也用用户当前目录下的 `out/`，不要写进 Skill 安装目录。
+之后文中的 `python scripts/...` 都指 `$PY <工具目录>/scripts/...`。
+
+首次确认环境：
 ```bash
-python scripts/make_presentation.py --selftest --out out_selftest
+$PY scripts/make_presentation.py --selftest --out out_selftest
 ```
-看到以 `OK` 开头的一行即可，然后删掉 `out_selftest/`。报 `No module named pptx` 就先 `pip install python-pptx`（建议在虚拟环境里）。
+看到以 `OK` 开头的一行即可，然后删掉 `out_selftest/`。报 `No module named pptx` 说明用错了解释器，换成上面的 `PY`。
 
 > 报错说明：脚本遇到找不到文件/空文件/PDF/JSON 写坏等情况会打印一行“出错了：…”并以非 0 退出；把这行原样转告用户并按提示处理，不要自己猜着改原文。
+> 编码：UTF-8 读不了会自动按 GB18030 读并提示；两种都读不了就报错，让用户另存为 UTF-8，不要自己转码覆盖原文。
+
+## 数据边界（开工前先对用户说一句）
+你读原文、写大纲，意味着会议全文已进入模型服务，不是只在本机。用户说内容敏感时，先问是否已替换成代号；不愿意就改走"只用脚本出草稿"，不要读全文。
 
 ## 第 1 步：放好输入
 - 输入是 `.txt` / `.md` 纯文本。PDF、Word、字幕先转成文本再用（不要手改原文，原文是核对依据）。
@@ -63,5 +74,12 @@ python scripts/preview_pptx.py out/deck.pptx        # 可选：没装 PowerPoint
 - 回原文抽查 3 个数字，确认和幻灯片一致。
 - 5 ≤ 页数 ≤ 7；封面标题不含文件名。
 
+## 客户版（用户说要发给客户/外部时）
+内部 `deck.pptx` 的备注里是原话依据，**不能外发**。先和用户确认哪些页/数字不能给对方看，改 `outline.json` 后：
+```bash
+$PY scripts/make_presentation.py --outline out/会议.outline.json --out out --name deck --client
+```
+得到 `out/deck.client.pptx`（无备注、属性清空，脚本会回读核对）。告诉用户：只发这一个文件；正文里的人名、数字、分歧仍在，需要他们逐页审。
+
 ## 交付
-告诉用户：成稿路径、提纲备忘路径、哪些地方是你推断的、哪些原文没写。
+告诉用户：成稿路径、提纲备忘路径、哪些地方是你推断的、哪些原文没写；提醒内部版含原话备注，外发请用客户版。

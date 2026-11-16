@@ -295,7 +295,7 @@ def fit_bullets(bullets, width_in, height_in, sizes=(28, 26, 24, 22, 20, 18, 17,
 # ---------------------------------------------------------------- 生成 PPTX
 NAVY, ACCENT, INK, GREY, PALE = "1F3A5F", "D9480F", "222B38", "6B7685", "EEF2F7"
 
-def build_pptx(outline, path):
+def build_pptx(outline, path, client=False):
     from pptx import Presentation
     from pptx.util import Inches, Pt, Emu
     from pptx.dml.color import RGBColor
@@ -420,9 +420,13 @@ def build_pptx(outline, path):
             footer(sl, n, total)
         if sd["type"] == "cover":
             pass
-        ns = sl.notes_slide.notes_text_frame
-        ns.text = "\n".join(notes) if notes else ""
+        if not client:   # 客户版：根本不创建备注页，原话依据不会进文件
+            ns = sl.notes_slide.notes_text_frame
+            ns.text = "\n".join(notes) if notes else ""
         sd["_font"] = checks[-1]["font"] if checks else None
+    if client:
+        cp = prs.core_properties
+        cp.author = cp.last_modified_by = cp.comments = cp.keywords = cp.subject = ""
     prs.save(path)
     return checks
 
@@ -534,6 +538,7 @@ def main():
     ap.add_argument("--title", help="封面标题，默认取文档一级标题")
     ap.add_argument("--lang", choices=["zh", "en"], default="zh", help="页面标题用中文还是英文（正文保持原文）")
     ap.add_argument("--max-slides", type=int, default=7)
+    ap.add_argument("--client", action="store_true", help="客户版：只配合 --outline 使用；输出 <名>.client.pptx，不含逐页备注，且不生成 notes/report")
     ap.add_argument("--selftest", action="store_true", help="用一段内置文字确认环境能跑通")
     a = ap.parse_args()
     t0 = time.time()
@@ -562,6 +567,16 @@ def main():
     else:
         outline = analyze(raw, a.title, a.lang, src, a.max_slides)
         json.dump(outline, open(os.path.join(a.out, f"{name}.outline.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    if a.client:
+        if not a.outline: die("--client 要和 --outline 一起用：先精修并审过 outline.json，再出客户版。")
+        cpath = os.path.join(a.out, f"{name}.client.pptx")
+        try: build_pptx(outline, cpath, client=True)
+        except ImportError: die("没有安装 python-pptx。请先运行：pip install python-pptx")
+        from pptx import Presentation
+        left = sum(1 for sl in Presentation(cpath).slides if sl.has_notes_slide and sl.notes_slide.notes_text_frame.text.strip())
+        if left: die(f"客户版里仍有 {left} 页带备注，已中止，请反馈这个问题。")
+        print(f"OK  客户版 {len(outline['slides'])} 页 -> {cpath}\n  已回读核对：备注 0 条，作者等属性已清空。页面正文里的人名、数字、风险与分歧、预算仍在，请你逐页读一遍再外发。")
+        sys.exit(0)
     pptx = os.path.join(a.out, f"{name}.pptx")
     try: checks = build_pptx(outline, pptx)
     except ImportError: die("没有安装 python-pptx。请先运行：pip install python-pptx")

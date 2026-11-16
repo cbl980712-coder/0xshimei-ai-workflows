@@ -1,0 +1,8 @@
+/* P0-1 Validate 放大成页面里最大的按钮 */
+button.btn.btn-primary { height: 48px; padding: 0 28px; font-size: 16px; font-weight: 600; }
+/* P0-2 次要按钮去掉描边，变成安静的文字按钮 */
+button.btn.btn-secondary { border-color: transparent; background: transparent; }
+/* P1-1 页面标题放大加重 */
+h1[class] { font-size: 32px; font-weight: 700; } /* 站点用 .text-2xl 之类的工具类设字号，裸 h1 选择器压不过，要加 [class] 抬高优先级 */
+/* P1-2 编辑框和按钮组之间拉开 */
+.space-y-3 > .flex.flex-wrap { margin-top: 24px; gap: 8px; align-items: center; }

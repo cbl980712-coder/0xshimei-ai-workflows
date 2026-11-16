@@ -1,0 +1,161 @@
+{
+ "url": "https://flask.palletsprojects.com/en/stable/",
+ "title": "Welcome to Flask — Flask Documentation (3.1.x)",
+ "viewport": [
+  1440,
+  900
+ ],
+ "docHeight": 8181,
+ "body": {
+  "fontSize": 17,
+  "fontFamily": "\"Atkinson Hyperlegible Next\", sans-serif",
+  "color": "rgb(62, 67, 73)",
+  "bg": "rgb(255, 255, 255)",
+  "lineHeight": "normal"
+ },
+ "textBlockWidth": 860,
+ "textBlockFont": 17,
+ "widestContainer": 1140,
+ "navHeight": 0,
+ "headings": [
+  {
+   "tag": "H2",
+   "text": "User’s Guide",
+   "sel": "#user-s-guide > h2",
+   "fontSize": 30.6,
+   "weight": "400",
+   "lineHeight": "normal",
+   "color": "rgb(0, 0, 0)",
+   "top": 481,
+   "marginTop": 30,
+   "marginBottom": 10,
+   "width": 860,
+   "aboveFold": true
+  },
+  {
+   "tag": "H2",
+   "text": "API Reference",
+   "sel": "#api-reference > h2",
+   "fontSize": 30.6,
+   "weight": "400",
+   "lineHeight": "normal",
+   "color": "rgb(0, 0, 0)",
+   "top": 5431,
+   "marginTop": 30,
+   "marginBottom": 10,
+   "width": 860,
+   "aboveFold": false
+  },
+  {
+   "tag": "H2",
+   "text": "Additional Notes",
+   "sel": "#additional-notes > h2",
+   "fontSize": 30.6,
+   "weight": "400",
+   "lineHeight": "normal",
+   "color": "rgb(0, 0, 0)",
+   "top": 6089,
+   "marginTop": 30,
+   "marginBottom": 10,
+   "width": 860,
+   "aboveFold": false
+  },
+  {
+   "tag": "H3",
+   "text": "Project Links",
+   "sel": "div.document > div.sphinxsidebar > div.sphinxsidebarwrapper > h3:nth-of-type(1)",
+   "fontSize": 24,
+   "weight": "400",
+   "lineHeight": "36px",
+   "color": "rgb(68, 68, 68)",
+   "top": 30,
+   "marginTop": 10,
+   "marginBottom": 10,
+   "width": 200,
+   "aboveFold": true
+  },
+  {
+   "tag": "H3",
+   "text": "Contents",
+   "sel": "div.document > div.sphinxsidebar > div.sphinxsidebarwrapper > h3:nth-of-type(2)",
+   "fontSize": 24,
+   "weight": "400",
+   "lineHeight": "36px",
+   "color": "rgb(68, 68, 68)",
+   "top": 191,
+   "marginTop": 10,
+   "marginBottom": 10,
+   "width": 200,
+   "aboveFold": true
+  },
+  {
+   "tag": "H3",
+   "text": "Quick search",
+   "sel": "#searchlabel",
+   "fontSize": 24,
+   "weight": "400",
+   "lineHeight": "36px",
+   "color": "rgb(68, 68, 68)",
+   "top": 331,
+   "marginTop": 10,
+   "marginBottom": 10,
+   "width": 200,
+   "aboveFold": true
+  }
+ ],
+ "h1Ratio": null,
+ "headingLevels": [
+  "H2",
+  "H3"
+ ],
+ "distinctHeadingSizes": [
+  30.6,
+  24
+ ],
+ "buttons": [],
+ "primaryCTA": null,
+ "ctaAboveFold": 0,
+ "sections": [
+  {
+   "sel": "#welcome-to-flask",
+   "top": 10,
+   "height": 8104,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+   "sel": "#user-s-guide",
+   "top": 481,
+   "height": 4920,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+   "sel": "#api-reference",
+   "top": 5431,
+   "height": 628,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+   "sel": "#additional-notes",
+   "top": 6089,
+   "height": 2025,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  }
+ ],
+ "medianSectionPadTop": null,
+ "firstScreenGaps": [
+  30,
+  17,
+  17
+ ],
+ "medianFirstScreenGap": 17,
+ "mediaCount": 1,
+ "mediaAboveFold": 1
+}

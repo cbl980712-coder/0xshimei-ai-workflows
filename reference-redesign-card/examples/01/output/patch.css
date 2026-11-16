@@ -1,0 +1,10 @@
+/* P0-1 一句话说明：从 14px 小斜体升成 32px 的正式一句话 */
+.dark-hero .main sub, .dark-hero .main sub i { display: block; font-size: 32px; font-style: normal; font-weight: 600; color: #fff; margin-top: 12px; }
+/* P0-2 docs 做成实心胶囊按钮（参考 Linear 的 Sign up） */
+.top-nav a[href="/docs/"] { display: inline-block; background: #3465d9; color: #fff; border-radius: 999px; padding: 6px 16px; font-weight: 600; }
+/* P1-1 首屏横幅加高（原样式写死 height:240px;line-height:240px，只加 padding 无效） */
+.dark-hero { height: auto; min-height: 320px; line-height: 1.2; display: flex; align-items: center; justify-content: center; }
+/* P1-2 章节标题放大、章节之间拉开 */
+main.c.content > h2 { font-size: 32px; margin-top: 72px; }
+/* P2 新闻框收小 */
+main.c.content .alert { font-size: 14px; line-height: 1.4; padding: 8px 14px; margin: 16px 8px; }

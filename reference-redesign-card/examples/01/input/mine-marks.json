@@ -1,0 +1,4 @@
+[{"label":"1 标题","selector":".dark-hero .main sub i"},
+ {"label":"2 留白","selector":".dark-hero"},
+ {"label":"3 按钮","selector":".top-nav a[href='/docs/']"},
+ {"label":"4 新闻框","selector":"main.c.content .alert"}]

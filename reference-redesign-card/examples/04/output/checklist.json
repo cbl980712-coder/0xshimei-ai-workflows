@@ -1,0 +1,31 @@
+{
+ "title": "Flask 文档首页 · 参考 Vue.js 的改版指令卡（自测用）",
+ "own_url": "https://flask.palletsprojects.com/en/stable/",
+ "ref_url": "https://vuejs.org/",
+ "goal": "第一次来的 Python 开发者 10 秒内知道 Flask 是什么、点哪里开始用（Quickstart）。",
+ "date": "2026-11-16",
+ "images": {"ref": "ref-marked-top.png", "mine": "mine-marked-top.png", "mine_top": "mine-before-top.png", "after": "mine-after-top.png"},
+ "borrow": [
+  {"id": "B1", "aspect": "按钮样式", "ref_where": "首屏主按钮 Why Vue：实心绿底、圆角 8px、高 40px、字号 16px", "why_good": "一眼能看到该点哪里", "mine_where": "正文第 1 段里的文字链接 Quickstart（现在只是下划线链接，高度约 20px）", "mine_selector": "#welcome-to-flask p a[href=\"quickstart/\"]"},
+  {"id": "B2", "aspect": "留白", "ref_where": "首屏内块之间纵向间距中位数 83px", "why_good": "每块之间有呼吸感", "mine_where": "第 1 段与第 2 段之间只有 17px", "mine_selector": "#welcome-to-flask > p:nth-of-type(2)"}
+ ],
+ "keep": [
+  {"where": "左侧栏 Project Links / Contents", "why": "文档站靠侧栏导航，参考页没有侧栏，照搬会丢导航"},
+  {"where": "顶部 Flask 标志图和正文字号 17px", "why": "品牌识别 + 正文可读，参考页的 76px 大标题不适合文档首页"}
+ ],
+ "not_borrow": ["Vue 的 76px 超大渐变标题：Flask 文档首页没有 H1 文字标题，加超大字会和 Logo 抢位置"],
+ "items": [
+  {"id": "P0-1", "priority": "P0", "borrow": "B1", "title": "把 Quickstart 链接变成实心按钮（最小改法：只改样式）",
+   "where": "第 1 段里的链接 Quickstart（#welcome-to-flask p a[href=\"quickstart/\"]）",
+   "change": "改成 inline-block，高度 ≥40px，圆角 8px，底色 rgb(66,184,131)，白字，去下划线。彻底改法（要改 HTML）：单独放一行按钮区。",
+   "css": "#welcome-to-flask p a[href=\"quickstart/\"] { display:inline-block; padding:11px 16px; border-radius:8px; background:rgb(66,184,131); color:#fff; text-decoration:none; border-bottom:0; }",
+   "how_to_check": "人看：首屏能一眼看到绿色按钮；量：高度 ≥40、圆角 ≥8",
+   "checks": [{"selector": "#welcome-to-flask p a[href=\"quickstart/\"]", "prop": "rect.height", "op": ">=", "value": 40, "note": "参考页主按钮高 40px"}, {"selector": "#welcome-to-flask p a[href=\"quickstart/\"]", "prop": "borderTopLeftRadius", "op": ">=", "value": 8, "note": "参考页圆角 8px"}]},
+  {"id": "P1-1", "priority": "P1", "borrow": "B2", "title": "拉开第 1、2 段之间的留白",
+   "where": "第 2 段（#welcome-to-flask > p:nth-of-type(2)）",
+   "change": "margin-top 从 17px 加到 40px（参考页中位数 83px 是整个首屏的，文档页取一半以内以免挤掉内容）",
+   "css": "#welcome-to-flask > p:nth-of-type(2) { margin-top:40px; }",
+   "how_to_check": "人看：两段之间明显分开；量：marginTop ≥ 40",
+   "checks": [{"selector": "#welcome-to-flask > p:nth-of-type(2)", "prop": "marginTop", "op": ">=", "value": 40, "note": "原 17px"}]}
+ ]
+}

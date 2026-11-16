@@ -1,0 +1,25 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flask 文档首页 · 参考 Vue.js 的改版指令卡（自测用）</title>
+<style>:root{--bg:#f6f7f9;--card:#fff;--ink:#16181d;--mut:#5d6572;--line:#e3e6eb;--acc:#e11d48;--ok:#15803d;--bad:#b91c1c}
+@media(prefers-color-scheme:dark){:root{--bg:#101216;--card:#181b21;--ink:#eceef2;--mut:#9aa3b2;--line:#2a2f38;--acc:#fb7185;--ok:#4ade80;--bad:#f87171}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+main{max-width:1000px;margin:0 auto;padding:32px 16px 80px}h1{font-size:28px;margin:0 0 8px}h2{font-size:20px;margin:40px 0 12px}
+.meta{color:var(--mut);font-size:14px}.meta a{color:inherit}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mut);font-weight:600}
+code,pre{font:13px/1.5 ui-monospace,Menlo,Consolas,monospace}pre{background:var(--bg);padding:10px 12px;border-radius:8px;overflow:auto;margin:8px 0}
+.pri{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--acc);border-radius:999px;padding:1px 10px;margin-right:8px}.P1{background:#d97706}.P2{background:#64748b}
+.it h3{margin:0 0 8px;font-size:17px}.it dl{margin:0;display:grid;grid-template-columns:96px 1fr;gap:6px 12px}.it dt{color:var(--mut);font-size:14px}.it dd{margin:0}
+.badge{font-size:12px;font-weight:700;margin-left:8px}.pass{color:var(--ok)}.fail{color:var(--bad)}
+.imgs{display:grid;grid-template-columns:1fr 1fr;gap:12px}figure{margin:0}figure img{width:100%;border:1px solid var(--line);border-radius:8px;display:block}figcaption{font-size:13px;color:var(--mut);margin-top:4px}
+@media(max-width:700px){.imgs{grid-template-columns:1fr}.it dl{grid-template-columns:1fr}table{display:block;overflow-x:auto}}</style></head><body><main>
+<h1>Flask 文档首页 · 参考 Vue.js 的改版指令卡（自测用）</h1><div class="meta">我的页面 <a href="https://flask.palletsprojects.com/en/stable/">https://flask.palletsprojects.com/en/stable/</a> · 参考 <a href="https://vuejs.org/">https://vuejs.org/</a> · 2026-11-16</div>
+<div class="card"><b>页面目标：</b>第一次来的 Python 开发者 10 秒内知道 Flask 是什么、点哪里开始用（Quickstart）。</div>
+<div class="imgs"><figure><img src="ref-marked-top.png" alt="参考页（红圈 = 想借鉴的位置）"><figcaption>参考页（红圈 = 想借鉴的位置）</figcaption></figure><figure><img src="mine-marked-top.png" alt="我的页（红圈 = 对应的区域）"><figcaption>我的页（红圈 = 对应的区域）</figcaption></figure></div>
+<h2>一、想借鉴的 → 对应我页面的哪里</h2><table><tr><th>编号</th><th>类型</th><th>参考图里的位置</th><th>好在哪</th><th>对应我页面的区域</th></tr>
+<tr><td>B1</td><td>按钮样式</td><td>首屏主按钮 Why Vue：实心绿底、圆角 8px、高 40px、字号 16px</td><td>一眼能看到该点哪里</td><td>正文第 1 段里的文字链接 Quickstart（现在只是下划线链接，高度约 20px）<br><code>#welcome-to-flask p a[href=&quot;quickstart/&quot;]</code></td></tr><tr><td>B2</td><td>留白</td><td>首屏内块之间纵向间距中位数 83px</td><td>每块之间有呼吸感</td><td>第 1 段与第 2 段之间只有 17px<br><code>#welcome-to-flask &gt; p:nth-of-type(2)</code></td></tr></table>
+<h2>二、这些地方不动</h2><div class="card"><ul><li><b>左侧栏 Project Links / Contents</b>：文档站靠侧栏导航，参考页没有侧栏，照搬会丢导航</li><li><b>顶部 Flask 标志图和正文字号 17px</b>：品牌识别 + 正文可读，参考页的 76px 大标题不适合文档首页</li></ul><p class="meta">不借鉴：</p><ul><li>Vue 的 76px 超大渐变标题：Flask 文档首页没有 H1 文字标题，加超大字会和 Logo 抢位置</li></ul></div>
+<h2>三、改版清单（按优先级）</h2>
+<div class="card it"><h3><span class="pri P0">P0</span>P0-1 把 Quickstart 链接变成实心按钮（最小改法：只改样式）<span class="badge pass">✅ 实测已达标</span></h3><dl>
+<dt>改哪里</dt><dd>第 1 段里的链接 Quickstart（#welcome-to-flask p a[href=&quot;quickstart/&quot;]）</dd><dt>怎么改</dt><dd>改成 inline-block，高度 ≥40px，圆角 8px，底色 rgb(66,184,131)，白字，去下划线。彻底改法（要改 HTML）：单独放一行按钮区。<pre>#welcome-to-flask p a[href=&quot;quickstart/&quot;] { display:inline-block; padding:11px 16px; border-radius:8px; background:rgb(66,184,131); color:#fff; text-decoration:none; border-bottom:0; }</pre></dd><dt>怎么看改对了</dt><dd>人看：首屏能一眼看到绿色按钮；量：高度 ≥40、圆角 ≥8</dd><dt>借鉴点</dt><dd>B1</dd></dl></div><div class="card it"><h3><span class="pri P1">P1</span>P1-1 拉开第 1、2 段之间的留白<span class="badge pass">✅ 实测已达标</span></h3><dl>
+<dt>改哪里</dt><dd>第 2 段（#welcome-to-flask &gt; p:nth-of-type(2)）</dd><dt>怎么改</dt><dd>margin-top 从 17px 加到 40px（参考页中位数 83px 是整个首屏的，文档页取一半以内以免挤掉内容）<pre>#welcome-to-flask &gt; p:nth-of-type(2) { margin-top:40px; }</pre></dd><dt>怎么看改对了</dt><dd>人看：两段之间明显分开；量：marginTop ≥ 40</dd><dt>借鉴点</dt><dd>B2</dd></dl></div>
+<h2>四、套上改动后的样子（浏览器临时预览）</h2><div class="imgs"><figure><img src="mine-before-top.png" alt="改前"><figcaption>改前</figcaption></figure><figure><img src="mine-after-top.png" alt="改后"><figcaption>改后</figcaption></figure></div>
+</main></body></html>

@@ -1,0 +1,220 @@
+{
+ "url": "https://htmx.org/",
+ "title": "</> htmx - high power tools for html",
+ "viewport": [
+  1440,
+  900
+ ],
+ "docHeight": 3751,
+ "body": {
+  "fontSize": 16,
+  "fontFamily": "-apple-system, \"system-ui\", \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira",
+  "color": "rgb(17, 17, 17)",
+  "bg": "rgb(255, 255, 255)",
+  "lineHeight": "24px"
+ },
+ "textBlockWidth": 618,
+ "textBlockFont": 16,
+ "widestContainer": 640,
+ "navHeight": 67,
+ "headings": [
+  {
+   "tag": "H2",
+   "text": "introduction",
+   "sel": "main.c.content > h2:nth-of-type(1)",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 473,
+   "marginTop": 42,
+   "marginBottom": 15.6,
+   "width": 618,
+   "aboveFold": true
+  },
+  {
+   "tag": "H2",
+   "text": "motivation",
+   "sel": "main.c.content > h2:nth-of-type(2)",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 683,
+   "marginTop": 42,
+   "marginBottom": 15.6,
+   "width": 618,
+   "aboveFold": true
+  },
+  {
+   "tag": "H2",
+   "text": "quick start",
+   "sel": "main.c.content > h2:nth-of-type(3)",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 927,
+   "marginTop": 42,
+   "marginBottom": 15.6,
+   "width": 618,
+   "aboveFold": false
+  },
+  {
+   "tag": "H2",
+   "text": "book",
+   "sel": "main.c.content > h2:nth-of-type(4)",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 1382,
+   "marginTop": 42,
+   "marginBottom": 15.6,
+   "width": 618,
+   "aboveFold": false
+  },
+  {
+   "tag": "H2",
+   "text": "sponsors",
+   "sel": "main.c.content > h2:nth-of-type(5)",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 1973,
+   "marginTop": 42,
+   "marginBottom": 15.6,
+   "width": 618,
+   "aboveFold": false
+  },
+  {
+   "tag": "H1",
+   "text": "Platinum Sponsor",
+   "sel": "main.c.content > div:nth-of-type(6) > h1:nth-of-type(1)",
+   "fontSize": 32,
+   "weight": "600",
+   "lineHeight": "32px",
+   "color": "rgb(17, 17, 17)",
+   "top": 2109,
+   "marginTop": 32,
+   "marginBottom": 20.8,
+   "width": 618,
+   "aboveFold": false
+  },
+  {
+   "tag": "H1",
+   "text": "Gold Sponsor",
+   "sel": "main.c.content > div:nth-of-type(6) > h1:nth-of-type(2)",
+   "fontSize": 32,
+   "weight": "600",
+   "lineHeight": "32px",
+   "color": "rgb(17, 17, 17)",
+   "top": 2331,
+   "marginTop": 12,
+   "marginBottom": 20.8,
+   "width": 618,
+   "aboveFold": false
+  },
+  {
+   "tag": "H2",
+   "text": "Silver Sponsors",
+   "sel": "#silver-sponsors",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 2511,
+   "marginTop": 42,
+   "marginBottom": 15.6,
+   "width": 618,
+   "aboveFold": false
+  },
+  {
+   "tag": "H2",
+   "text": "haiku",
+   "sel": "div.c.content > div.row > div.col.footer-haiku > h2",
+   "fontSize": 24,
+   "weight": "600",
+   "lineHeight": "24px",
+   "color": "rgb(17, 17, 17)",
+   "top": 3438,
+   "marginTop": 0,
+   "marginBottom": 15.6,
+   "width": 309,
+   "aboveFold": false
+  }
+ ],
+ "h1Ratio": 2,
+ "headingLevels": [
+  "H2",
+  "H1"
+ ],
+ "distinctHeadingSizes": [
+  32,
+  24
+ ],
+ "buttons": [],
+ "primaryCTA": null,
+ "ctaAboveFold": 0,
+ "sections": [
+  {
+   "sel": "main.c.content > div.dark-hero.full-width",
+   "top": 67,
+   "height": 240,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+   "sel": "main.c.content > ul",
+   "top": 722,
+   "height": 131,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+   "sel": "main.c.content > pre.language-html",
+   "top": 967,
+   "height": 148,
+   "padTop": 8,
+   "padBottom": 8,
+   "bg": "rgb(31, 35, 41)"
+  },
+  {
+   "sel": "main.c.content > div:nth-of-type(5)",
+   "top": 1477,
+   "height": 454,
+   "padTop": 24,
+   "padBottom": 24,
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+   "sel": "main.c.content > div:nth-of-type(6)",
+   "top": 2077,
+   "height": 1282,
+   "padTop": 0,
+   "padBottom": 0,
+   "bg": "rgba(0, 0, 0, 0)"
+  }
+ ],
+ "medianSectionPadTop": 24,
+ "firstScreenGaps": [
+  299,
+  31,
+  59,
+  16,
+  42,
+  16,
+  42,
+  16,
+  16,
+  16,
+  42,
+  16
+ ],
+ "medianFirstScreenGap": 31,
+ "mediaCount": 26,
+ "mediaAboveFold": 0
+}

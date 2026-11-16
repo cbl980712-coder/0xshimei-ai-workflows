@@ -1,0 +1,5 @@
+[{"label":"1 赞助横幅按钮","selector":"#banner-cta"},
+ {"label":"2 开始使用","selector":".copy-banner a.cta"},
+ {"label":"3 下载按钮","selector":"[role=complementary] > a.cta"},
+ {"label":"4 横幅","selector":"#billboard"},
+ {"label":"5 标语","selector":".copy-banner em"}]

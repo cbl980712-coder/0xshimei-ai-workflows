@@ -1,0 +1,167 @@
+{
+ "title": "jsonlint.com 首页 · 参考 TinyPNG(Tinify) 的改版指令卡",
+ "own_url": "https://jsonlint.com/",
+ "ref_url": "https://tinypng.com/",
+ "goal": "访客粘贴 JSON 后，一眼找到 Validate；页面保持安静，不让 6 个按钮同时抢眼。",
+ "date": "2026-11-16",
+ "images": {
+  "ref": "ref-marked-top.png",
+  "mine": "mine-marked-top.png",
+  "mine_top": "mine-before-top.png",
+  "after": "mine-after-top.png"
+ },
+ "borrow": [
+  {
+   "id": "B1",
+   "aspect": "按钮样式",
+   "ref_where": "导航右上 Sign up（绿色实心）+ Log in（描边），一实一空；页面里的主动作 Analyze now 高 49px",
+   "why_good": "只有一个“最重”的按钮，其余退后，用户不用想点哪个",
+   "mine_where": "编辑框下的按钮组：Validate 实心蓝（38px 高、14px 字），旁边 Clear / Compress / Sort Keys / Copy 四个同尺寸描边按钮 + 一个 Load Sample，共 6 个，视觉重量几乎一样",
+   "mine_selector": "button.btn.btn-primary ； button.btn.btn-secondary"
+  },
+  {
+   "id": "B2",
+   "aspect": "标题层级",
+   "ref_where": "页面大标题 40px、字重 700，是正文 15px 的 2.67 倍",
+   "why_good": "进页面先看到“这是什么”",
+   "mine_where": "“JSON Validator” 24px、字重 600，只有正文 16px 的 1.5 倍，与下面的说明、按钮拉不开差距",
+   "mine_selector": "h1"
+  },
+  {
+   "id": "B3",
+   "aspect": "留白",
+   "ref_where": "主操作区（上传框）四周留白大，块与块之间 48px（中位数）",
+   "why_good": "主操作区像被放在舞台中央，不被别的元素挤着",
+   "mine_where": "编辑框与下面按钮组的间距只有 12px，首屏块间距中位数 18px",
+   "mine_selector": "div.space-y-3 > div.flex.flex-wrap"
+  }
+ ],
+ "keep": [
+  {
+   "where": "912px 宽的 JSON 编辑框（左侧）",
+   "why": "这是工具本体：粘贴长 JSON 需要宽度；TinyPNG 的 760px 居中框是为拖图设计的，不借鉴"
+  },
+  {
+   "where": "顶部 11 个工具标签（Validate / Format / Repair …）",
+   "why": "用户靠它在工具之间切换，是这类站点的核心导航，不动"
+  },
+  {
+   "where": "Validate 的蓝色 #0a84ff",
+   "why": "品牌色与参考页不同，保持，只借“一实多虚”的关系"
+  },
+  {
+   "where": "编辑框下方的 Tip 和 JSON Formatter 等链接",
+   "why": "SEO 内链，不动"
+  }
+ ],
+ "not_borrow": [
+  "TinyPNG 的熊猫大图背景：与 JSON 工具的气质不符，且会拖慢加载",
+  "参考页首屏的聊天悬浮按钮（Need a hand?）：这是客服插件，不是设计"
+ ],
+ "items": [
+  {
+   "id": "P0-1",
+   "priority": "P0",
+   "borrow": "B1",
+   "title": "Validate 放大，成为按钮组里最大的一个",
+   "where": "button.btn.btn-primary（Validate）",
+   "change": "高度 38 → 48px，左右内边距 28px，字号 14 → 16px，字重 600。其余按钮保持原大小。",
+   "css": "button.btn.btn-primary { height:48px; padding:0 28px; font-size:16px; font-weight:600; }",
+   "how_to_check": "一眼最大最亮的是 Validate；量：高 ≥ 46px、字号 ≥ 16px",
+   "checks": [
+    {
+     "selector": "button.btn.btn-primary",
+     "prop": "rect.height",
+     "op": ">=",
+     "value": 46,
+     "note": "Validate 高度"
+    },
+    {
+     "selector": "button.btn.btn-primary",
+     "prop": "fontSize",
+     "op": ">=",
+     "value": 16,
+     "note": "Validate 字号"
+    }
+   ]
+  },
+  {
+   "id": "P0-2",
+   "priority": "P0",
+   "borrow": "B1",
+   "title": "其余按钮去掉描边，变成文字按钮",
+   "where": "button.btn.btn-secondary（Clear / Compress / Sort Keys / Copy）",
+   "change": "边框透明、背景透明，文字和悬停效果保留。保证它们仍可点（尺寸不变），只是不再画框。",
+   "css": "button.btn.btn-secondary { border-color:transparent; background:transparent; }",
+   "how_to_check": "按钮组里只有 Validate 是有框有底色的；量：次要按钮背景和边框都是透明",
+   "checks": [
+    {
+     "selector": "button.btn.btn-secondary",
+     "prop": "backgroundColor",
+     "op": "==",
+     "value": "rgba(0, 0, 0, 0)",
+     "note": "透明底"
+    },
+    {
+     "selector": "button.btn.btn-secondary",
+     "prop": "borderTopColor",
+     "op": "==",
+     "value": "rgba(0, 0, 0, 0)",
+     "note": "透明边框"
+    },
+    {
+     "selector": "button.btn.btn-secondary",
+     "prop": "rect.height",
+     "op": ">=",
+     "value": 36,
+     "note": "点击区域不缩小"
+    }
+   ]
+  },
+  {
+   "id": "P1-1",
+   "priority": "P1",
+   "borrow": "B2",
+   "title": "页面标题放大加重",
+   "where": "h1（JSON Validator）",
+   "change": "24px/600 → 32px/700（与正文比从 1.5 倍到 2 倍；TinyPNG 是 2.67 倍，工具站不需要那么大，取中间值）。 注意：站点用工具类（如 text-2xl）设字号，只写 h1 { … } 压不过，要写 h1[class] { … } 抬高优先级。",
+   "css": "h1[class] { font-size:32px; font-weight:700; }",
+   "how_to_check": "标题明显比下面那行说明大一档；量：字号 ≥ 32px，字重 ≥ 700",
+   "checks": [
+    {
+     "selector": "h1",
+     "prop": "fontSize",
+     "op": ">=",
+     "value": 32,
+     "note": "H1 字号"
+    },
+    {
+     "selector": "h1",
+     "prop": "fontWeight",
+     "op": ">=",
+     "value": 700,
+     "note": "H1 字重"
+    }
+   ]
+  },
+  {
+   "id": "P1-2",
+   "priority": "P1",
+   "borrow": "B3",
+   "title": "编辑框和按钮组之间拉开",
+   "where": "div.space-y-3 > div.flex.flex-wrap（按钮组容器）",
+   "change": "上外边距 12px → 24px，按钮之间 8px，垂直居中对齐（Validate 变高后其他按钮不再顶着上沿）。",
+   "css": ".space-y-3 > .flex.flex-wrap { margin-top:24px; gap:8px; align-items:center; }",
+   "how_to_check": "编辑框底边与按钮组之间有明显空隙；量：按钮组上外边距 ≥ 24px",
+   "checks": [
+    {
+     "selector": "div.space-y-3 > div.flex.flex-wrap",
+     "prop": "marginTop",
+     "op": ">=",
+     "value": 24,
+     "note": "按钮组上外边距"
+    }
+   ]
+  }
+ ]
+}

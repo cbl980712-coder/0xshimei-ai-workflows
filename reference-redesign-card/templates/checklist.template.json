@@ -1,0 +1,26 @@
+{
+ "title": "我的页面 · 参考 XXX 的改版指令卡",
+ "own_url": "https://你的页面网址/",
+ "ref_url": "https://参考页网址/",
+ "goal": "一句话：谁来这个页面，要在几秒内做成什么事。",
+ "date": "YYYY-MM-DD",
+ "images": {"ref": "ref-marked-top.png", "mine": "mine-marked-top.png", "mine_top": "mine-before-top.png", "after": "mine-after-top.png"},
+ "borrow": [
+  {"id": "B1", "aspect": "留白 | 标题层级 | 按钮样式 | 其他", "ref_where": "参考页哪个位置（带量出来的数字）", "why_good": "好在哪（一句话）", "mine_where": "对应我页面哪个区域（带量出来的数字）", "mine_selector": "CSS 选择器"}
+ ],
+ "keep": [
+  {"where": "不动的地方", "why": "为什么不动（至少写 2 条）"}
+ ],
+ "not_borrow": ["参考页有、但不适合我的目标的东西（可选）"],
+ "items": [
+  {
+   "id": "P0-1", "priority": "P0", "borrow": "B1",
+   "title": "一句话说清改什么",
+   "where": "具体到选择器 + 页面上的文字",
+   "change": "怎么改：具体到数值",
+   "css": "选择器 { 属性: 值; }",
+   "how_to_check": "人怎么看改对了 + 量什么",
+   "checks": [{"selector": "CSS 选择器", "prop": "fontSize", "op": ">=", "value": 32, "note": "说明"}]
+  }
+ ]
+}
